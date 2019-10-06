@@ -23,16 +23,16 @@ public:
 namespace finances { namespace {
 class FormatterStub : public Formatter {
 public:
-    auto formatted() const {
-        return formatted_;
+    auto toFormat() const {
+        return toFormat_;
     }
 
     std::string format(const Transactions &t) {
-        formatted_ = t;
+        toFormat_ = t;
         return {};
     }
 private:
-    Transactions formatted_;
+    Transactions toFormat_;
 };
 
 class FormattedWriterTests {
@@ -43,8 +43,8 @@ protected:
         return {amount, std::move(label), std::move(date)};
     }
 
-    Transactions formatted() {
-        return formatter.formatted();
+    Transactions toFormat() {
+        return formatter.toFormat();
     }
 
     void printOne(int amount, std::string label, std::string date) {
@@ -52,11 +52,11 @@ protected:
     }
 };
 
-#define ASSERT_ONE_FORMATTED(a, b, c)\
-    CHECK(Transactions{transaction(a, b, c)} == formatted())
+#define ASSERT_ONE_TO_FORMAT(a, b, c)\
+    CHECK(Transactions{transaction(a, b, c)} == toFormat())
 
-TEST_CASE_METHOD(FormattedWriterTests, "tbd") {
+TEST_CASE_METHOD(FormattedWriterTests, "printFormatsOne") {
     printOne(-1000, "chipotle", "10/6/19");
-    ASSERT_ONE_FORMATTED(-1000, "chipotle", "10/6/19");
+    ASSERT_ONE_TO_FORMAT(-1000, "chipotle", "10/6/19");
 }
 }}
