@@ -9,29 +9,42 @@ protected:
     std::string format(const Transactions &t) {
         return formatter.formatTransactions(t);
     }
+
+    std::string formatNetIncome(int x) {
+        return formatter.formatNetIncome(x);
+    }
 };
 
-#define ASSERT_FORMAT_ONE(a, b, c, d)\
+#define ASSERT_FORMAT_ONE_TRANSACTION(a, b, c, d)\
     CHECK(d == format(Transactions{transaction(a, b, c)}))
-#define ASSERT_FORMAT_TWO(a, b, c, d, e, f, g)\
+#define ASSERT_FORMAT_TWO_TRANSACTIONS(a, b, c, d, e, f, g)\
     CHECK(g == format(Transactions{\
         transaction(a, b, c), \
         transaction(d, e, f)\
     }))
+#define ASSERT_FORMAT_NET_INCOME(a, b)\
+    CHECK(b == formatNetIncome(a))
 
-TEST_CASE_METHOD(ItemizedFormatterTests, "formatOne") {
-    ASSERT_FORMAT_ONE(
+TEST_CASE_METHOD(ItemizedFormatterTests, "formatOneTransaction") {
+    ASSERT_FORMAT_ONE_TRANSACTION(
         -5000, "hyvee", "10/5/19",
         "-50.00 hyvee 10/5/19"
     );
 }
 
-TEST_CASE_METHOD(ItemizedFormatterTests, "formatTwo") {
-    ASSERT_FORMAT_TWO(
+TEST_CASE_METHOD(ItemizedFormatterTests, "formatTwoTransactions") {
+    ASSERT_FORMAT_TWO_TRANSACTIONS(
         -5000, "hyvee", "10/5/19",
         -979, "chipotle", "10/4/19",
         "-50.00 hyvee 10/5/19\n"
         "-9.79 chipotle 10/4/19"
+    );
+}
+
+TEST_CASE_METHOD(ItemizedFormatterTests, "formatNetIncome") {
+    ASSERT_FORMAT_NET_INCOME(
+        -979,
+        "Net Income: -9.79"
     );
 }
 }}

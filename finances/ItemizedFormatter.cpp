@@ -28,4 +28,16 @@ std::string ItemizedFormatter::formatTransactions(const Transactions &transactio
     }
     return formatted;
 }
+
+std::string ItemizedFormatter::formatNetIncome(int x) {
+    auto amountBeforeDecimal = x / 100;
+    auto amountAfterDecimal =
+        std::abs(x - amountBeforeDecimal * 100);
+    auto leadingZero =  "";
+    if (amountAfterDecimal < 10)
+        leadingZero = "0";
+    auto beforeDecimal = string(amountBeforeDecimal);
+    auto afterDecimal = leadingZero + string(amountAfterDecimal);
+    return "Net Income: " + beforeDecimal + "." + afterDecimal;
+}
 }
