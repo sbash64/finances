@@ -36,7 +36,7 @@ Transactions TransactionRecord::findByAmount(int amount_) {
     return found;
 }
 
-Transactions TransactionRecord::getAll() {
+Transactions TransactionRecord::all() {
     return transactions;
 }
 

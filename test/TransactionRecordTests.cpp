@@ -34,8 +34,8 @@ protected:
         return record.netIncome();
     }
 
-    Transactions getAll() {
-        return record.getAll();
+    Transactions all() {
+        return record.all();
     }
 };
 
@@ -59,7 +59,7 @@ protected:
             transaction(a, b, c), \
             transaction(d, e, f), \
             transaction(g, h, i)\
-        } == getAll()\
+        } == all()\
     )
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNone") {
@@ -133,7 +133,7 @@ TEST_CASE_METHOD(TransactionRecordTests, "removeATransaction") {
     );
 }
 
-TEST_CASE_METHOD(TransactionRecordTests, "getAll") {
+TEST_CASE_METHOD(TransactionRecordTests, "all") {
     add(-2000, "hyvee", "10/5/19");
     add(-3000, "walmart", "10/4/19");
     add(-1000, "chipotle", "10/6/19");
