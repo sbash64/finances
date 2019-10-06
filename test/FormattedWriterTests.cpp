@@ -9,7 +9,16 @@ public:
         return toFormat_;
     }
 
-    std::string format(const Transactions &t) {
+    auto netIncomeToFormat() const {
+        return netIncomeToFormat_;
+    }
+
+    std::string formatNetIncome(int x) override {
+        netIncomeToFormat_ = x;
+        return {};
+    }
+
+    std::string format(const Transactions &t) override {
         toFormat_ = t;
         return formatted_;
     }
@@ -20,6 +29,7 @@ public:
 private:
     Transactions toFormat_;
     std::string formatted_;
+    int netIncomeToFormat_;
 };
 
 class WriterStub : public Writer {
@@ -44,6 +54,10 @@ protected:
         return formatter.toFormat();
     }
 
+    int netIncomeToFormat() {
+        return formatter.netIncomeToFormat();
+    }
+
     void print(const Transactions &t = {}) {
         printer.print(t);
     }
@@ -59,20 +73,30 @@ protected:
     std::string written() {
         return writer.written();
     }
+
+    void printNetIncome(int x) {
+        printer.printNetIncome(x);
+    }
 };
 
 #define ASSERT_ONE_TO_FORMAT(a, b, c)\
     CHECK(Transactions{transaction(a, b, c)} == toFormat())
 #define ASSERT_WRITTEN(a) CHECK(a == written())
+#define ASSERT_NET_INCOME_TO_FORMAT(a) CHECK(a == netIncomeToFormat())
 
-TEST_CASE_METHOD(FormattedWriterTests, "printFormatsOne") {
+TEST_CASE_METHOD(FormattedWriterTests, "printTransactionsFormatsOne") {
     printOne(-1000, "chipotle", "10/6/19");
     ASSERT_ONE_TO_FORMAT(-1000, "chipotle", "10/6/19");
 }
 
-TEST_CASE_METHOD(FormattedWriterTests, "printWritesFormatted") {
+TEST_CASE_METHOD(FormattedWriterTests, "printTransactionsWritesFormatted") {
     setFormatted("hello");
     print();
     ASSERT_WRITTEN("\nhello\n\n");
+}
+
+TEST_CASE_METHOD(FormattedWriterTests, "printNetIncomeFormatsNet") {
+    printNetIncome(10);
+    ASSERT_NET_INCOME_TO_FORMAT(10);
 }
 }}

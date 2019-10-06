@@ -8,6 +8,7 @@ namespace finances {
 class ItemizedFormatter : public Formatter {
 public:
     std::string format(const Transactions &) override;
+    std::string formatNetIncome(int) override { return {}; }
 };
 }
 
