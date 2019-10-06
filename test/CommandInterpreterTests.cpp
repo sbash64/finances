@@ -36,23 +36,23 @@ private:
 
 class PrinterStub : public Printer {
 public:
-    auto printed() const {
-        return printed_;
+    auto printedTransactions() const {
+        return printedTransactions_;
     }
 
     auto netIncome() const {
         return netIncome_;
     }
 
-    void print(const Transactions &t) override {
-        printed_ = t;
+    void printTransactions(const Transactions &t) override {
+        printedTransactions_ = t;
     }
 
     void printNetIncome(int x) override {
         netIncome_ = x;
     }
 private:
-    Transactions printed_;
+    Transactions printedTransactions_;
     int netIncome_;
 };
 
@@ -73,12 +73,12 @@ protected:
         return record.transactionAdded();
     }
 
-    void setAll(Transactions t) {
+    void setAllTransactions(Transactions t) {
         record.setAll(std::move(t));
     }
 
-    Transactions printed() {
-        return printer.printed();
+    Transactions printedTransactions() {
+        return printer.printedTransactions();
     }
 
     int printedNetIncome() {
@@ -88,12 +88,12 @@ protected:
 
 #define ASSERT_TRANSACTION_ADDED(a, b, c)\
     CHECK(transaction(a, b, c) == transactionAdded())
-#define ASSERT_BOTH_PRINTED(a, b, c, d, e, f)\
+#define ASSERT_BOTH_TRANSACTIONS_PRINTED(a, b, c, d, e, f)\
     CHECK(\
         Transactions{\
             transaction(a, b, c), \
             transaction(d, e, f)\
-        } == printed()\
+        } == printedTransactions()\
     )
 #define ASSERT_NET_INCOME_PRINTED(a) CHECK(a == printedNetIncome())
 
@@ -107,13 +107,13 @@ TEST_CASE_METHOD(CommandInterpreterTests, "addsAnotherTransaction") {
     ASSERT_TRANSACTION_ADDED(-947, "chipotle", "10/6/19");
 }
 
-TEST_CASE_METHOD(CommandInterpreterTests, "printPrintsAll") {
-    setAll({ 
+TEST_CASE_METHOD(CommandInterpreterTests, "printPrintsAllTransactions") {
+    setAllTransactions({ 
         transaction(-1000, "chipotle", "10/6/19"),
         transaction(-5000, "hyvee", "10/4/19")
     });
     execute("print");
-    ASSERT_BOTH_PRINTED(
+    ASSERT_BOTH_TRANSACTIONS_PRINTED(
         -1000, "chipotle", "10/6/19",
         -5000, "hyvee", "10/4/19"
     );

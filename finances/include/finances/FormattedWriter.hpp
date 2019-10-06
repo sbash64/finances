@@ -26,7 +26,7 @@ public:
         formatter{formatter},
         writer{writer} {}
 
-    void print(const Transactions &t) override {
+    void printTransactions(const Transactions &t) override {
         writer.write('\n' + formatter.format(t) + "\n\n");
     }
 

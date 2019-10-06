@@ -59,7 +59,7 @@ protected:
     }
 
     void print(const Transactions &t = {}) {
-        printer.print(t);
+        printer.printTransactions(t);
     }
 
     void printOne(int amount, std::string label, std::string date) {

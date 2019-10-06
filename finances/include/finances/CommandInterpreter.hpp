@@ -16,7 +16,7 @@ public:
 class Printer {
 public:
     virtual ~Printer() = default;
-    virtual void print(const Transactions &) = 0;
+    virtual void printTransactions(const Transactions &) = 0;
     virtual void printNetIncome(int) = 0;
 };
 
