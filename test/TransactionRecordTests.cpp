@@ -28,6 +28,10 @@ protected:
     std::vector<Transaction> none() {
         return {};
     }
+
+    int netIncome() {
+        return record.netIncome();
+    }
 };
 
 #define ASSERT_EQUAL(a, b) CHECK(a == b)
@@ -43,6 +47,7 @@ protected:
             transaction(d, e, f)\
         } == findByAmount(g)\
     )
+#define ASSERT_NET_INCOME(a) ASSERT_EQUAL(a, netIncome())
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNone") {
     ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(0);
@@ -78,5 +83,9 @@ TEST_CASE_METHOD(TransactionRecordTests, "findByAmountBothFound") {
         -1000, "chipotle", "10/5/19",
         -1000
     );
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "netIncomeNoTransactions") {
+    ASSERT_NET_INCOME(0);
 }
 }}

@@ -20,6 +20,7 @@ class TransactionRecord {
 public:
     void add(const Transaction &);
     std::vector<Transaction> findByAmount(int);
+    int netIncome();
 };
 }
 

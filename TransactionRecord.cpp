@@ -26,4 +26,8 @@ std::vector<Transaction> TransactionRecord::findByAmount(int amount_) {
     );
     return found;
 }
+
+int TransactionRecord::netIncome() {
+    return 0;
+}
 }
