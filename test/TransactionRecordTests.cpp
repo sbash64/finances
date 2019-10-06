@@ -88,4 +88,9 @@ TEST_CASE_METHOD(TransactionRecordTests, "findByAmountBothFound") {
 TEST_CASE_METHOD(TransactionRecordTests, "netIncomeNoTransactions") {
     ASSERT_NET_INCOME(0);
 }
+
+TEST_CASE_METHOD(TransactionRecordTests, "netIncomeOneTransaction") {
+    add(-1000, "hyvee", "10/5/19");
+    ASSERT_NET_INCOME(-1000);
+}
 }}

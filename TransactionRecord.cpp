@@ -28,6 +28,6 @@ std::vector<Transaction> TransactionRecord::findByAmount(int amount_) {
 }
 
 int TransactionRecord::netIncome() {
-    return 0;
+    return transactions.size() ? transactions.front().amount : 0;
 }
 }
