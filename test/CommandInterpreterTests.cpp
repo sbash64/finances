@@ -1,31 +1,7 @@
-#include <string>
+#include <finances/Transaction.hpp>
+#include <sstream>
 
 namespace finances {
-struct Transaction {
-    int amount;
-    std::string label;
-    std::string date;
-};
-
-constexpr auto amount(const Transaction &t) {
-    return t.amount;
-}
-
-constexpr auto &label(const Transaction &t) {
-    return t.label;
-}
-
-constexpr auto &date(const Transaction &t) {
-    return t.date;
-}
-
-constexpr bool operator==(const Transaction &lhs, const Transaction &rhs) {
-    return
-        amount(lhs) == amount(rhs) &&
-        label(lhs) == label(rhs) &&
-        date(lhs) == date(rhs);
-}
-
 class ITransactionRecord {
 public:
     virtual ~ITransactionRecord() = default;
@@ -38,8 +14,10 @@ public:
     explicit CommandInterpreter(ITransactionRecord &record) :
         record{record} {}
 
-    void execute(const std::string &) {
-        record.add({-5000, "hyvee", "10/5/19"});
+    void execute(const std::string &s) {
+        std::stringstream stream;
+
+        record.add({std::stoi(s.substr(4, 3))*100, "hyvee", "10/5/19"});
     }
 };
 }
