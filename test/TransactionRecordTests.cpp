@@ -9,7 +9,7 @@ protected:
         return {amount, std::move(label), std::move(date)};
     }
 
-    std::vector<Transaction> onlyOne(
+    Transactions onlyOne(
         int amount,
         std::string label,
         std::string date
@@ -21,11 +21,11 @@ protected:
         record.add(transaction(amount, std::move(label), std::move(date)));
     }
 
-    std::vector<Transaction> findByAmount(int amount) {
+    Transactions findByAmount(int amount) {
         return record.findByAmount(amount);
     }
 
-    std::vector<Transaction> none() {
+    Transactions none() {
         return {};
     }
 
@@ -42,7 +42,7 @@ protected:
     ASSERT_TRANSACTIONS_BY_AMOUNT(none(), a)
 #define ASSERT_TWO_TRANSACTIONS_FOR_AMOUNT(a, b, c, d, e, f, g)\
     CHECK(\
-        std::vector<Transaction>{\
+        Transactions{\
             transaction(a, b, c), \
             transaction(d, e, f)\
         } == findByAmount(g)\
