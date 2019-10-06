@@ -21,6 +21,10 @@ protected:
         record.add(transaction(amount, std::move(label), std::move(date)));
     }
 
+    void remove(int amount, std::string label, std::string date) {
+        record.remove(transaction(amount, std::move(label), std::move(date)));
+    }
+
     Transactions findByAmount(int amount) {
         return record.findByAmount(amount);
     }
@@ -98,5 +102,11 @@ TEST_CASE_METHOD(TransactionRecordTests, "netIncomeTwoTransactions") {
     add(-5000, "hyvee", "10/5/19");
     add(-1000, "chipotle", "10/5/19");
     ASSERT_NET_INCOME(-6000);
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "removeTransaction") {
+    add(-5000, "hyvee", "10/5/19");
+    remove(-5000, "hyvee", "10/5/19");
+    ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(-5000);
 }
 }}

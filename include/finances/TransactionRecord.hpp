@@ -35,6 +35,7 @@ constexpr bool operator==(const Transaction &lhs, const Transaction &rhs) {
 class TransactionRecord {
 public:
     void add(const Transaction &);
+    void remove(const Transaction &);
     Transactions findByAmount(int);
     int netIncome();
 private:

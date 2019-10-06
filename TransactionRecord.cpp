@@ -7,6 +7,10 @@ void TransactionRecord::add(const Transaction &t) {
     transactions.push_back(t);
 }
 
+void TransactionRecord::remove(const Transaction &) {
+    transactions.pop_back();
+}
+
 constexpr auto begin(const Transactions &v) {
     return v.begin();
 }
