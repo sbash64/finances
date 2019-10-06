@@ -11,15 +11,34 @@ struct Transaction {
     std::string date;
 };
 
-int amount(const Transaction &);
-bool operator==(const Transaction &, const Transaction &);
+using Transactions = std::vector<Transaction>;
+
+constexpr auto amount(const Transaction &t) {
+    return t.amount;
+}
+
+constexpr auto &label(const Transaction &t) {
+    return t.label;
+}
+
+constexpr auto &date(const Transaction &t) {
+    return t.date;
+}
+
+constexpr bool operator==(const Transaction &lhs, const Transaction &rhs) {
+    return
+        amount(lhs) == amount(rhs) &&
+        label(lhs) == label(rhs) &&
+        date(lhs) == date(rhs);
+}
 
 class TransactionRecord {
-    std::vector<Transaction> transactions;
 public:
     void add(const Transaction &);
-    std::vector<Transaction> findByAmount(int);
+    Transactions findByAmount(int);
     int netIncome();
+private:
+    Transactions transactions;
 };
 }
 

@@ -3,26 +3,23 @@
 #include <numeric>
 
 namespace finances {
-int amount(const Transaction &t) {
-    return t.amount;
-}
-
-bool operator==(const Transaction &lhs, const Transaction &rhs) {
-    return
-        amount(lhs) == amount(rhs) &&
-        lhs.label == rhs.label &&
-        lhs.date == rhs.date;
-}
-
 void TransactionRecord::add(const Transaction &t) {
     transactions.push_back(t);
 }
 
-std::vector<Transaction> TransactionRecord::findByAmount(int amount_) {
-    std::vector<Transaction> found;
+constexpr auto begin(const Transactions &v) {
+    return v.begin();
+}
+
+constexpr auto end(const Transactions &v) {
+    return v.end();
+}
+
+Transactions TransactionRecord::findByAmount(int amount_) {
+    Transactions found;
     std::copy_if(
-        transactions.begin(),
-        transactions.end(),
+        begin(transactions),
+        end(transactions),
         std::back_inserter(found),
         [=](auto t) { return amount(t) == amount_; }
     );
@@ -30,7 +27,11 @@ std::vector<Transaction> TransactionRecord::findByAmount(int amount_) {
 }
 
 int TransactionRecord::netIncome() {
-    return std::accumulate(transactions.begin(), transactions.end(), 0, 
-        [](auto net, auto t) { return net + t.amount; });
+    return std::accumulate(
+        begin(transactions),
+        end(transactions),
+        0,
+        [](auto net, auto t) { return net + t.amount; }
+    );
 }
 }
