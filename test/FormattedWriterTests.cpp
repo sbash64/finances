@@ -73,6 +73,6 @@ TEST_CASE_METHOD(FormattedWriterTests, "printFormatsOne") {
 TEST_CASE_METHOD(FormattedWriterTests, "printWritesFormatted") {
     setFormatted("hello");
     print();
-    ASSERT_WRITTEN("hello");
+    ASSERT_WRITTEN("\nhello\n\n");
 }
 }}
