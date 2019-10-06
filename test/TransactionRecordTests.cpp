@@ -23,7 +23,7 @@ bool operator==(const Transaction &lhs, const Transaction &rhs) {
 class TransactionRecord {
     std::vector<Transaction> transactions;
 public:
-    void add(Transaction t) {
+    void add(const Transaction &t) {
         transactions.push_back(t);
     }
 
@@ -47,7 +47,7 @@ class TransactionRecordTests {
     TransactionRecord record;
 protected:
     Transaction transaction(int amount, std::string label, std::string date) {
-        return {amount, label, date};
+        return {amount, std::move(label), std::move(date)};
     }
 
     std::vector<Transaction> onlyOne(
@@ -55,11 +55,11 @@ protected:
         std::string label,
         std::string date
     ) {
-        return { transaction(amount, label, date) };
+        return { transaction(amount, std::move(label), std::move(date)) };
     }
 
     void add(int amount, std::string label, std::string date) {
-        record.add(transaction(amount, label, date));
+        record.add(transaction(amount, std::move(label), std::move(date)));
     }
 
     std::vector<Transaction> findByAmount(int amount) {
@@ -77,6 +77,13 @@ protected:
     ASSERT_TRANSACTIONS_BY_AMOUNT(onlyOne(a, b, c), d)
 #define ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(a)\
     ASSERT_TRANSACTIONS_BY_AMOUNT(none(), a)
+#define ASSERT_TWO_TRANSACTIONS_FOR_AMOUNT(a, b, c, d, e, f, g)\
+    CHECK(\
+        std::vector<Transaction>{\
+            transaction(a, b, c), \
+            transaction(d, e, f)\
+        } == findByAmount(g)\
+    )
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNone") {
     ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(0);
@@ -89,24 +96,28 @@ TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNoneFound") {
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountOneFoundOnlyOne") {
     add(-5000, "hyvee", "10/5/19");
-    ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(-5000, "hyvee", "10/5/19", -5000);
+    ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(
+        -5000, "hyvee", "10/5/19",
+        -5000
+    );
 }
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountOneFound") {
     add(-5000, "hyvee", "10/5/19");
     add(-1000, "chipotle", "10/5/19");
-    ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(-5000, "hyvee", "10/5/19", -5000);
+    ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(
+        -5000, "hyvee", "10/5/19",
+        -5000
+    );
 }
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountBothFound") {
     add(-1000, "hyvee", "10/5/19");
     add(-1000, "chipotle", "10/5/19");
-    CHECK(
-        std::vector<Transaction>{
-            transaction(-1000, "hyvee", "10/5/19"),
-            transaction(-1000, "chipotle", "10/5/19")
-        } ==
-        findByAmount(-1000)
+    ASSERT_TWO_TRANSACTIONS_FOR_AMOUNT(
+        -1000, "hyvee", "10/5/19",
+        -1000, "chipotle", "10/5/19",
+        -1000
     );
 }
 }}
