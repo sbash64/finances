@@ -15,7 +15,7 @@ public:
 
     std::string formatNetIncome(int x) override {
         netIncomeToFormat_ = x;
-        return {};
+        return formattedNetIncome_;
     }
 
     std::string formatTransactions(const Transactions &t) override {
@@ -26,9 +26,14 @@ public:
     void setFormmated(std::string s) {
         formatted_ = std::move(s);
     }
+
+    void setFormattedNetIncome(std::string s) {
+        formattedNetIncome_ = std::move(s);
+    }
 private:
     Transactions toFormat_;
     std::string formatted_;
+    std::string formattedNetIncome_;
     int netIncomeToFormat_;
 };
 
@@ -70,11 +75,15 @@ protected:
         formatter.setFormmated(std::move(s));
     }
 
+    void setFormattedNetIncome(std::string s) {
+        formatter.setFormattedNetIncome(std::move(s));
+    }
+
     std::string written() {
         return writer.written();
     }
 
-    void printNetIncome(int x) {
+    void printNetIncome(int x = {}) {
         printer.printNetIncome(x);
     }
 };
@@ -98,5 +107,11 @@ TEST_CASE_METHOD(FormattedWriterTests, "printTransactionsWritesFormatted") {
 TEST_CASE_METHOD(FormattedWriterTests, "printNetIncomeFormatsNet") {
     printNetIncome(10);
     ASSERT_NET_INCOME_TO_FORMAT(10);
+}
+
+TEST_CASE_METHOD(FormattedWriterTests, "printNetIncomeWritesNetIncome") {
+    setFormattedNetIncome("hello");
+    printNetIncome();
+    ASSERT_WRITTEN("\nhello\n\n");
 }
 }}

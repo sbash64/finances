@@ -31,7 +31,7 @@ public:
     }
 
     void printNetIncome(int x) override {
-        formatter.formatNetIncome(x);
+        writer.write('\n' + formatter.formatNetIncome(x) + "\n\n");
     }
 };
 }
