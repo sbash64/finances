@@ -61,6 +61,8 @@ protected:
 
 #define ASSERT_EQUAL(a, b) CHECK(a == b)
 #define ASSERT_TRANSACTIONS_BY_AMOUNT(a, b) ASSERT_EQUAL(a, findByAmount(b))
+#define ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(a, b, c, d)\
+    ASSERT_TRANSACTIONS_BY_AMOUNT(onlyOne(a, b, c), d)
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNone") {
     ASSERT_TRANSACTIONS_BY_AMOUNT(none(), 0);
@@ -68,12 +70,12 @@ TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNone") {
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountOnlyOne") {
     add(-5000, "hyvee", "10/5/19");
-    ASSERT_TRANSACTIONS_BY_AMOUNT(onlyOne(-5000, "hyvee", "10/5/19"), -5000);
+    ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(-5000, "hyvee", "10/5/19", -5000);
 }
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountOneFound") {
     add(-5000, "hyvee", "10/5/19");
     add(-1000, "chipotle", "10/5/19");
-    ASSERT_TRANSACTIONS_BY_AMOUNT(onlyOne(-5000, "hyvee", "10/5/19"), -5000);
+    ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(-5000, "hyvee", "10/5/19", -5000);
 }
 }}
