@@ -109,4 +109,8 @@ TEST_CASE_METHOD(TransactionRecordTests, "removeTransaction") {
     remove(-5000, "hyvee", "10/5/19");
     ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(-5000);
 }
+
+TEST_CASE_METHOD(TransactionRecordTests, "removeNonExistingTransaction") {
+    remove(-5000, "hyvee", "10/5/19");
+}
 }}

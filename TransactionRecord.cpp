@@ -8,7 +8,7 @@ void TransactionRecord::add(const Transaction &t) {
 }
 
 void TransactionRecord::remove(const Transaction &) {
-    transactions.pop_back();
+    transactions.clear();
 }
 
 constexpr auto begin(const Transactions &v) {
