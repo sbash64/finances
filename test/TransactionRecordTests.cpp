@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <algorithm>
 
 namespace finances {
 struct Transaction {
@@ -8,9 +9,13 @@ struct Transaction {
     std::string date;
 };
 
+int amount(const Transaction &t) {
+    return t.amount;
+}
+
 bool operator==(const Transaction &lhs, const Transaction &rhs) {
     return
-        lhs.amount == rhs.amount &&
+        amount(lhs) == amount(rhs) &&
         lhs.label == rhs.label &&
         lhs.date == rhs.date;
 }
@@ -18,12 +23,20 @@ bool operator==(const Transaction &lhs, const Transaction &rhs) {
 class TransactionRecord {
     std::vector<Transaction> transactions;
 public:
-    void add(Transaction t) { transactions.push_back(t); }
+    void add(Transaction t) {
+        transactions.push_back(t);
+    }
 
-    std::vector<Transaction> findByAmount(int) {
-        return transactions.size() > 0
-            ? std::vector<Transaction>{ transactions.front() }
-            : transactions;
+    std::vector<Transaction> findByAmount(int amount_) {
+        auto found = std::find_if(
+            transactions.begin(),
+            transactions.end(),
+            [=](auto t) { return amount(t) == amount_; }
+        );
+        if (found != transactions.end())
+            return { *found };
+        else
+            return {};
     }
 };
 }
@@ -63,12 +76,19 @@ protected:
 #define ASSERT_TRANSACTIONS_BY_AMOUNT(a, b) ASSERT_EQUAL(a, findByAmount(b))
 #define ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(a, b, c, d)\
     ASSERT_TRANSACTIONS_BY_AMOUNT(onlyOne(a, b, c), d)
+#define ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(a)\
+    ASSERT_TRANSACTIONS_BY_AMOUNT(none(), a)
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNone") {
-    ASSERT_TRANSACTIONS_BY_AMOUNT(none(), 0);
+    ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(0);
 }
 
-TEST_CASE_METHOD(TransactionRecordTests, "findByAmountOnlyOne") {
+TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNoneFound") {
+    add(-5000, "hyvee", "10/5/19");
+    ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(0);
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "findByAmountOneFoundOnlyOne") {
     add(-5000, "hyvee", "10/5/19");
     ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(-5000, "hyvee", "10/5/19", -5000);
 }
