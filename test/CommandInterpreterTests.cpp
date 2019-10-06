@@ -15,23 +15,37 @@ public:
     virtual void print(const Transactions &) = 0;
 };
 
+int integer(const std::string &s) {
+    return std::stoi(s);
+}
+
+int toHundredthsNoDecimal(const std::string &s) {
+    return integer(s) * 100;
+}
+
 int toHundredths(const std::string &s) {
-    auto found = s.find('.');
-    if (found == std::string::npos)
-        return std::stoi(s) * 100;
+    auto decimal = s.find('.');
+    if (decimal == std::string::npos)
+        return toHundredthsNoDecimal(s);
     auto sign = ' ';
     if (s.front() == '-')
         sign = '-';
-    auto beforeDecimal = s.substr(0, found);
-    auto afterDecimal = sign + s.substr(found + 1);
-    return std::stoi(beforeDecimal) * 100 + std::stoi(afterDecimal);
+    auto beforeDecimal = s.substr(0, decimal);
+    auto afterDecimal = sign + s.substr(decimal + 1);
+    return toHundredthsNoDecimal(beforeDecimal) + integer(afterDecimal);
+}
+
+std::string next(std::stringstream &s) {
+    std::string next_;
+    s >> next_;
+    return next_;
 }
 
 class CommandInterpreter {
     ITransactionRecord &record;
     Printer &printer;
 public:
-    explicit CommandInterpreter(
+    CommandInterpreter(
         ITransactionRecord &record,
         Printer &printer
     ) :
@@ -39,18 +53,14 @@ public:
         printer{printer} {}
 
     void execute(const std::string &s) {
-        if (s == "print")
+        std::stringstream stream{s};
+        auto command = next(stream);
+        if (command == "print")
             printer.print(record.all());
         else {
-            std::stringstream stream{s};
-            std::string command;
-            stream >> command;
-            std::string amount;
-            stream >> amount;
-            std::string label;
-            stream >> label;
-            std::string date;
-            stream >> date;
+            auto amount = next(stream);
+            auto label = next(stream);
+            auto date = next(stream);
             record.add({
                 toHundredths(amount),
                 label,
