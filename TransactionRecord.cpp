@@ -36,6 +36,10 @@ Transactions TransactionRecord::findByAmount(int amount_) {
     return found;
 }
 
+Transactions TransactionRecord::getAll() {
+    return transactions;
+}
+
 int TransactionRecord::netIncome() {
     return std::accumulate(
         begin(transactions),

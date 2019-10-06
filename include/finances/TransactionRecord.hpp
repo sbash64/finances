@@ -38,6 +38,7 @@ public:
     void remove(const Transaction &);
     Transactions findByAmount(int);
     int netIncome();
+    Transactions getAll();
 private:
     Transactions transactions;
 };

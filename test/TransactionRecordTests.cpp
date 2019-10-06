@@ -36,6 +36,10 @@ protected:
     int netIncome() {
         return record.netIncome();
     }
+
+    Transactions getAll() {
+        return record.getAll();
+    }
 };
 
 #define ASSERT_EQUAL(a, b) CHECK(a == b)
@@ -52,6 +56,14 @@ protected:
         } == findByAmount(g)\
     )
 #define ASSERT_NET_INCOME(a) ASSERT_EQUAL(a, netIncome())
+#define ASSERT_THREE_TRANSACTIONS(a, b, c, d, e, f, g, h, i)\
+    CHECK(\
+        Transactions{\
+            transaction(a, b, c), \
+            transaction(d, e, f), \
+            transaction(g, h, i)\
+        } == getAll()\
+    )
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNone") {
     ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(0);
@@ -121,6 +133,17 @@ TEST_CASE_METHOD(TransactionRecordTests, "removeATransaction") {
     ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(
         -1000, "chipotle", "10/5/19",
         -1000
+    );
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "getAll") {
+    add(-2000, "hyvee", "10/5/19");
+    add(-3000, "walmart", "10/4/19");
+    add(-1000, "chipotle", "10/6/19");
+    ASSERT_THREE_TRANSACTIONS(
+        -2000, "hyvee", "10/5/19",
+        -3000, "walmart", "10/4/19",
+        -1000, "chipotle", "10/6/19"
     );
 }
 }}
