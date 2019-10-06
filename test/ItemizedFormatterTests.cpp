@@ -3,8 +3,16 @@
 namespace finances {
 class ItemizedFormatter {
 public:
-    std::string format(const Transactions &) {
-        return "-50 hyvee 10/5/19";
+    std::string format(const Transactions &t) {
+        auto first = t.front();
+        auto amountBeforeDecimal = first.amount / 100;
+        auto amountAfterDecimal = first.amount - amountBeforeDecimal * 100;
+        auto leadingZero =  "";
+        if (amountAfterDecimal < 10)
+            leadingZero = "0";
+        auto beforeDecimal = std::to_string(amountBeforeDecimal);
+        auto afterDecimal = leadingZero + std::to_string(amountAfterDecimal);
+        return beforeDecimal + "." + afterDecimal + " " + first.label + " " + first.date;
     }
 };
 }
@@ -30,7 +38,7 @@ protected:
 TEST_CASE_METHOD(ItemizedFormatterTests, "tbd") {
     ASSERT_FORMAT_ONE(
         -5000, "hyvee", "10/5/19",
-        "-50 hyvee 10/5/19"
+        "-50.00 hyvee 10/5/19"
     );
 }
 }}
