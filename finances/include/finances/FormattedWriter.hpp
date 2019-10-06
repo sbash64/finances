@@ -1,7 +1,8 @@
 #ifndef FINANCES_FORMATTEDWRITER_HPP_
 #define FINANCES_FORMATTEDWRITER_HPP_
 
-#include <finances/Transaction.hpp>
+#include "Transaction.hpp"
+#include "CommandInterpreter.hpp"
 
 namespace finances {
 class Formatter {
@@ -16,7 +17,7 @@ public:
     virtual void write(const std::string &) = 0;
 };
 
-class FormattedWriter {
+class FormattedWriter : public Printer {
     Formatter &formatter;
     Writer &writer;
 public:
@@ -24,7 +25,7 @@ public:
         formatter{formatter},
         writer{writer} {}
 
-    void print(const Transactions &t) {
+    void print(const Transactions &t) override {
         writer.write(formatter.format(t));
     }
 };
