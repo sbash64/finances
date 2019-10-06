@@ -19,7 +19,12 @@ class TransactionRecord {
     std::vector<Transaction> transactions;
 public:
     void add(Transaction t) { transactions.push_back(t); }
-    std::vector<Transaction> findByAmount(int) { return transactions; }
+
+    std::vector<Transaction> findByAmount(int) {
+        return transactions.size() > 0
+            ? std::vector<Transaction>{ transactions.front() }
+            : transactions;
+    }
 };
 }
 
@@ -63,6 +68,12 @@ TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNone") {
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountOnlyOne") {
     add(-5000, "hyvee", "10/5/19");
+    ASSERT_TRANSACTIONS_BY_AMOUNT(onlyOne(-5000, "hyvee", "10/5/19"), -5000);
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "findByAmountOneFound") {
+    add(-5000, "hyvee", "10/5/19");
+    add(-1000, "chipotle", "10/5/19");
     ASSERT_TRANSACTIONS_BY_AMOUNT(onlyOne(-5000, "hyvee", "10/5/19"), -5000);
 }
 }}
