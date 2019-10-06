@@ -3,6 +3,9 @@ project(Finances VERSION 0.0.1 LANGUAGES CXX)
 
 add_subdirectory(finances)
 
+add_executable(finances-console main.cpp)
+target_link_libraries(finances-console finances)
+
 include(FetchContent)
 
 FetchContent_Declare(
