@@ -16,10 +16,10 @@ bool operator==(const Transaction &lhs, const Transaction &rhs) {
 }
 
 class TransactionRecord {
-    Transaction t;
+    std::vector<Transaction> transactions;
 public:
-    void add(Transaction a) { t = a; }
-    std::vector<Transaction> findByAmount(int) { return {t}; }
+    void add(Transaction t) { transactions.push_back(t); }
+    std::vector<Transaction> findByAmount(int) { return transactions; }
 };
 }
 
@@ -35,7 +35,11 @@ protected:
         return {amount, label, date};
     }
 
-    std::vector<Transaction> oneTransaction(int amount, std::string label, std::string date) {
+    std::vector<Transaction> onlyOne(
+        int amount,
+        std::string label,
+        std::string date
+    ) {
         return { transaction(amount, label, date) };
     }
 
@@ -46,10 +50,18 @@ protected:
     std::vector<Transaction> findByAmount(int amount) {
         return record.findByAmount(amount);
     }
+
+    std::vector<Transaction> none() {
+        return {};
+    }
 };
 
-TEST_CASE_METHOD(TransactionRecordTests, "tbd") {
+TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNone") {
+    ASSERT_EQUAL(none(), findByAmount(0));
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "findByAmountOnlyOne") {
     add(-5000, "hyvee", "10/5/19");
-    ASSERT_EQUAL(oneTransaction(-5000, "hyvee", "10/5/19"), findByAmount(-50));
+    ASSERT_EQUAL(onlyOne(-5000, "hyvee", "10/5/19"), findByAmount(-5000));
 }
 }}
