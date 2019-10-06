@@ -1,24 +1,31 @@
 #include <finances/Transaction.hpp>
 
 namespace finances {
+std::string string(int x) {
+    return std::to_string(x);
+}
+
 class ItemizedFormatter {
 public:
     std::string format(const Transactions &transactions) {
         std::string formatted;
-        bool first_ = true;
+        bool first = true;
         for (auto transaction : transactions) {
-            if (!first_) {
+            if (!first)
                 formatted += '\n';
-            }
-            auto amountBeforeDecimal = transaction.amount / 100;
-            auto amountAfterDecimal = std::abs(transaction.amount - amountBeforeDecimal * 100);
+            auto amountBeforeDecimal = amount(transaction) / 100;
+            auto amountAfterDecimal =
+                std::abs(amount(transaction) - amountBeforeDecimal * 100);
             auto leadingZero =  "";
             if (amountAfterDecimal < 10)
                 leadingZero = "0";
-            auto beforeDecimal = std::to_string(amountBeforeDecimal);
-            auto afterDecimal = leadingZero + std::to_string(amountAfterDecimal);
-            formatted += beforeDecimal + "." + afterDecimal + " " + transaction.label + " " + transaction.date;
-            first_ = false;
+            auto beforeDecimal = string(amountBeforeDecimal);
+            auto afterDecimal = leadingZero + string(amountAfterDecimal);
+            formatted +=
+                beforeDecimal + "." + afterDecimal + " " +
+                transaction.label + " " +
+                transaction.date;
+            first = false;
         }
         return formatted;
     }
