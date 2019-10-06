@@ -1,4 +1,6 @@
 #include "TransactionRecord.hpp"
+#include <algorithm>
+#include <numeric>
 
 namespace finances {
 int amount(const Transaction &t) {
@@ -28,6 +30,7 @@ std::vector<Transaction> TransactionRecord::findByAmount(int amount_) {
 }
 
 int TransactionRecord::netIncome() {
-    return transactions.size() ? transactions.front().amount : 0;
+    return std::accumulate(transactions.begin(), transactions.end(), 0, 
+        [](auto net, auto t) { return net + t.amount; });
 }
 }

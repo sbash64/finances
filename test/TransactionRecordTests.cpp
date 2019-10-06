@@ -93,4 +93,10 @@ TEST_CASE_METHOD(TransactionRecordTests, "netIncomeOneTransaction") {
     add(-1000, "hyvee", "10/5/19");
     ASSERT_NET_INCOME(-1000);
 }
+
+TEST_CASE_METHOD(TransactionRecordTests, "netIncomeTwoTransactions") {
+    add(-5000, "hyvee", "10/5/19");
+    add(-1000, "chipotle", "10/5/19");
+    ASSERT_NET_INCOME(-6000);
+}
 }}

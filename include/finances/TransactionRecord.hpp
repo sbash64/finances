@@ -3,7 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <algorithm>
 
 namespace finances {
 struct Transaction {
