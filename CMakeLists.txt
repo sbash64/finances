@@ -4,6 +4,7 @@ project(Finances VERSION 0.0.1 LANGUAGES CXX)
 add_library(finances
     TransactionRecord.cpp
     CommandInterpreter.cpp
+    FormattedWriter.cpp
 )
 target_include_directories(finances
     PRIVATE include/finances

@@ -1,32 +1,4 @@
-#include <finances/Transaction.hpp>
-
-namespace finances {
-class Formatter {
-public:
-    virtual ~Formatter() = default;
-    virtual std::string format(const Transactions &) = 0;
-};
-
-class Writer {
-public:
-    virtual ~Writer() = default;
-    virtual void write(const std::string &) = 0;
-};
-
-class FormattedWriter {
-    Formatter &formatter;
-    Writer &writer;
-public:
-    FormattedWriter(Formatter &formatter, Writer &writer) :
-        formatter{formatter},
-        writer{writer} {}
-
-    void print(const Transactions &t) {
-        writer.write(formatter.format(t));
-    }
-};
-}
-
+#include <finances/FormattedWriter.hpp>
 #include <catch2/catch.hpp>
 
 namespace finances { namespace {
@@ -75,16 +47,16 @@ protected:
         return formatter.toFormat();
     }
 
+    void print(const Transactions &t = {}) {
+        printer.print(t);
+    }
+
     void printOne(int amount, std::string label, std::string date) {
-        printer.print({transaction(amount, std::move(label), std::move(date))});
+        print({transaction(amount, std::move(label), std::move(date))});
     }
 
     void setFormatted(std::string s) {
         formatter.setFormmated(std::move(s));
-    }
-
-    void print() {
-        printer.print({});
     }
 
     std::string written() {
