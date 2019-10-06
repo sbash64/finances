@@ -10,7 +10,7 @@ public:
     void add(const Transaction &) override;
     void remove(const Transaction &);
     Transactions findByAmount(int);
-    int netIncome();
+    int netIncome() override;
     Transactions all() override;
 private:
     Transactions transactions;

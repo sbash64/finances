@@ -28,6 +28,8 @@ public:
     void print(const Transactions &t) override {
         writer.write('\n' + formatter.format(t) + "\n\n");
     }
+
+    void printNetIncome(int) override {}
 };
 }
 

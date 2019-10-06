@@ -32,6 +32,8 @@ void CommandInterpreter::execute(const std::string &s) {
     auto command = next(stream);
     if (command == "print")
         printer.print(record.all());
+    else if (command == "net")
+        printer.printNetIncome(record.netIncome());
     else {
         auto amount = next(stream);
         auto label = next(stream);

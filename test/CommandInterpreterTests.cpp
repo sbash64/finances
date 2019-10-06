@@ -9,6 +9,10 @@ public:
         return transactionAdded_;
     }
 
+    void setNetIncome(int x) {
+        netIncome_ = x;
+    }
+
     void add(const Transaction &t) override {
         transactionAdded_ = t;
     }
@@ -20,9 +24,14 @@ public:
     Transactions all() override {
         return all_;
     }
+
+    int netIncome() override {
+        return netIncome_;
+    }
 private:
     Transactions all_;
     Transaction transactionAdded_;
+    int netIncome_{};
 };
 
 class PrinterStub : public Printer {
@@ -31,11 +40,20 @@ public:
         return printed_;
     }
 
-    void print(const Transactions &t) {
+    auto netIncome() const {
+        return netIncome_;
+    }
+
+    void print(const Transactions &t) override {
         printed_ = t;
+    }
+
+    void printNetIncome(int x) override {
+        netIncome_ = x;
     }
 private:
     Transactions printed_;
+    int netIncome_;
 };
 
 class CommandInterpreterTests {
@@ -45,6 +63,10 @@ class CommandInterpreterTests {
 protected:
     void execute(const std::string &s) {
         interpreter.execute(s);
+    }
+
+    void setNetIncome(int x) {
+        record.setNetIncome(x);
     }
 
     Transaction transactionAdded() {
@@ -58,6 +80,10 @@ protected:
     Transactions printed() {
         return printer.printed();
     }
+
+    int printedNetIncome() {
+        return printer.netIncome();
+    }
 };
 
 #define ASSERT_TRANSACTION_ADDED(a, b, c)\
@@ -69,6 +95,7 @@ protected:
             transaction(d, e, f)\
         } == printed()\
     )
+#define ASSERT_NET_INCOME_PRINTED(a) CHECK(a == printedNetIncome())
 
 TEST_CASE_METHOD(CommandInterpreterTests, "addsTransaction") {
     execute("add -50 hyvee 10/5/19");
@@ -90,5 +117,11 @@ TEST_CASE_METHOD(CommandInterpreterTests, "printPrintsAll") {
         -1000, "chipotle", "10/6/19",
         -5000, "hyvee", "10/4/19"
     );
+}
+
+TEST_CASE_METHOD(CommandInterpreterTests, "netPrintsNetIncome") {
+    setNetIncome(5000);
+    execute("net");
+    ASSERT_NET_INCOME_PRINTED(5000);
 }
 }}

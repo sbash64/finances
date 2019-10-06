@@ -10,12 +10,14 @@ public:
     virtual ~ITransactionRecord() = default;
     virtual void add(const Transaction &) = 0;
     virtual Transactions all() = 0;
+    virtual int netIncome() = 0;
 };
 
 class Printer {
 public:
     virtual ~Printer() = default;
     virtual void print(const Transactions &) = 0;
+    virtual void printNetIncome(int) = 0;
 };
 
 class CommandInterpreter {
