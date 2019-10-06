@@ -28,15 +28,14 @@ public:
     }
 
     std::vector<Transaction> findByAmount(int amount_) {
-        auto found = std::find_if(
+        std::vector<Transaction> found;
+        std::copy_if(
             transactions.begin(),
             transactions.end(),
+            std::back_inserter(found),
             [=](auto t) { return amount(t) == amount_; }
         );
-        if (found != transactions.end())
-            return { *found };
-        else
-            return {};
+        return found;
     }
 };
 }
@@ -97,5 +96,17 @@ TEST_CASE_METHOD(TransactionRecordTests, "findByAmountOneFound") {
     add(-5000, "hyvee", "10/5/19");
     add(-1000, "chipotle", "10/5/19");
     ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(-5000, "hyvee", "10/5/19", -5000);
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "findByAmountBothFound") {
+    add(-1000, "hyvee", "10/5/19");
+    add(-1000, "chipotle", "10/5/19");
+    CHECK(
+        std::vector<Transaction>{
+            transaction(-1000, "hyvee", "10/5/19"),
+            transaction(-1000, "chipotle", "10/5/19")
+        } ==
+        findByAmount(-1000)
+    );
 }
 }}
