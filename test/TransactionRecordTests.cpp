@@ -1,45 +1,4 @@
-#include <string>
-#include <vector>
-#include <algorithm>
-
-namespace finances {
-struct Transaction {
-    int amount;
-    std::string label;
-    std::string date;
-};
-
-int amount(const Transaction &t) {
-    return t.amount;
-}
-
-bool operator==(const Transaction &lhs, const Transaction &rhs) {
-    return
-        amount(lhs) == amount(rhs) &&
-        lhs.label == rhs.label &&
-        lhs.date == rhs.date;
-}
-
-class TransactionRecord {
-    std::vector<Transaction> transactions;
-public:
-    void add(const Transaction &t) {
-        transactions.push_back(t);
-    }
-
-    std::vector<Transaction> findByAmount(int amount_) {
-        std::vector<Transaction> found;
-        std::copy_if(
-            transactions.begin(),
-            transactions.end(),
-            std::back_inserter(found),
-            [=](auto t) { return amount(t) == amount_; }
-        );
-        return found;
-    }
-};
-}
-
+#include <finances/TransactionRecord.hpp>
 #include <catch2/catch.hpp>
 
 namespace finances { namespace {
