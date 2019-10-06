@@ -1,5 +1,4 @@
 #include <finances/Transaction.hpp>
-#include <sstream>
 
 namespace finances {
 class ITransactionRecord {
@@ -15,9 +14,11 @@ public:
         record{record} {}
 
     void execute(const std::string &s) {
-        std::stringstream stream;
-
-        record.add({std::stoi(s.substr(4, 3))*100, "hyvee", "10/5/19"});
+        record.add({
+            std::stoi(s.substr(4, 3))*100,
+            s.substr(8, 5),
+            s.substr(14)
+        });
     }
 };
 }
