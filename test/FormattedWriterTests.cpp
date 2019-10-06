@@ -1,3 +1,4 @@
+#include "testing-utility.hpp"
 #include <finances/FormattedWriter.hpp>
 #include <catch2/catch.hpp>
 
@@ -39,10 +40,6 @@ class FormattedWriterTests {
     WriterStub writer;
     FormattedWriter printer{formatter, writer};
 protected:
-    Transaction transaction(int amount, std::string label, std::string date) {
-        return {amount, std::move(label), std::move(date)};
-    }
-
     Transactions toFormat() {
         return formatter.toFormat();
     }

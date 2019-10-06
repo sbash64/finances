@@ -17,16 +17,13 @@ public:
 };
 }
 
+#include "testing-utility.hpp"
 #include <catch2/catch.hpp>
 
 namespace finances { namespace {
 class ItemizedFormatterTests {
     ItemizedFormatter formatter;
 protected:
-    Transaction transaction(int amount, std::string label, std::string date) {
-        return {amount, std::move(label), std::move(date)};
-    }
-
     std::string format(const Transactions &t) {
         return formatter.format(t);
     }

@@ -1,3 +1,4 @@
+#include "testing-utility.hpp"
 #include <finances/TransactionRecord.hpp>
 #include <catch2/catch.hpp>
 
@@ -5,10 +6,6 @@ namespace finances { namespace {
 class TransactionRecordTests {
     TransactionRecord record;
 protected:
-    Transaction transaction(int amount, std::string label, std::string date) {
-        return {amount, std::move(label), std::move(date)};
-    }
-
     Transactions onlyOne(
         int amount,
         std::string label,

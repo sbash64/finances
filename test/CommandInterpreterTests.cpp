@@ -1,3 +1,4 @@
+#include "testing-utility.hpp"
 #include <finances/CommandInterpreter.hpp>
 #include <catch2/catch.hpp>
 
@@ -42,10 +43,6 @@ class CommandInterpreterTests {
     PrinterStub printer;
     CommandInterpreter interpreter{record, printer};
 protected:
-    Transaction transaction(int amount, std::string label, std::string date) {
-        return {amount, std::move(label), std::move(date)};
-    }
-
     void execute(const std::string &s) {
         interpreter.execute(s);
     }
