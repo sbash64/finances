@@ -6,7 +6,7 @@ std::string string(int x) {
     return std::to_string(x);
 }
 
-std::string ItemizedFormatter::format(const Transactions &transactions) {
+std::string ItemizedFormatter::formatTransactions(const Transactions &transactions) {
     std::string formatted;
     bool first = true;
     for (auto transaction : transactions) {

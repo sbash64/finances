@@ -18,7 +18,7 @@ public:
         return {};
     }
 
-    std::string format(const Transactions &t) override {
+    std::string formatTransactions(const Transactions &t) override {
         toFormat_ = t;
         return formatted_;
     }
@@ -62,7 +62,7 @@ protected:
         printer.printTransactions(t);
     }
 
-    void printOne(int amount, std::string label, std::string date) {
+    void printOneTransaction(int amount, std::string label, std::string date) {
         print({transaction(amount, std::move(label), std::move(date))});
     }
 
@@ -79,14 +79,14 @@ protected:
     }
 };
 
-#define ASSERT_ONE_TO_FORMAT(a, b, c)\
+#define ASSERT_ONE_TRANSACTION_TO_FORMAT(a, b, c)\
     CHECK(Transactions{transaction(a, b, c)} == toFormat())
 #define ASSERT_WRITTEN(a) CHECK(a == written())
 #define ASSERT_NET_INCOME_TO_FORMAT(a) CHECK(a == netIncomeToFormat())
 
 TEST_CASE_METHOD(FormattedWriterTests, "printTransactionsFormatsOne") {
-    printOne(-1000, "chipotle", "10/6/19");
-    ASSERT_ONE_TO_FORMAT(-1000, "chipotle", "10/6/19");
+    printOneTransaction(-1000, "chipotle", "10/6/19");
+    ASSERT_ONE_TRANSACTION_TO_FORMAT(-1000, "chipotle", "10/6/19");
 }
 
 TEST_CASE_METHOD(FormattedWriterTests, "printTransactionsWritesFormatted") {

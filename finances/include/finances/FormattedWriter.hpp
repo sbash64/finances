@@ -8,7 +8,7 @@ namespace finances {
 class Formatter {
 public:
     virtual ~Formatter() = default;
-    virtual std::string format(const Transactions &) = 0;
+    virtual std::string formatTransactions(const Transactions &) = 0;
     virtual std::string formatNetIncome(int) = 0;
 };
 
@@ -27,7 +27,7 @@ public:
         writer{writer} {}
 
     void printTransactions(const Transactions &t) override {
-        writer.write('\n' + formatter.format(t) + "\n\n");
+        writer.write('\n' + formatter.formatTransactions(t) + "\n\n");
     }
 
     void printNetIncome(int x) override {

@@ -7,7 +7,7 @@ class ItemizedFormatterTests {
     ItemizedFormatter formatter;
 protected:
     std::string format(const Transactions &t) {
-        return formatter.format(t);
+        return formatter.formatTransactions(t);
     }
 };
 
