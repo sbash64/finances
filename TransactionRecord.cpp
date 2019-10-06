@@ -3,20 +3,26 @@
 #include <numeric>
 
 namespace finances {
-void TransactionRecord::add(const Transaction &t) {
-    transactions.push_back(t);
-}
-
-void TransactionRecord::remove(const Transaction &) {
-    transactions.clear();
-}
-
 constexpr auto begin(const Transactions &v) {
     return v.begin();
 }
 
 constexpr auto end(const Transactions &v) {
     return v.end();
+}
+
+void TransactionRecord::add(const Transaction &t) {
+    transactions.push_back(t);
+}
+
+void TransactionRecord::remove(const Transaction &t) {
+    auto found = std::find(
+        begin(transactions),
+        end(transactions),
+        t
+    );
+    if (found != end(transactions))
+        transactions.erase(found);
 }
 
 Transactions TransactionRecord::findByAmount(int amount_) {

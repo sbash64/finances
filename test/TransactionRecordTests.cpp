@@ -104,7 +104,7 @@ TEST_CASE_METHOD(TransactionRecordTests, "netIncomeTwoTransactions") {
     ASSERT_NET_INCOME(-6000);
 }
 
-TEST_CASE_METHOD(TransactionRecordTests, "removeTransaction") {
+TEST_CASE_METHOD(TransactionRecordTests, "removeOnlyTransaction") {
     add(-5000, "hyvee", "10/5/19");
     remove(-5000, "hyvee", "10/5/19");
     ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(-5000);
@@ -112,5 +112,15 @@ TEST_CASE_METHOD(TransactionRecordTests, "removeTransaction") {
 
 TEST_CASE_METHOD(TransactionRecordTests, "removeNonExistingTransaction") {
     remove(-5000, "hyvee", "10/5/19");
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "removeATransaction") {
+    add(-5000, "hyvee", "10/5/19");
+    add(-1000, "chipotle", "10/5/19");
+    remove(-5000, "hyvee", "10/5/19");
+    ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(
+        -1000, "chipotle", "10/5/19",
+        -1000
+    );
 }
 }}
