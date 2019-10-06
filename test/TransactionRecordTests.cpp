@@ -25,8 +25,6 @@ public:
 
 #include <catch2/catch.hpp>
 
-#define ASSERT_EQUAL(a, b) CHECK(a == b)
-
 namespace finances { namespace {
 class TransactionRecordTests {
     TransactionRecord record;
@@ -56,12 +54,15 @@ protected:
     }
 };
 
+#define ASSERT_EQUAL(a, b) CHECK(a == b)
+#define ASSERT_TRANSACTIONS_BY_AMOUNT(a, b) ASSERT_EQUAL(a, findByAmount(b))
+
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNone") {
-    ASSERT_EQUAL(none(), findByAmount(0));
+    ASSERT_TRANSACTIONS_BY_AMOUNT(none(), 0);
 }
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountOnlyOne") {
     add(-5000, "hyvee", "10/5/19");
-    ASSERT_EQUAL(onlyOne(-5000, "hyvee", "10/5/19"), findByAmount(-5000));
+    ASSERT_TRANSACTIONS_BY_AMOUNT(onlyOne(-5000, "hyvee", "10/5/19"), -5000);
 }
 }}
