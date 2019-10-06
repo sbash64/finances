@@ -1,4 +1,5 @@
 #include <finances/Transaction.hpp>
+#include <sstream>
 
 namespace finances {
 class ITransactionRecord {
@@ -7,6 +8,18 @@ public:
     virtual void add(const Transaction &) = 0;
 };
 
+int toHundredths(const std::string &s) {
+    auto found = s.find('.');
+    if (found == std::string::npos)
+        return std::stoi(s) * 100;
+    auto sign = ' ';
+    if (s.front() == '-')
+        sign = '-';
+    auto beforeDecimal = s.substr(0, found);
+    auto afterDecimal = sign + s.substr(found + 1);
+    return std::stoi(beforeDecimal) * 100 + std::stoi(afterDecimal);
+}
+
 class CommandInterpreter {
     ITransactionRecord &record;
 public:
@@ -14,10 +27,19 @@ public:
         record{record} {}
 
     void execute(const std::string &s) {
+        std::stringstream stream{s};
+        std::string command;
+        stream >> command;
+        std::string amount;
+        stream >> amount;
+        std::string label;
+        stream >> label;
+        std::string date;
+        stream >> date;
         record.add({
-            std::stoi(s.substr(4, 3))*100,
-            s.substr(8, 5),
-            s.substr(14)
+            toHundredths(amount),
+            label,
+            date
         });
     }
 };
@@ -59,8 +81,13 @@ protected:
 #define ASSERT_TRANSACTION_ADDED(a, b, c)\
     CHECK(transaction(a, b, c) == transactionAdded())
 
-TEST_CASE_METHOD(CommandInterpreterTests, "tbd") {
+TEST_CASE_METHOD(CommandInterpreterTests, "addsTransaction") {
     execute("add -50 hyvee 10/5/19");
     ASSERT_TRANSACTION_ADDED(-5000, "hyvee", "10/5/19");
+}
+
+TEST_CASE_METHOD(CommandInterpreterTests, "addsAnotherTransaction") {
+    execute("add -9.47 chipotle 10/6/19");
+    ASSERT_TRANSACTION_ADDED(-947, "chipotle", "10/6/19");
 }
 }}
