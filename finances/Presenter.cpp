@@ -54,14 +54,18 @@ static Transaction transaction(std::stringstream &stream) {
     return {amount_, label, date};
 }
 
+static void showTransactions(View &view, const Transactions &t) {
+    view.showTransactions(t);
+}
+
 void Presenter::execute(const std::string &s) {
     std::stringstream stream{s};
     auto command = next(stream);
     try {
         if (matches(command, Command::print))
-            view.showTransactions(model.transactions());
+            showTransactions(view, model.transactions());
         else if (matches(command, Command::printVerified))
-            view.showTransactions(model.verifiedTransactions());
+            showTransactions(view, model.verifiedTransactions());
         else if (matches(command, Command::netIncome))
             view.showNetIncome(model.netIncome());
         else if (matches(command, Command::verify))
