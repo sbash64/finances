@@ -124,8 +124,32 @@ protected:
         return model.amountVerified();
     }
 
+    void executeCommand(Command c, const std::string &s = {}) {
+        execute(name(c) + std::string{s.empty() ? "" : " "} + s);
+    }
+
     void executeAdd(const std::string &s) {
-        execute(name(Command::add) + std::string{" "} + s);
+        executeCommand(Command::add, s);
+    }
+
+    void executeRemove(const std::string &s) {
+        executeCommand(Command::remove, s);
+    }
+
+    void executeVerify(const std::string &s) {
+        executeCommand(Command::verify, s);
+    }
+
+    void executeNetIncome() {
+        executeCommand(Command::netIncome);
+    }
+
+    void executePrint() {
+        executeCommand(Command::print);
+    }
+
+    void executePrintVerified() {
+        executeCommand(Command::printVerified);
     }
 };
 
@@ -154,7 +178,7 @@ TEST_CASE_METHOD(PresenterTests, "addsAnotherTransaction") {
 }
 
 TEST_CASE_METHOD(PresenterTests, "removesTransaction") {
-    execute("remove -12.34 hyvee 10/5/19");
+    executeRemove("-12.34 hyvee 10/5/19");
     ASSERT_TRANSACTION_REMOVED(-1234, "hyvee", "10/5/19");
 }
 
@@ -163,7 +187,7 @@ TEST_CASE_METHOD(PresenterTests, "printPrintsAllTransactions") {
         transaction(-1000, "chipotle", "10/6/19"),
         transaction(-5000, "hyvee", "10/4/19")
     });
-    execute("print");
+    executePrint();
     ASSERT_BOTH_TRANSACTIONS_PRINTED(
         -1000, "chipotle", "10/6/19",
         -5000, "hyvee", "10/4/19"
@@ -175,7 +199,7 @@ TEST_CASE_METHOD(PresenterTests, "printVerifiedPrintsVerifiedTransactions") {
         transaction(-1000, "chipotle", "10/6/19"),
         transaction(-5000, "hyvee", "10/4/19")
     });
-    execute("printverified");
+    executePrintVerified();
     ASSERT_BOTH_TRANSACTIONS_PRINTED(
         -1000, "chipotle", "10/6/19",
         -5000, "hyvee", "10/4/19"
@@ -184,12 +208,12 @@ TEST_CASE_METHOD(PresenterTests, "printVerifiedPrintsVerifiedTransactions") {
 
 TEST_CASE_METHOD(PresenterTests, "netPrintsNetIncome") {
     setNetIncome(5000);
-    execute("net");
+    executeNetIncome();
     ASSERT_NET_INCOME_PRINTED(5000);
 }
 
 TEST_CASE_METHOD(PresenterTests, "verifyVerifiesAmount") {
-    execute("verify -12.34");
+    executeVerify("-12.34");
     ASSERT_AMOUNT_VERIFIED(-1234);
 }
 
@@ -198,6 +222,6 @@ TEST_CASE_METHOD(PresenterTests, "unrecognizedCommandDoesNotAbort") {
 }
 
 TEST_CASE_METHOD(PresenterTests, "partiallyCorrectCommandDoesNotAbort") {
-    execute("add oops");
+    executeAdd("oops");
 }
 }}
