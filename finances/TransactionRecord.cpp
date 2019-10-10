@@ -12,6 +12,10 @@ constexpr auto end(const Transactions &v) {
     return v.end();
 }
 
+constexpr auto begin(const VerifiableTransactions &v) {
+    return v.begin();
+}
+
 constexpr auto end(const VerifiableTransactions &v) {
     return v.end();
 }
@@ -50,7 +54,7 @@ static auto find_if(
     return std::find_if(
         std::begin(transactions),
         end(transactions),
-        [=](auto t) { return f(t); }
+        [&](auto t) { return f(t); }
     );
 }
 
@@ -59,34 +63,53 @@ void TransactionRecord::add(const Transaction &t) {
 }
 
 void TransactionRecord::remove(const Transaction &transaction_) {
-    auto found_ = find_if(
+    auto maybe = find_if(
         verifiableTransactions,
-        [=](auto t) { return transaction(t) == transaction_; }
+        [&](auto t) { return transaction(t) == transaction_; }
     );
-    if (found(found_, verifiableTransactions))
-        verifiableTransactions.erase(found_);
+    if (found(maybe, verifiableTransactions))
+        verifiableTransactions.erase(maybe);
+}
+
+static void for_each(
+    const VerifiableTransactions &transactions,
+    std::function<void(const VerifiableTransaction &)> f
+) {
+    std::for_each(begin(transactions), end(transactions), f);
 }
 
 Transactions TransactionRecord::findByAmount(int amount) {
     Transactions found;
-    for (auto transaction : verifiableTransactions)
-        if (amountMatches(transaction, amount))
-            addTo(found, transaction);
+    for_each(
+        verifiableTransactions,
+        [&](auto transaction) {
+            if (amountMatches(transaction, amount))
+                addTo(found, transaction);
+        }
+    );
     return found;
 }
 
 Transactions TransactionRecord::verifiedTransactions() {
     Transactions found;
-    for (auto transaction : verifiableTransactions)
-        if (verified(transaction))
-            addTo(found, transaction);
+    for_each(
+        verifiableTransactions,
+        [&](auto transaction) {
+            if (verified(transaction))
+                addTo(found, transaction);
+        }
+    );
     return found;
 }
 
 Transactions TransactionRecord::transactions() {
     Transactions transactions;
-    for (auto transaction : verifiableTransactions)
-        addTo(transactions, transaction);
+    for_each(
+        verifiableTransactions,
+        [&](auto transaction) {
+            addTo(transactions, transaction);
+        }
+    );
     return transactions;
 }
 
