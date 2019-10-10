@@ -53,15 +53,19 @@ static Transaction transaction(std::stringstream &stream) {
 void Presenter::execute(const std::string &s) {
     std::stringstream stream{s};
     auto command = next(stream);
-    if (matches(command, "print"))
-        view.showTransactions(model.transactions());
-    else if (matches(command, "net"))
-        view.showNetIncome(model.netIncome());
-    else if (matches(command, "verify"))
-        model.verify(amount(stream));
-    else if (matches(command, "add"))
-        model.add(transaction(stream));
-    else if (matches(command, "remove"))
-        model.remove(transaction(stream));
+    try {
+        if (matches(command, "print"))
+            view.showTransactions(model.transactions());
+        else if (matches(command, "net"))
+            view.showNetIncome(model.netIncome());
+        else if (matches(command, "verify"))
+            model.verify(amount(stream));
+        else if (matches(command, "add"))
+            model.add(transaction(stream));
+        else if (matches(command, "remove"))
+            model.remove(transaction(stream));
+    } catch (const std::exception &) {
+
+    }
 }
 }

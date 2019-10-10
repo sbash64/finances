@@ -167,4 +167,8 @@ TEST_CASE_METHOD(PresenterTests, "verifyVerifiesAmount") {
 TEST_CASE_METHOD(PresenterTests, "unrecognizedCommandDoesNotAbort") {
     execute("jellyfish");
 }
+
+TEST_CASE_METHOD(PresenterTests, "partiallyCorrectCommandDoesNotAbort") {
+    execute("add oops");
+}
 }}
