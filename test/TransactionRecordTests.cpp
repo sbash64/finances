@@ -45,6 +45,16 @@ protected:
     Transactions all() {
         return record.transactions();
     }
+
+    Transactions two(
+        int amount1, std::string label1, std::string date1,
+        int amount2, std::string label2, std::string date2
+    ) {
+        return {
+            transaction(amount1, std::move(label1), std::move(date1)),
+            transaction(amount2, std::move(label2), std::move(date2))
+        };
+    }
 };
 
 #define ASSERT_TRANSACTIONS_BY_AMOUNT(a, b) ASSERT_EQUAL(a, findByAmount(b))
@@ -52,6 +62,8 @@ protected:
     ASSERT_TRANSACTIONS_BY_AMOUNT(onlyOne(a, b, c), d)
 #define ASSERT_ONE_VERIFIED_TRANSACTION(a, b, c)\
     ASSERT_EQUAL(onlyOne(a, b, c), verifiedTransactions())
+#define ASSERT_TWO_VERIFIED_TRANSACTIONS(a, b, c, d, e, f)\
+    ASSERT_EQUAL(two(a, b, c, d, e, f), verifiedTransactions())
 #define ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(a)\
     ASSERT_TRANSACTIONS_BY_AMOUNT(none(), a)
 #define ASSERT_TWO_TRANSACTIONS_FOR_AMOUNT(a, b, c, d, e, f, g)\
@@ -171,5 +183,17 @@ TEST_CASE_METHOD(TransactionRecordTests, "oneOfTwoVerifiedTransactions") {
     add(-1000, "chipotle", "10/6/19");
     verify(-2000);
     ASSERT_ONE_VERIFIED_TRANSACTION(-2000, "hyvee", "10/5/19");
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "twoOfThreeVerifiedTransactions") {
+    add(-2000, "hyvee", "10/5/19");
+    add(-1000, "chipotle", "10/6/19");
+    add(-3000, "barnes noble", "10/4/19");
+    verify(-2000);
+    verify(-3000);
+    ASSERT_TWO_VERIFIED_TRANSACTIONS(
+        -2000, "hyvee", "10/5/19",
+        -3000, "barnes noble", "10/4/19"
+    );
 }
 }}

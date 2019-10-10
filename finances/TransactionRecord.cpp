@@ -96,12 +96,10 @@ void TransactionRecord::verify(int amount_) {
 }
 
 Transactions TransactionRecord::verifiedTransactions() {
-    auto found_ = find_if(
-        verifiableTransactions_,
-        [=](auto t) { return verified(t); }
-    );
-    if (!found(found_, verifiableTransactions_))
-        return {};
-    return { transaction(*found_) };
+    Transactions found;
+    for (auto t : verifiableTransactions_)
+        if (verified(t))
+            addTo(found, t);
+    return found;
 }
 }
