@@ -55,19 +55,23 @@ static bool amountMatches(const Transaction &t, int amount_) {
     return amount(t) == amount_;
 }
 
+static void addTo(Transactions &t, const VerifiableTransaction &vt) {
+    t.push_back(transaction(vt));
+}
+
 Transactions TransactionRecord::findByAmount(int amount) {
     Transactions found;
     for (auto t : verifiableTransactions_)
         if (amountMatches(transaction(t), amount))
-            found.push_back(transaction(t));
+            addTo(found, t);
     return found;
 }
 
 Transactions TransactionRecord::transactions() {
-    Transactions found;
+    Transactions transactions;
     for (auto t : verifiableTransactions_)
-        found.push_back(transaction(t));
-    return found;
+        addTo(transactions, t);
+    return transactions;
 }
 
 int TransactionRecord::netIncome() {
@@ -77,6 +81,10 @@ int TransactionRecord::netIncome() {
         0,
         [](auto net, auto t) { return net + amount(transaction(t)); }
     );
+}
+
+static bool verified(const VerifiableTransaction &t) {
+    return t.verified;
 }
 
 void TransactionRecord::verify(int amount_) {
@@ -90,10 +98,10 @@ void TransactionRecord::verify(int amount_) {
 Transactions TransactionRecord::verifiedTransactions() {
     auto found_ = find_if(
         verifiableTransactions_,
-        [=](auto t) { return t.verified; }
+        [=](auto t) { return verified(t); }
     );
     if (!found(found_, verifiableTransactions_))
         return {};
-    return { found_->transaction };
+    return { transaction(*found_) };
 }
 }
