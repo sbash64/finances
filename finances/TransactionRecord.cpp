@@ -35,12 +35,19 @@ void TransactionRecord::add(const Transaction &t) {
     verifiableTransactions_.push_back({t, false});
 }
 
+static bool found(
+    VerifiableTransactions::iterator it,
+    const VerifiableTransactions &t
+) {
+    return it != end(t);
+}
+
 void TransactionRecord::remove(const Transaction &transaction_) {
     auto found_ = find_if(
         verifiableTransactions_,
         [=](auto t) { return transaction(t) == transaction_; }
     );
-    if (found_ != end(verifiableTransactions_))
+    if (found(found_, verifiableTransactions_))
         verifiableTransactions_.erase(found_);
 }
 
@@ -81,12 +88,12 @@ void TransactionRecord::verify(int amount_) {
 }
 
 Transactions TransactionRecord::verifiedTransactions() {
-    auto found = find_if(
+    auto found_ = find_if(
         verifiableTransactions_,
         [=](auto t) { return t.verified; }
     );
-    if (found == end(verifiableTransactions_))
+    if (!found(found_, verifiableTransactions_))
         return {};
-    return { found->transaction };
+    return { found_->transaction };
 }
 }
