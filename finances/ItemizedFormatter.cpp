@@ -71,6 +71,6 @@ std::string ItemizedFormatter::formatTransactions(
 }
 
 std::string ItemizedFormatter::formatNetIncome(int x) {
-    return "Net Income: " + formatAmount(x);
+    return concatenate("Net Income: ", formatAmount(x));
 }
 }
