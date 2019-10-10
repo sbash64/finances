@@ -44,11 +44,11 @@ public:
         return netIncome_;
     }
 
-    void printTransactions(const Transactions &t) override {
+    void showTransactions(const Transactions &t) override {
         printedTransactions_ = t;
     }
 
-    void printNetIncome(int x) override {
+    void showNetIncome(int x) override {
         netIncome_ = x;
     }
 private:

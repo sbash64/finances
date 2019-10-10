@@ -24,8 +24,8 @@ class FormattedWriter : public View {
     Writer &writer;
 public:
     FormattedWriter(Formatter &, Writer &);
-    void printTransactions(const Transactions &t) override;
-    void printNetIncome(int x) override;
+    void showTransactions(const Transactions &t) override;
+    void showNetIncome(int x) override;
 };
 }
 

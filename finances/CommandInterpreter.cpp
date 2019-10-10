@@ -2,6 +2,13 @@
 #include <sstream>
 
 namespace finances {
+CommandInterpreter::CommandInterpreter(
+    Model &record,
+    View &printer
+) :
+    model{record},
+    view{printer} {}
+
 static int integer(const std::string &s) {
     return std::stoi(s);
 }
@@ -36,14 +43,14 @@ void CommandInterpreter::execute(const std::string &s) {
     std::stringstream stream{s};
     auto command = next(stream);
     if (matches(command, "print"))
-        printer.printTransactions(record.all());
+        view.showTransactions(model.all());
     else if (matches(command, "net"))
-        printer.printNetIncome(record.netIncome());
+        view.showNetIncome(model.netIncome());
     else {
         auto amount = next(stream);
         auto label = next(stream);
         auto date = next(stream);
-        record.add({
+        model.add({
             toHundredths(amount),
             label,
             date

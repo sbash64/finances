@@ -64,7 +64,7 @@ protected:
     }
 
     void print(const Transactions &t = {}) {
-        printer.printTransactions(t);
+        printer.showTransactions(t);
     }
 
     void printOneTransaction(int amount, std::string label, std::string date) {
@@ -84,7 +84,7 @@ protected:
     }
 
     void printNetIncome(int x = {}) {
-        printer.printNetIncome(x);
+        printer.showNetIncome(x);
     }
 };
 

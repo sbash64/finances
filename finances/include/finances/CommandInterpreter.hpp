@@ -16,20 +16,15 @@ public:
 class View {
 public:
     virtual ~View() = default;
-    virtual void printTransactions(const Transactions &) = 0;
-    virtual void printNetIncome(int) = 0;
+    virtual void showTransactions(const Transactions &) = 0;
+    virtual void showNetIncome(int) = 0;
 };
 
 class CommandInterpreter {
-    Model &record;
-    View &printer;
+    Model &model;
+    View &view;
 public:
-    CommandInterpreter(
-        Model &record,
-        View &printer
-    ) :
-        record{record},
-        printer{printer} {}
+    CommandInterpreter(Model &, View &);
     void execute(const std::string &);
 };
 }
