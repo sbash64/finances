@@ -13,6 +13,10 @@ public:
         return transactionAdded_;
     }
 
+    auto transactionRemoved() const {
+        return transactionRemoved_;
+    }
+
     void setNetIncome(int x) {
         netIncome_ = x;
     }
@@ -36,9 +40,14 @@ public:
     void verify(int x) override {
         amountVerified_ = x;
     }
+
+    void remove(const Transaction &t) override {
+        transactionRemoved_ = t;
+    }
 private:
     Transactions transactions_;
     Transaction transactionAdded_;
+    Transaction transactionRemoved_;
     int netIncome_{};
     int amountVerified_{};
 };
@@ -82,6 +91,10 @@ protected:
         return model.transactionAdded();
     }
 
+    Transaction transactionRemoved() {
+        return model.transactionRemoved();
+    }
+
     void setAllTransactions(Transactions t) {
         model.setTransactions(std::move(t));
     }
@@ -101,6 +114,8 @@ protected:
 
 #define ASSERT_TRANSACTION_ADDED(a, b, c)\
     ASSERT_EQUAL(transaction(a, b, c), transactionAdded())
+#define ASSERT_TRANSACTION_REMOVED(a, b, c)\
+    ASSERT_EQUAL(transaction(a, b, c), transactionRemoved())
 #define ASSERT_BOTH_TRANSACTIONS_PRINTED(a, b, c, d, e, f)\
     CHECK(\
         Transactions{\
@@ -119,6 +134,11 @@ TEST_CASE_METHOD(PresenterTests, "addsTransaction") {
 TEST_CASE_METHOD(PresenterTests, "addsAnotherTransaction") {
     execute("add -9.47 chipotle 10/6/19");
     ASSERT_TRANSACTION_ADDED(-947, "chipotle", "10/6/19");
+}
+
+TEST_CASE_METHOD(PresenterTests, "removesTransaction") {
+    execute("remove -50 hyvee 10/5/19");
+    ASSERT_TRANSACTION_REMOVED(-5000, "hyvee", "10/5/19");
 }
 
 TEST_CASE_METHOD(PresenterTests, "printPrintsAllTransactions") {

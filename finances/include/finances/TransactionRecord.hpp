@@ -16,7 +16,7 @@ using VerifiableTransactions = std::vector<VerifiableTransaction>;
 class TransactionRecord : public Model {
 public:
     void add(const Transaction &) override;
-    void remove(const Transaction &);
+    void remove(const Transaction &) override;
     Transactions findByAmount(int);
     int netIncome() override;
     Transactions transactions() override;

@@ -60,5 +60,15 @@ void Presenter::execute(const std::string &s) {
             date
         });
     }
+    else if (matches(command, "remove")) {
+        auto amount = next(stream);
+        auto label = next(stream);
+        auto date = next(stream);
+        model.remove({
+            toHundredths(amount),
+            label,
+            date
+        });
+    }
 }
 }
