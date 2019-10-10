@@ -5,8 +5,8 @@
 namespace finances { namespace {
 class FormatterStub : public Formatter {
 public:
-    auto toFormat() const {
-        return toFormat_;
+    auto transactionsToFormat() const {
+        return transactionsToFormat_;
     }
 
     auto netIncomeToFormat() const {
@@ -19,20 +19,20 @@ public:
     }
 
     std::string formatTransactions(const Transactions &t) override {
-        toFormat_ = t;
-        return formatted_;
+        transactionsToFormat_ = t;
+        return formattedTransactions_;
     }
 
-    void setFormmated(std::string s) {
-        formatted_ = std::move(s);
+    void setFormattedTransactions(std::string s) {
+        formattedTransactions_ = std::move(s);
     }
 
     void setFormattedNetIncome(std::string s) {
         formattedNetIncome_ = std::move(s);
     }
 private:
-    Transactions toFormat_;
-    std::string formatted_;
+    Transactions transactionsToFormat_;
+    std::string formattedTransactions_;
     std::string formattedNetIncome_;
     int netIncomeToFormat_;
 };
@@ -55,24 +55,28 @@ class FormattedWriterTests {
     WriterStub writer;
     FormattedWriter printer{formatter, writer};
 protected:
-    Transactions toFormat() {
-        return formatter.toFormat();
+    Transactions transactionsToFormat() {
+        return formatter.transactionsToFormat();
     }
 
     int netIncomeToFormat() {
         return formatter.netIncomeToFormat();
     }
 
-    void print(const Transactions &t = {}) {
+    void showTransactions(const Transactions &t = {}) {
         printer.showTransactions(t);
     }
 
-    void printOneTransaction(int amount, std::string label, std::string date) {
-        print({transaction(amount, std::move(label), std::move(date))});
+    void showOneTransaction(int amount, std::string label, std::string date) {
+        showTransactions({transaction(
+            amount,
+            std::move(label),
+            std::move(date)
+        )});
     }
 
     void setFormatted(std::string s) {
-        formatter.setFormmated(std::move(s));
+        formatter.setFormattedTransactions(std::move(s));
     }
 
     void setFormattedNetIncome(std::string s) {
@@ -83,35 +87,35 @@ protected:
         return writer.written();
     }
 
-    void printNetIncome(int x = {}) {
+    void showNetIncome(int x = {}) {
         printer.showNetIncome(x);
     }
 };
 
 #define ASSERT_ONE_TRANSACTION_TO_FORMAT(a, b, c)\
-    CHECK(Transactions{transaction(a, b, c)} == toFormat())
+    CHECK(Transactions{transaction(a, b, c)} == transactionsToFormat())
 #define ASSERT_WRITTEN(a) CHECK(a == written())
 #define ASSERT_NET_INCOME_TO_FORMAT(a) CHECK(a == netIncomeToFormat())
 
-TEST_CASE_METHOD(FormattedWriterTests, "printTransactionsFormatsOne") {
-    printOneTransaction(-1000, "chipotle", "10/6/19");
+TEST_CASE_METHOD(FormattedWriterTests, "showTransactionsFormatsOne") {
+    showOneTransaction(-1000, "chipotle", "10/6/19");
     ASSERT_ONE_TRANSACTION_TO_FORMAT(-1000, "chipotle", "10/6/19");
 }
 
-TEST_CASE_METHOD(FormattedWriterTests, "printTransactionsWritesFormatted") {
+TEST_CASE_METHOD(FormattedWriterTests, "showTransactionsWritesFormatted") {
     setFormatted("hello");
-    print();
+    showTransactions();
     ASSERT_WRITTEN("\nhello\n\n");
 }
 
-TEST_CASE_METHOD(FormattedWriterTests, "printNetIncomeFormatsNet") {
-    printNetIncome(10);
+TEST_CASE_METHOD(FormattedWriterTests, "showNetIncomeFormatsNet") {
+    showNetIncome(10);
     ASSERT_NET_INCOME_TO_FORMAT(10);
 }
 
-TEST_CASE_METHOD(FormattedWriterTests, "printNetIncomeWritesNetIncome") {
+TEST_CASE_METHOD(FormattedWriterTests, "showNetIncomeWritesNetIncome") {
     setFormattedNetIncome("hello");
-    printNetIncome();
+    showNetIncome();
     ASSERT_WRITTEN("\nhello\n\n");
 }
 }}
