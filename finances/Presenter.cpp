@@ -39,6 +39,10 @@ static bool matches(const std::string &a, const std::string &b) {
     return a == b;
 }
 
+static bool matches(const std::string &a, Command c) {
+    return matches(a, name(c));
+}
+
 static int amount(std::stringstream &stream) {
     return toHundredths(next(stream));
 }
@@ -54,17 +58,17 @@ void Presenter::execute(const std::string &s) {
     std::stringstream stream{s};
     auto command = next(stream);
     try {
-        if (matches(command, "print"))
+        if (matches(command, Command::print))
             view.showTransactions(model.transactions());
-        else if (matches(command, "printverified"))
+        else if (matches(command, Command::printVerified))
             view.showTransactions(model.verifiedTransactions());
-        else if (matches(command, "net"))
+        else if (matches(command, Command::netIncome))
             view.showNetIncome(model.netIncome());
-        else if (matches(command, "verify"))
+        else if (matches(command, Command::verify))
             model.verify(amount(stream));
-        else if (matches(command, "add"))
+        else if (matches(command, Command::add))
             model.add(transaction(stream));
-        else if (matches(command, "remove"))
+        else if (matches(command, Command::remove))
             model.remove(transaction(stream));
     } catch (const std::exception &) {
 

@@ -23,6 +23,34 @@ public:
     virtual void showNetIncome(int) = 0;
 };
 
+enum class Command {
+    print,
+    printVerified,
+    add,
+    remove,
+    verify,
+    netIncome
+};
+
+constexpr const char *name(Command c) {
+    switch (c) {
+        case (Command::print):
+            return "print";
+        case (Command::printVerified):
+            return "printverified";
+        case (Command::add):
+            return "add";
+        case (Command::remove):
+            return "remove";
+        case (Command::verify):
+            return "verify";
+        case (Command::netIncome):
+            return "net";
+        default:
+            return "";
+    }
+}
+
 class Presenter {
     Model &model;
     View &view;
