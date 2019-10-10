@@ -3,12 +3,15 @@
 
 #include "Transaction.hpp"
 #include "Presenter.hpp"
+#include <vector>
 
 namespace finances {
 struct VerifiableTransaction {
     Transaction transaction;
     bool verified;
 };
+
+using VerifiableTransactions = std::vector<VerifiableTransaction>;
 
 class TransactionRecord : public Model {
 public:
@@ -20,7 +23,7 @@ public:
     void verify(int) override;
     Transactions verifiedTransactions();
 private:
-    std::vector<VerifiableTransaction> verifiableTransactions_;
+    VerifiableTransactions verifiableTransactions_;
 };
 }
 
