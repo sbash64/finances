@@ -13,6 +13,7 @@ public:
     int netIncome() override;
     Transactions transactions() override;
     void verify(int) override {}
+    Transactions verifiedTransactions() { return {}; }
 private:
     Transactions transactions_;
 };

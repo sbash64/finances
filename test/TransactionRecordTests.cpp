@@ -34,6 +34,10 @@ protected:
         return record.netIncome();
     }
 
+    Transactions verifiedTransactions() {
+        return record.verifiedTransactions();
+    }
+
     Transactions all() {
         return record.transactions();
     }
@@ -60,6 +64,8 @@ protected:
             transaction(g, h, i)\
         } == all()\
     )
+#define ASSERT_NO_VERIFIED_TRANSACTIONS()\
+    ASSERT_EQUAL(none(), verifiedTransactions())
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNone") {
     ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(0);
@@ -141,5 +147,10 @@ TEST_CASE_METHOD(TransactionRecordTests, "all") {
         -3000, "walmart", "10/4/19",
         -1000, "chipotle", "10/6/19"
     );
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "verifiedTransactions") {
+    add(-2000, "hyvee", "10/5/19");
+    ASSERT_NO_VERIFIED_TRANSACTIONS();
 }
 }}
