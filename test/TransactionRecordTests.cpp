@@ -58,21 +58,22 @@ protected:
 };
 
 #define ASSERT_TRANSACTIONS_BY_AMOUNT(a, b) ASSERT_EQUAL(a, findByAmount(b))
+
 #define ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(a, b, c, d)\
     ASSERT_TRANSACTIONS_BY_AMOUNT(onlyOne(a, b, c), d)
+
 #define ASSERT_ONE_VERIFIED_TRANSACTION(a, b, c)\
     ASSERT_EQUAL(onlyOne(a, b, c), verifiedTransactions())
+
 #define ASSERT_TWO_VERIFIED_TRANSACTIONS(a, b, c, d, e, f)\
     ASSERT_EQUAL(two(a, b, c, d, e, f), verifiedTransactions())
+
 #define ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(a)\
     ASSERT_TRANSACTIONS_BY_AMOUNT(none(), a)
+
 #define ASSERT_TWO_TRANSACTIONS_FOR_AMOUNT(a, b, c, d, e, f, g)\
-    CHECK(\
-        Transactions{\
-            transaction(a, b, c), \
-            transaction(d, e, f)\
-        } == findByAmount(g)\
-    )
+    ASSERT_EQUAL(two(a, b, c, d, e, f), findByAmount(g))
+
 #define ASSERT_NET_INCOME(a) ASSERT_EQUAL(a, netIncome())
 #define ASSERT_THREE_TRANSACTIONS(a, b, c, d, e, f, g, h, i)\
     CHECK(\
