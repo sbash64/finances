@@ -28,12 +28,16 @@ static std::string next(std::stringstream &s) {
     return next_;
 }
 
+static bool matches(const std::string &a, const std::string &b) {
+    return a == b;
+}
+
 void CommandInterpreter::execute(const std::string &s) {
     std::stringstream stream{s};
     auto command = next(stream);
-    if (command == "print")
+    if (matches(command, "print"))
         printer.printTransactions(record.all());
-    else if (command == "net")
+    else if (matches(command, "net"))
         printer.printNetIncome(record.netIncome());
     else {
         auto amount = next(stream);

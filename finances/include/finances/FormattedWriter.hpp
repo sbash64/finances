@@ -1,8 +1,9 @@
-#ifndef FINANCES_FORMATTEDWRITER_HPP_
-#define FINANCES_FORMATTEDWRITER_HPP_
+#ifndef FINANCES_INCLUDE_FINANCES_FORMATTEDWRITER_HPP_
+#define FINANCES_INCLUDE_FINANCES_FORMATTEDWRITER_HPP_
 
 #include "Transaction.hpp"
 #include "CommandInterpreter.hpp"
+#include <string>
 
 namespace finances {
 class Formatter {
@@ -22,17 +23,9 @@ class FormattedWriter : public Printer {
     Formatter &formatter;
     Writer &writer;
 public:
-    FormattedWriter(Formatter &formatter, Writer &writer) :
-        formatter{formatter},
-        writer{writer} {}
-
-    void printTransactions(const Transactions &t) override {
-        writer.write('\n' + formatter.formatTransactions(t) + "\n\n");
-    }
-
-    void printNetIncome(int x) override {
-        writer.write('\n' + formatter.formatNetIncome(x) + "\n\n");
-    }
+    FormattedWriter(Formatter &, Writer &);
+    void printTransactions(const Transactions &t) override;
+    void printNetIncome(int x) override;
 };
 }
 
