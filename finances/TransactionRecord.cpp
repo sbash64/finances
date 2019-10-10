@@ -13,6 +13,8 @@ constexpr auto end(const Transactions &v) {
 
 void TransactionRecord::add(const Transaction &t) {
     transactions_.push_back(t);
+    verifiableTransactions_.push_back({t, false});
+    verified_.push_back(false);
 }
 
 void TransactionRecord::remove(const Transaction &t) {
@@ -48,11 +50,23 @@ int TransactionRecord::netIncome() {
         [](auto net, auto t) { return net + t.amount; }
     );
 }
-void TransactionRecord::verify(int) {
-    verified_ = true;
+void TransactionRecord::verify(int amount_) {
+    auto found = std::find_if(
+        std::begin(verifiableTransactions_),
+        std::end(verifiableTransactions_),
+        [=](auto t) { return amount(t.transaction) == amount_; }
+    );
+    found->verified = true;
 }
 
 Transactions TransactionRecord::verifiedTransactions() {
-    return verified_ ? transactions_ : Transactions{};
+    auto found = std::find_if(
+        std::begin(verifiableTransactions_),
+        std::end(verifiableTransactions_),
+        [=](auto t) { return t.verified; }
+    );
+    if (found == verifiableTransactions_.end())
+        return {};
+    return { found->transaction };
 }
 }

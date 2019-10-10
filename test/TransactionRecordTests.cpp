@@ -160,8 +160,15 @@ TEST_CASE_METHOD(TransactionRecordTests, "noVerifiedTransactions") {
     ASSERT_NO_VERIFIED_TRANSACTIONS();
 }
 
-TEST_CASE_METHOD(TransactionRecordTests, "oneVerifiedTransaction") {
+TEST_CASE_METHOD(TransactionRecordTests, "oneOfOneVerifiedTransactions") {
     add(-2000, "hyvee", "10/5/19");
+    verify(-2000);
+    ASSERT_ONE_VERIFIED_TRANSACTION(-2000, "hyvee", "10/5/19");
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "oneOfTwoVerifiedTransactions") {
+    add(-2000, "hyvee", "10/5/19");
+    add(-1000, "chipotle", "10/6/19");
     verify(-2000);
     ASSERT_ONE_VERIFIED_TRANSACTION(-2000, "hyvee", "10/5/19");
 }

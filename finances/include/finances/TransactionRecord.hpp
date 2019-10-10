@@ -5,6 +5,11 @@
 #include "Presenter.hpp"
 
 namespace finances {
+struct VerifiableTransaction {
+    Transaction transaction;
+    bool verified;
+};
+
 class TransactionRecord : public Model {
 public:
     void add(const Transaction &) override;
@@ -16,7 +21,8 @@ public:
     Transactions verifiedTransactions();
 private:
     Transactions transactions_;
-    bool verified_;
+    std::vector<VerifiableTransaction> verifiableTransactions_;
+    std::vector<bool> verified_;
 };
 }
 
