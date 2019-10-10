@@ -39,6 +39,17 @@ static bool matches(const std::string &a, const std::string &b) {
     return a == b;
 }
 
+static Transaction transaction(std::stringstream &stream) {
+    auto amount = next(stream);
+    auto label = next(stream);
+    auto date = next(stream);
+    return {
+        toHundredths(amount),
+        label,
+        date
+    };
+}
+
 void Presenter::execute(const std::string &s) {
     std::stringstream stream{s};
     auto command = next(stream);
@@ -50,25 +61,9 @@ void Presenter::execute(const std::string &s) {
         auto amount = next(stream);
         model.verify(toHundredths(amount));
     }
-    else if (matches(command, "add")) {
-        auto amount = next(stream);
-        auto label = next(stream);
-        auto date = next(stream);
-        model.add({
-            toHundredths(amount),
-            label,
-            date
-        });
-    }
-    else if (matches(command, "remove")) {
-        auto amount = next(stream);
-        auto label = next(stream);
-        auto date = next(stream);
-        model.remove({
-            toHundredths(amount),
-            label,
-            date
-        });
-    }
+    else if (matches(command, "add"))
+        model.add(transaction(stream));
+    else if (matches(command, "remove"))
+        model.remove(transaction(stream));
 }
 }

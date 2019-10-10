@@ -137,8 +137,8 @@ TEST_CASE_METHOD(PresenterTests, "addsAnotherTransaction") {
 }
 
 TEST_CASE_METHOD(PresenterTests, "removesTransaction") {
-    execute("remove -50 hyvee 10/5/19");
-    ASSERT_TRANSACTION_REMOVED(-5000, "hyvee", "10/5/19");
+    execute("remove -12.34 hyvee 10/5/19");
+    ASSERT_TRANSACTION_REMOVED(-1234, "hyvee", "10/5/19");
 }
 
 TEST_CASE_METHOD(PresenterTests, "printPrintsAllTransactions") {
