@@ -12,43 +12,8 @@ constexpr auto end(const Transactions &v) {
     return v.end();
 }
 
-void TransactionRecord::add(const Transaction &t) {
-    transactions_.push_back(t);
-    verifiableTransactions_.push_back({t, false});
-}
-
-void TransactionRecord::remove(const Transaction &t) {
-    auto found = std::find(
-        begin(transactions_),
-        end(transactions_),
-        t
-    );
-    if (found != end(transactions_))
-        transactions_.erase(found);
-}
-
-Transactions TransactionRecord::findByAmount(int amount_) {
-    Transactions found;
-    std::copy_if(
-        begin(transactions_),
-        end(transactions_),
-        std::back_inserter(found),
-        [=](auto t) { return amount(t) == amount_; }
-    );
-    return found;
-}
-
-Transactions TransactionRecord::transactions() {
-    return transactions_;
-}
-
-int TransactionRecord::netIncome() {
-    return std::accumulate(
-        begin(transactions_),
-        end(transactions_),
-        0,
-        [](auto net, auto t) { return net + t.amount; }
-    );
+constexpr auto end(const std::vector<VerifiableTransaction> &v) {
+    return v.end();
 }
 
 static auto find_if(
@@ -57,15 +22,56 @@ static auto find_if(
 ) {
     return std::find_if(
         std::begin(transactions),
-        std::end(transactions),
+        end(transactions),
         [=](auto t) { return f(t); }
+    );
+}
+
+void TransactionRecord::add(const Transaction &t) {
+    verifiableTransactions_.push_back({t, false});
+}
+
+void TransactionRecord::remove(const Transaction &t) {
+    auto found_ = find_if(
+        verifiableTransactions_,
+        [=](auto t_) { return t_.transaction == t; }
+    );
+    if (found_ != end(verifiableTransactions_))
+        verifiableTransactions_.erase(found_);
+}
+
+static bool amountMatches(const Transaction &t, int amount_) {
+    return amount(t) == amount_;
+}
+
+Transactions TransactionRecord::findByAmount(int amount) {
+    Transactions found;
+    for (auto t : verifiableTransactions_)
+        if (amountMatches(t.transaction, amount))
+            found.push_back(t.transaction);
+    return found;
+}
+
+Transactions TransactionRecord::transactions() {
+    Transactions found;
+    for (auto t : verifiableTransactions_)
+        found.push_back(t.transaction);
+    return found;
+}
+
+int TransactionRecord::netIncome() {
+    return std::accumulate(
+        begin(verifiableTransactions_),
+        end(verifiableTransactions_),
+        0,
+        [](auto net, auto t) { return net + amount(t.transaction); }
     );
 }
 
 void TransactionRecord::verify(int amount_) {
     auto found = find_if(
         verifiableTransactions_,
-        [=](auto t) { return amount(t.transaction) == amount_; }
+        [=](auto t) { return amountMatches(t.transaction, amount_); }
     );
     found->verified = true;
 }
@@ -75,7 +81,7 @@ Transactions TransactionRecord::verifiedTransactions() {
         verifiableTransactions_,
         [=](auto t) { return t.verified; }
     );
-    if (found == verifiableTransactions_.end())
+    if (found == end(verifiableTransactions_))
         return {};
     return { found->transaction };
 }

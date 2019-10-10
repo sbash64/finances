@@ -20,7 +20,6 @@ public:
     void verify(int) override;
     Transactions verifiedTransactions();
 private:
-    Transactions transactions_;
     std::vector<VerifiableTransaction> verifiableTransactions_;
 };
 }
