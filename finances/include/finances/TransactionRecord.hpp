@@ -22,7 +22,6 @@ public:
 private:
     Transactions transactions_;
     std::vector<VerifiableTransaction> verifiableTransactions_;
-    std::vector<bool> verified_;
 };
 }
 
