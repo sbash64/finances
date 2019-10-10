@@ -1,8 +1,8 @@
-#ifndef FINANCES_COMMANDINTERPRETER_HPP_
-#define FINANCES_COMMANDINTERPRETER_HPP_
+#ifndef FINANCES_INCLUDE_FINANCES_COMMANDINTERPRETER_HPP_
+#define FINANCES_INCLUDE_FINANCES_COMMANDINTERPRETER_HPP_
 
 #include "Transaction.hpp"
-#include <sstream>
+#include <string>
 
 namespace finances {
 class ITransactionRecord {

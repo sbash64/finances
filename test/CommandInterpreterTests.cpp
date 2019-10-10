@@ -108,7 +108,7 @@ TEST_CASE_METHOD(CommandInterpreterTests, "addsAnotherTransaction") {
 }
 
 TEST_CASE_METHOD(CommandInterpreterTests, "printPrintsAllTransactions") {
-    setAllTransactions({ 
+    setAllTransactions({
         transaction(-1000, "chipotle", "10/6/19"),
         transaction(-5000, "hyvee", "10/4/19")
     });

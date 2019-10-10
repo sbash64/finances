@@ -1,4 +1,5 @@
 #include "CommandInterpreter.hpp"
+#include <sstream>
 
 namespace finances {
 static int integer(const std::string &s) {
