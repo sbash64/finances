@@ -14,6 +14,14 @@ static int remainingHundredths(int x) {
     return std::abs(x - hundreds(x) * 100);
 }
 
+static std::string concatenate(std::string s1, std::string s2) {
+    return s1 + s2;
+}
+
+static std::string withLeadingSpace(std::string s) {
+    return concatenate(" ", std::move(s));
+}
+
 static std::string afterDecimal(int x) {
     auto amountAfterDecimal = remainingHundredths(x);
     return (amountAfterDecimal < 10 ? "0" : "") + string(amountAfterDecimal);
@@ -24,14 +32,21 @@ static std::string beforeDecimal(int x) {
 }
 
 static std::string formatAmount(int x) {
-    return beforeDecimal(x) + "." + afterDecimal(x);
+    return concatenate(
+        beforeDecimal(x),
+        concatenate(".", afterDecimal(x))
+    );
 }
 
 static std::string formatTransaction(const Transaction &t) {
     return
-        formatAmount(amount(t)) + " " +
-        t.label + " " +
-        t.date;
+        concatenate(
+            formatAmount(amount(t)),
+            withLeadingSpace(concatenate(
+                t.label,
+                withLeadingSpace(t.date)
+            ))
+        );
 }
 
 static void append(std::string &s, const std::string &what) {
