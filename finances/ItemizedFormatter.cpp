@@ -10,17 +10,21 @@ static int hundreds(int x) {
     return x / 100;
 }
 
-static int remainder(int x) {
+static int remainingHundredths(int x) {
     return std::abs(x - hundreds(x) * 100);
 }
 
 static std::string afterDecimal(int x) {
-    auto amountAfterDecimal = remainder(x);
+    auto amountAfterDecimal = remainingHundredths(x);
     return (amountAfterDecimal < 10 ? "0" : "") + string(amountAfterDecimal);
 }
 
 static std::string beforeDecimal(int x) {
     return string(hundreds(x));
+}
+
+static std::string formatAmount(int x) {
+    return beforeDecimal(x) + "." + afterDecimal(x);
 }
 
 std::string ItemizedFormatter::formatTransactions(
@@ -32,8 +36,7 @@ std::string ItemizedFormatter::formatTransactions(
         if (!first)
             formatted += '\n';
         formatted +=
-            beforeDecimal(amount(transaction)) + "." +
-            afterDecimal(amount(transaction)) + " " +
+            formatAmount(amount(transaction)) + " " +
             transaction.label + " " +
             transaction.date;
         first = false;
@@ -42,6 +45,6 @@ std::string ItemizedFormatter::formatTransactions(
 }
 
 std::string ItemizedFormatter::formatNetIncome(int x) {
-    return "Net Income: " + beforeDecimal(x) + "." + afterDecimal(x);
+    return "Net Income: " + formatAmount(x);
 }
 }
