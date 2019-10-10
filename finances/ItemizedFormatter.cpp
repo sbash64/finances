@@ -22,9 +22,12 @@ static std::string withLeadingSpace(std::string s) {
     return concatenate(" ", std::move(s));
 }
 
+static std::string twoDigits(int x) {
+    return concatenate(x < 10 ? "0" : "", string(x));
+}
+
 static std::string afterDecimal(int x) {
-    auto amountAfterDecimal = remainingHundredths(x);
-    return (amountAfterDecimal < 10 ? "0" : "") + string(amountAfterDecimal);
+    return twoDigits(remainingHundredths(x));
 }
 
 static std::string beforeDecimal(int x) {
