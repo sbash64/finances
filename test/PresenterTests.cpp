@@ -87,7 +87,7 @@ protected:
 };
 
 #define ASSERT_TRANSACTION_ADDED(a, b, c)\
-    CHECK(transaction(a, b, c) == transactionAdded())
+    ASSERT_EQUAL(transaction(a, b, c), transactionAdded())
 #define ASSERT_BOTH_TRANSACTIONS_PRINTED(a, b, c, d, e, f)\
     CHECK(\
         Transactions{\
@@ -95,7 +95,7 @@ protected:
             transaction(d, e, f)\
         } == printedTransactions()\
     )
-#define ASSERT_NET_INCOME_PRINTED(a) CHECK(a == printedNetIncome())
+#define ASSERT_NET_INCOME_PRINTED(a) ASSERT_EQUAL(a, printedNetIncome())
 
 TEST_CASE_METHOD(PresenterTests, "addsTransaction") {
     execute("add -50 hyvee 10/5/19");

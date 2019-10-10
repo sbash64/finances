@@ -39,7 +39,6 @@ protected:
     }
 };
 
-#define ASSERT_EQUAL(a, b) CHECK(a == b)
 #define ASSERT_TRANSACTIONS_BY_AMOUNT(a, b) ASSERT_EQUAL(a, findByAmount(b))
 #define ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(a, b, c, d)\
     ASSERT_TRANSACTIONS_BY_AMOUNT(onlyOne(a, b, c), d)

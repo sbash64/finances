@@ -15,7 +15,6 @@ protected:
     }
 };
 
-#define ASSERT_EQUAL(a, b) CHECK(a == b)
 #define ASSERT_FORMAT_ONE_TRANSACTION(a, b, c, d)\
     ASSERT_EQUAL(d, formatTransactions(Transactions{transaction(a, b, c)}))
 #define ASSERT_FORMAT_TWO_TRANSACTIONS(a, b, c, d, e, f, g)\

@@ -93,9 +93,9 @@ protected:
 };
 
 #define ASSERT_ONE_TRANSACTION_TO_FORMAT(a, b, c)\
-    CHECK(Transactions{transaction(a, b, c)} == transactionsToFormat())
-#define ASSERT_WRITTEN(a) CHECK(a == written())
-#define ASSERT_NET_INCOME_TO_FORMAT(a) CHECK(a == netIncomeToFormat())
+    ASSERT_EQUAL(Transactions{transaction(a, b, c)}, transactionsToFormat())
+#define ASSERT_WRITTEN(a) ASSERT_EQUAL(a, written())
+#define ASSERT_NET_INCOME_TO_FORMAT(a) ASSERT_EQUAL(a, netIncomeToFormat())
 
 TEST_CASE_METHOD(FormattedWriterTests, "showTransactionsFormatsOne") {
     showOneTransaction(-1000, "chipotle", "10/6/19");
