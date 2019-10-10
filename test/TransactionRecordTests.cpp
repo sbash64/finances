@@ -197,4 +197,9 @@ TEST_CASE_METHOD(TransactionRecordTests, "twoOfThreeVerifiedTransactions") {
         -3000, "barnes noble", "10/4/19"
     );
 }
+
+TEST_CASE_METHOD(TransactionRecordTests, "noneVerifiedDespiteEffort") {
+    verify(-3000);
+    ASSERT_NO_VERIFIED_TRANSACTIONS();
+}
 }}

@@ -100,10 +100,11 @@ int TransactionRecord::netIncome() {
 }
 
 void TransactionRecord::verify(int amount) {
-    auto found = find_if(
+    auto found_ = find_if(
         verifiableTransactions,
         [=](auto t) { return amountMatches(t, amount); }
     );
-    found->verified = true;
+    if (found(found_, verifiableTransactions))
+        found_->verified = true;
 }
 }
