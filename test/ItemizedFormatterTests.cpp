@@ -6,7 +6,7 @@ namespace finances { namespace {
 class ItemizedFormatterTests {
     ItemizedFormatter formatter;
 protected:
-    std::string format(const Transactions &t) {
+    std::string formatTransactions(const Transactions &t) {
         return formatter.formatTransactions(t);
     }
 
@@ -15,15 +15,16 @@ protected:
     }
 };
 
+#define ASSERT_EQUAL(a, b) CHECK(a == b)
 #define ASSERT_FORMAT_ONE_TRANSACTION(a, b, c, d)\
-    CHECK(d == format(Transactions{transaction(a, b, c)}))
+    ASSERT_EQUAL(d, formatTransactions(Transactions{transaction(a, b, c)}))
 #define ASSERT_FORMAT_TWO_TRANSACTIONS(a, b, c, d, e, f, g)\
-    CHECK(g == format(Transactions{\
+    ASSERT_EQUAL(g, formatTransactions(Transactions{\
         transaction(a, b, c), \
         transaction(d, e, f)\
     }))
 #define ASSERT_FORMAT_NET_INCOME(a, b)\
-    CHECK(b == formatNetIncome(a))
+    ASSERT_EQUAL(b, formatNetIncome(a))
 
 TEST_CASE_METHOD(ItemizedFormatterTests, "formatOneTransaction") {
     ASSERT_FORMAT_ONE_TRANSACTION(
