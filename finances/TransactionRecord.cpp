@@ -48,4 +48,11 @@ int TransactionRecord::netIncome() {
         [](auto net, auto t) { return net + t.amount; }
     );
 }
+void TransactionRecord::verify(int) {
+    verified_ = true;
+}
+
+Transactions TransactionRecord::verifiedTransactions() {
+    return verified_ ? transactions_ : Transactions{};
+}
 }

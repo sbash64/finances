@@ -18,6 +18,10 @@ protected:
         record.add(transaction(amount, std::move(label), std::move(date)));
     }
 
+    void verify(int amount) {
+        record.verify(amount);
+    }
+
     void remove(int amount, std::string label, std::string date) {
         record.remove(transaction(amount, std::move(label), std::move(date)));
     }
@@ -46,6 +50,8 @@ protected:
 #define ASSERT_TRANSACTIONS_BY_AMOUNT(a, b) ASSERT_EQUAL(a, findByAmount(b))
 #define ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(a, b, c, d)\
     ASSERT_TRANSACTIONS_BY_AMOUNT(onlyOne(a, b, c), d)
+#define ASSERT_ONE_VERIFIED_TRANSACTION(a, b, c)\
+    ASSERT_EQUAL(onlyOne(a, b, c), verifiedTransactions())
 #define ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(a)\
     ASSERT_TRANSACTIONS_BY_AMOUNT(none(), a)
 #define ASSERT_TWO_TRANSACTIONS_FOR_AMOUNT(a, b, c, d, e, f, g)\
@@ -149,8 +155,14 @@ TEST_CASE_METHOD(TransactionRecordTests, "all") {
     );
 }
 
-TEST_CASE_METHOD(TransactionRecordTests, "verifiedTransactions") {
+TEST_CASE_METHOD(TransactionRecordTests, "noVerifiedTransactions") {
     add(-2000, "hyvee", "10/5/19");
     ASSERT_NO_VERIFIED_TRANSACTIONS();
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "oneVerifiedTransaction") {
+    add(-2000, "hyvee", "10/5/19");
+    verify(-2000);
+    ASSERT_ONE_VERIFIED_TRANSACTION(-2000, "hyvee", "10/5/19");
 }
 }}

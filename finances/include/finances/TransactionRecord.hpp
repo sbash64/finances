@@ -12,10 +12,11 @@ public:
     Transactions findByAmount(int);
     int netIncome() override;
     Transactions transactions() override;
-    void verify(int) override {}
-    Transactions verifiedTransactions() { return {}; }
+    void verify(int) override;
+    Transactions verifiedTransactions();
 private:
     Transactions transactions_;
+    bool verified_;
 };
 }
 
