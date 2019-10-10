@@ -34,6 +34,10 @@ static std::string formatTransaction(const Transaction &t) {
         t.date;
 }
 
+static void append(std::string &s, const std::string &what) {
+    s += what;
+}
+
 std::string ItemizedFormatter::formatTransactions(
     const Transactions &transactions
 ) {
@@ -41,8 +45,8 @@ std::string ItemizedFormatter::formatTransactions(
     bool first = true;
     for (auto transaction : transactions) {
         if (!first)
-            formatted += '\n';
-        formatted += formatTransaction(transaction);
+            append(formatted, "\n");
+        append(formatted, formatTransaction(transaction));
         first = false;
     }
     return formatted;
