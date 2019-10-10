@@ -123,6 +123,10 @@ protected:
     int amountVerified() {
         return model.amountVerified();
     }
+
+    void executeAdd(const std::string &s) {
+        execute(name(Command::add) + std::string{" "} + s);
+    }
 };
 
 #define ASSERT_TRANSACTION_ADDED(a, b, c)\
@@ -140,12 +144,12 @@ protected:
 #define ASSERT_AMOUNT_VERIFIED(a) ASSERT_EQUAL(a, amountVerified())
 
 TEST_CASE_METHOD(PresenterTests, "addsTransaction") {
-    execute("add -50 hyvee 10/5/19");
+    executeAdd("-50 hyvee 10/5/19");
     ASSERT_TRANSACTION_ADDED(-5000, "hyvee", "10/5/19");
 }
 
 TEST_CASE_METHOD(PresenterTests, "addsAnotherTransaction") {
-    execute("add -9.47 chipotle 10/6/19");
+    executeAdd("-9.47 chipotle 10/6/19");
     ASSERT_TRANSACTION_ADDED(-947, "chipotle", "10/6/19");
 }
 
