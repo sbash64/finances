@@ -5,6 +5,10 @@
 namespace finances { namespace {
 class ModelStub : public Model {
 public:
+    auto amountVerified() const {
+        return amountVerified_;
+    }
+
     auto transactionAdded() const {
         return transactionAdded_;
     }
@@ -28,10 +32,15 @@ public:
     int netIncome() override {
         return netIncome_;
     }
+
+    void verify(int x) override {
+        amountVerified_ = x;
+    }
 private:
     Transactions transactions_;
     Transaction transactionAdded_;
     int netIncome_{};
+    int amountVerified_{};
 };
 
 class ViewStub : public View {
@@ -84,6 +93,10 @@ protected:
     int printedNetIncome() {
         return view.shownNetIncome();
     }
+
+    int amountVerified() {
+        return model.amountVerified();
+    }
 };
 
 #define ASSERT_TRANSACTION_ADDED(a, b, c)\
@@ -96,6 +109,7 @@ protected:
         } == printedTransactions()\
     )
 #define ASSERT_NET_INCOME_PRINTED(a) ASSERT_EQUAL(a, printedNetIncome())
+#define ASSERT_AMOUNT_VERIFIED(a) ASSERT_EQUAL(a, amountVerified())
 
 TEST_CASE_METHOD(PresenterTests, "addsTransaction") {
     execute("add -50 hyvee 10/5/19");
@@ -123,5 +137,10 @@ TEST_CASE_METHOD(PresenterTests, "netPrintsNetIncome") {
     setNetIncome(5000);
     execute("net");
     ASSERT_NET_INCOME_PRINTED(5000);
+}
+
+TEST_CASE_METHOD(PresenterTests, "verifyVerifiesAmount") {
+    execute("verify -12.34");
+    ASSERT_AMOUNT_VERIFIED(-1234);
 }
 }}

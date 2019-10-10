@@ -12,6 +12,7 @@ public:
     Transactions findByAmount(int);
     int netIncome() override;
     Transactions transactions() override;
+    void verify(int) override {}
 private:
     Transactions transactions_;
 };

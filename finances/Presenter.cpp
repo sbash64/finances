@@ -46,6 +46,10 @@ void Presenter::execute(const std::string &s) {
         view.showTransactions(model.transactions());
     else if (matches(command, "net"))
         view.showNetIncome(model.netIncome());
+    else if (matches(command, "verify")) {
+        auto amount = next(stream);
+        model.verify(toHundredths(amount));
+    }
     else {
         auto amount = next(stream);
         auto label = next(stream);
