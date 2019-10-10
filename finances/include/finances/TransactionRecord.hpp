@@ -2,7 +2,7 @@
 #define FINANCES_INCLUDE_FINANCES_TRANSACTIONRECORD_HPP_
 
 #include "Transaction.hpp"
-#include "CommandInterpreter.hpp"
+#include "Presenter.hpp"
 
 namespace finances {
 class TransactionRecord : public Model {
@@ -11,9 +11,9 @@ public:
     void remove(const Transaction &);
     Transactions findByAmount(int);
     int netIncome() override;
-    Transactions all() override;
+    Transactions transactions() override;
 private:
-    Transactions transactions;
+    Transactions transactions_;
 };
 }
 

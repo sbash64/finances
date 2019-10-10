@@ -1,5 +1,5 @@
-#ifndef FINANCES_INCLUDE_FINANCES_COMMANDINTERPRETER_HPP_
-#define FINANCES_INCLUDE_FINANCES_COMMANDINTERPRETER_HPP_
+#ifndef FINANCES_INCLUDE_FINANCES_PRESENTER_HPP_
+#define FINANCES_INCLUDE_FINANCES_PRESENTER_HPP_
 
 #include "Transaction.hpp"
 #include <string>
@@ -9,7 +9,7 @@ class Model {
 public:
     virtual ~Model() = default;
     virtual void add(const Transaction &) = 0;
-    virtual Transactions all() = 0;
+    virtual Transactions transactions() = 0;
     virtual int netIncome() = 0;
 };
 
@@ -20,11 +20,11 @@ public:
     virtual void showNetIncome(int) = 0;
 };
 
-class CommandInterpreter {
+class Presenter {
     Model &model;
     View &view;
 public:
-    CommandInterpreter(Model &, View &);
+    Presenter(Model &, View &);
     void execute(const std::string &);
 };
 }

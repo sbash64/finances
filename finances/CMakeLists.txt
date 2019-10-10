@@ -1,6 +1,6 @@
 add_library(finances
     TransactionRecord.cpp
-    CommandInterpreter.cpp
+    Presenter.cpp
     FormattedWriter.cpp
     ItemizedFormatter.cpp
 )

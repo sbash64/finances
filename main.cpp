@@ -1,4 +1,4 @@
-#include <finances/CommandInterpreter.hpp>
+#include <finances/Presenter.hpp>
 #include <finances/FormattedWriter.hpp>
 #include <finances/ItemizedFormatter.hpp>
 #include <finances/TransactionRecord.hpp>
@@ -17,7 +17,7 @@ void main_() {
     ItemizedFormatter formatter;
     FormattedWriter formattedWriter{formatter, writer};
     TransactionRecord record;
-    CommandInterpreter interpreter{record, formattedWriter};
+    Presenter interpreter{record, formattedWriter};
     while(1) {
         std::string next;
         std::getline(std::cin, next);

@@ -1,6 +1,6 @@
 add_executable(test 
     TransactionRecordTests.cpp
-    CommandInterpreterTests.cpp
+    PresenterTests.cpp
     FormattedWriterTests.cpp
     ItemizedFormatterTests.cpp
     main.cpp

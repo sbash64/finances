@@ -1,5 +1,5 @@
 #include "testing-utility.hpp"
-#include <finances/CommandInterpreter.hpp>
+#include <finances/Presenter.hpp>
 #include <catch2/catch.hpp>
 
 namespace finances { namespace {
@@ -21,7 +21,7 @@ public:
         all_ = std::move(t);
     }
 
-    Transactions all() override {
+    Transactions transactions() override {
         return all_;
     }
 
@@ -56,10 +56,10 @@ private:
     int netIncome_;
 };
 
-class CommandInterpreterTests {
+class PresenterTests {
     TransactionRecordStub record;
     PrinterStub printer;
-    CommandInterpreter interpreter{record, printer};
+    Presenter interpreter{record, printer};
 protected:
     void execute(const std::string &s) {
         interpreter.execute(s);
@@ -97,17 +97,17 @@ protected:
     )
 #define ASSERT_NET_INCOME_PRINTED(a) CHECK(a == printedNetIncome())
 
-TEST_CASE_METHOD(CommandInterpreterTests, "addsTransaction") {
+TEST_CASE_METHOD(PresenterTests, "addsTransaction") {
     execute("add -50 hyvee 10/5/19");
     ASSERT_TRANSACTION_ADDED(-5000, "hyvee", "10/5/19");
 }
 
-TEST_CASE_METHOD(CommandInterpreterTests, "addsAnotherTransaction") {
+TEST_CASE_METHOD(PresenterTests, "addsAnotherTransaction") {
     execute("add -9.47 chipotle 10/6/19");
     ASSERT_TRANSACTION_ADDED(-947, "chipotle", "10/6/19");
 }
 
-TEST_CASE_METHOD(CommandInterpreterTests, "printPrintsAllTransactions") {
+TEST_CASE_METHOD(PresenterTests, "printPrintsAllTransactions") {
     setAllTransactions({
         transaction(-1000, "chipotle", "10/6/19"),
         transaction(-5000, "hyvee", "10/4/19")
@@ -119,7 +119,7 @@ TEST_CASE_METHOD(CommandInterpreterTests, "printPrintsAllTransactions") {
     );
 }
 
-TEST_CASE_METHOD(CommandInterpreterTests, "netPrintsNetIncome") {
+TEST_CASE_METHOD(PresenterTests, "netPrintsNetIncome") {
     setNetIncome(5000);
     execute("net");
     ASSERT_NET_INCOME_PRINTED(5000);

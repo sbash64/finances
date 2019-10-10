@@ -1,8 +1,8 @@
-#include "CommandInterpreter.hpp"
+#include "Presenter.hpp"
 #include <sstream>
 
 namespace finances {
-CommandInterpreter::CommandInterpreter(
+Presenter::Presenter(
     Model &record,
     View &printer
 ) :
@@ -39,11 +39,11 @@ static bool matches(const std::string &a, const std::string &b) {
     return a == b;
 }
 
-void CommandInterpreter::execute(const std::string &s) {
+void Presenter::execute(const std::string &s) {
     std::stringstream stream{s};
     auto command = next(stream);
     if (matches(command, "print"))
-        view.showTransactions(model.all());
+        view.showTransactions(model.transactions());
     else if (matches(command, "net"))
         view.showNetIncome(model.netIncome());
     else {

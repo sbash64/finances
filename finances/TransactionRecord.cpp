@@ -12,38 +12,38 @@ constexpr auto end(const Transactions &v) {
 }
 
 void TransactionRecord::add(const Transaction &t) {
-    transactions.push_back(t);
+    transactions_.push_back(t);
 }
 
 void TransactionRecord::remove(const Transaction &t) {
     auto found = std::find(
-        begin(transactions),
-        end(transactions),
+        begin(transactions_),
+        end(transactions_),
         t
     );
-    if (found != end(transactions))
-        transactions.erase(found);
+    if (found != end(transactions_))
+        transactions_.erase(found);
 }
 
 Transactions TransactionRecord::findByAmount(int amount_) {
     Transactions found;
     std::copy_if(
-        begin(transactions),
-        end(transactions),
+        begin(transactions_),
+        end(transactions_),
         std::back_inserter(found),
         [=](auto t) { return amount(t) == amount_; }
     );
     return found;
 }
 
-Transactions TransactionRecord::all() {
-    return transactions;
+Transactions TransactionRecord::transactions() {
+    return transactions_;
 }
 
 int TransactionRecord::netIncome() {
     return std::accumulate(
-        begin(transactions),
-        end(transactions),
+        begin(transactions_),
+        end(transactions_),
         0,
         [](auto net, auto t) { return net + t.amount; }
     );

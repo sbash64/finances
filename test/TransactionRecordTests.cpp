@@ -35,7 +35,7 @@ protected:
     }
 
     Transactions all() {
-        return record.all();
+        return record.transactions();
     }
 };
 
