@@ -21,7 +21,7 @@ public:
     int netIncome() override;
     Transactions transactions() override;
     void verify(int) override;
-    Transactions verifiedTransactions();
+    Transactions verifiedTransactions() override;
 private:
     VerifiableTransactions verifiableTransactions;
 };

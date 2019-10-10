@@ -29,6 +29,10 @@ public:
         transactions_ = std::move(t);
     }
 
+    void setVerifiedTransactions(Transactions t) {
+        verifiedTransactions_ = std::move(t);
+    }
+
     Transactions transactions() override {
         return transactions_;
     }
@@ -44,8 +48,13 @@ public:
     void remove(const Transaction &t) override {
         transactionRemoved_ = t;
     }
+
+    Transactions verifiedTransactions() override {
+        return verifiedTransactions_;
+    }
 private:
     Transactions transactions_;
+    Transactions verifiedTransactions_;
     Transaction transactionAdded_;
     Transaction transactionRemoved_;
     int netIncome_{};
@@ -99,6 +108,10 @@ protected:
         model.setTransactions(std::move(t));
     }
 
+    void setVerifiedTransactions(Transactions t) {
+        model.setVerifiedTransactions(std::move(t));
+    }
+
     Transactions printedTransactions() {
         return view.shownTransactions();
     }
@@ -147,6 +160,18 @@ TEST_CASE_METHOD(PresenterTests, "printPrintsAllTransactions") {
         transaction(-5000, "hyvee", "10/4/19")
     });
     execute("print");
+    ASSERT_BOTH_TRANSACTIONS_PRINTED(
+        -1000, "chipotle", "10/6/19",
+        -5000, "hyvee", "10/4/19"
+    );
+}
+
+TEST_CASE_METHOD(PresenterTests, "printVerifiedPrintsVerifiedTransactions") {
+    setVerifiedTransactions({
+        transaction(-1000, "chipotle", "10/6/19"),
+        transaction(-5000, "hyvee", "10/4/19")
+    });
+    execute("printverified");
     ASSERT_BOTH_TRANSACTIONS_PRINTED(
         -1000, "chipotle", "10/6/19",
         -5000, "hyvee", "10/4/19"
