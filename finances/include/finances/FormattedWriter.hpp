@@ -19,7 +19,7 @@ public:
     virtual void write(const std::string &) = 0;
 };
 
-class FormattedWriter : public Printer {
+class FormattedWriter : public View {
     Formatter &formatter;
     Writer &writer;
 public:

@@ -5,28 +5,28 @@
 #include <string>
 
 namespace finances {
-class ITransactionRecord {
+class Model {
 public:
-    virtual ~ITransactionRecord() = default;
+    virtual ~Model() = default;
     virtual void add(const Transaction &) = 0;
     virtual Transactions all() = 0;
     virtual int netIncome() = 0;
 };
 
-class Printer {
+class View {
 public:
-    virtual ~Printer() = default;
+    virtual ~View() = default;
     virtual void printTransactions(const Transactions &) = 0;
     virtual void printNetIncome(int) = 0;
 };
 
 class CommandInterpreter {
-    ITransactionRecord &record;
-    Printer &printer;
+    Model &record;
+    View &printer;
 public:
     CommandInterpreter(
-        ITransactionRecord &record,
-        Printer &printer
+        Model &record,
+        View &printer
     ) :
         record{record},
         printer{printer} {}

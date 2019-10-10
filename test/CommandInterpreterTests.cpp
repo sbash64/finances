@@ -3,7 +3,7 @@
 #include <catch2/catch.hpp>
 
 namespace finances { namespace {
-class TransactionRecordStub : public ITransactionRecord {
+class TransactionRecordStub : public Model {
 public:
     auto transactionAdded() const {
         return transactionAdded_;
@@ -34,7 +34,7 @@ private:
     int netIncome_{};
 };
 
-class PrinterStub : public Printer {
+class PrinterStub : public View {
 public:
     auto printedTransactions() const {
         return printedTransactions_;
