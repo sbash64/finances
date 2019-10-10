@@ -50,7 +50,7 @@ void Presenter::execute(const std::string &s) {
         auto amount = next(stream);
         model.verify(toHundredths(amount));
     }
-    else {
+    else if (matches(command, "add")) {
         auto amount = next(stream);
         auto label = next(stream);
         auto date = next(stream);

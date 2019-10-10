@@ -143,4 +143,8 @@ TEST_CASE_METHOD(PresenterTests, "verifyVerifiesAmount") {
     execute("verify -12.34");
     ASSERT_AMOUNT_VERIFIED(-1234);
 }
+
+TEST_CASE_METHOD(PresenterTests, "unrecognizedCommandDoesNotAbort") {
+    execute("jellyfish");
+}
 }}
