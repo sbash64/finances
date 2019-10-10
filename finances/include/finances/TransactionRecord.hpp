@@ -23,7 +23,7 @@ public:
     void verify(int) override;
     Transactions verifiedTransactions();
 private:
-    VerifiableTransactions verifiableTransactions_;
+    VerifiableTransactions verifiableTransactions;
 };
 }
 
