@@ -27,6 +27,13 @@ static std::string formatAmount(int x) {
     return beforeDecimal(x) + "." + afterDecimal(x);
 }
 
+static std::string formatTransaction(const Transaction &t) {
+    return
+        formatAmount(amount(t)) + " " +
+        t.label + " " +
+        t.date;
+}
+
 std::string ItemizedFormatter::formatTransactions(
     const Transactions &transactions
 ) {
@@ -35,10 +42,7 @@ std::string ItemizedFormatter::formatTransactions(
     for (auto transaction : transactions) {
         if (!first)
             formatted += '\n';
-        formatted +=
-            formatAmount(amount(transaction)) + " " +
-            transaction.label + " " +
-            transaction.date;
+        formatted += formatTransaction(transaction);
         first = false;
     }
     return formatted;
