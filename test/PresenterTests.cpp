@@ -3,7 +3,7 @@
 #include <catch2/catch.hpp>
 
 namespace finances { namespace {
-class TransactionRecordStub : public Model {
+class ModelStub : public Model {
 public:
     auto transactionAdded() const {
         return transactionAdded_;
@@ -17,72 +17,72 @@ public:
         transactionAdded_ = t;
     }
 
-    void setAll(Transactions t) {
-        all_ = std::move(t);
+    void setTransactions(Transactions t) {
+        transactions_ = std::move(t);
     }
 
     Transactions transactions() override {
-        return all_;
+        return transactions_;
     }
 
     int netIncome() override {
         return netIncome_;
     }
 private:
-    Transactions all_;
+    Transactions transactions_;
     Transaction transactionAdded_;
     int netIncome_{};
 };
 
-class PrinterStub : public View {
+class ViewStub : public View {
 public:
-    auto printedTransactions() const {
-        return printedTransactions_;
+    auto shownTransactions() const {
+        return shownTransactions_;
     }
 
-    auto netIncome() const {
-        return netIncome_;
+    auto shownNetIncome() const {
+        return shownNetIncome_;
     }
 
     void showTransactions(const Transactions &t) override {
-        printedTransactions_ = t;
+        shownTransactions_ = t;
     }
 
     void showNetIncome(int x) override {
-        netIncome_ = x;
+        shownNetIncome_ = x;
     }
 private:
-    Transactions printedTransactions_;
-    int netIncome_;
+    Transactions shownTransactions_;
+    int shownNetIncome_;
 };
 
 class PresenterTests {
-    TransactionRecordStub record;
-    PrinterStub printer;
-    Presenter interpreter{record, printer};
+    ModelStub model;
+    ViewStub view;
+    Presenter presenter{model, view};
 protected:
     void execute(const std::string &s) {
-        interpreter.execute(s);
+        presenter.execute(s);
     }
 
     void setNetIncome(int x) {
-        record.setNetIncome(x);
+        model.setNetIncome(x);
     }
 
     Transaction transactionAdded() {
-        return record.transactionAdded();
+        return model.transactionAdded();
     }
 
     void setAllTransactions(Transactions t) {
-        record.setAll(std::move(t));
+        model.setTransactions(std::move(t));
     }
 
     Transactions printedTransactions() {
-        return printer.printedTransactions();
+        return view.shownTransactions();
     }
 
     int printedNetIncome() {
-        return printer.netIncome();
+        return view.shownNetIncome();
     }
 };
 

@@ -6,18 +6,25 @@ std::string string(int x) {
     return std::to_string(x);
 }
 
-std::string ItemizedFormatter::formatTransactions(const Transactions &transactions) {
+static int hundreds(int x) {
+    return x / 100;
+}
+
+static int remainder(int x) {
+    return std::abs(x - hundreds(x) * 100);
+}
+
+std::string ItemizedFormatter::formatTransactions(
+    const Transactions &transactions
+) {
     std::string formatted;
     bool first = true;
     for (auto transaction : transactions) {
         if (!first)
             formatted += '\n';
-        auto amountBeforeDecimal = amount(transaction) / 100;
-        auto amountAfterDecimal =
-            std::abs(amount(transaction) - amountBeforeDecimal * 100);
-        auto leadingZero =  "";
-        if (amountAfterDecimal < 10)
-            leadingZero = "0";
+        auto amountBeforeDecimal = hundreds(amount(transaction));
+        auto amountAfterDecimal = remainder(amount(transaction));
+        auto leadingZero = amountAfterDecimal < 10 ? "0" : "";
         auto beforeDecimal = string(amountBeforeDecimal);
         auto afterDecimal = leadingZero + string(amountAfterDecimal);
         formatted +=
@@ -30,9 +37,8 @@ std::string ItemizedFormatter::formatTransactions(const Transactions &transactio
 }
 
 std::string ItemizedFormatter::formatNetIncome(int x) {
-    auto amountBeforeDecimal = x / 100;
-    auto amountAfterDecimal =
-        std::abs(x - amountBeforeDecimal * 100);
+    auto amountBeforeDecimal = hundreds(x);
+    auto amountAfterDecimal = remainder(x);
     auto leadingZero =  "";
     if (amountAfterDecimal < 10)
         leadingZero = "0";
