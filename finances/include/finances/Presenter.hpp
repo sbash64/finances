@@ -10,11 +10,11 @@ public:
     virtual ~Model() = default;
     virtual void add(const Transaction &) = 0;
     virtual void remove(const Transaction &) = 0;
+    virtual void verify(int amount) = 0;
     virtual Transactions transactions() = 0;
     virtual Transactions verifiedTransactions() = 0;
     virtual Transactions unverifiedTransactions() = 0;
     virtual int netIncome() = 0;
-    virtual void verify(int amount) = 0;
 };
 
 class View {

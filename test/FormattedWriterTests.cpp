@@ -94,7 +94,12 @@ protected:
 
 #define ASSERT_ONE_TRANSACTION_TO_FORMAT(a, b, c)\
     ASSERT_EQUAL(Transactions{transaction(a, b, c)}, transactionsToFormat())
+
 #define ASSERT_WRITTEN(a) ASSERT_EQUAL(a, written())
+
+#define ASSERT_WRITTEN_FOR_SHOWING(a)\
+    ASSERT_WRITTEN(std::string{"\n"} + a + "\n\n")
+
 #define ASSERT_NET_INCOME_TO_FORMAT(a) ASSERT_EQUAL(a, netIncomeToFormat())
 
 TEST_CASE_METHOD(FormattedWriterTests, "showTransactionsFormatsOne") {
@@ -105,7 +110,7 @@ TEST_CASE_METHOD(FormattedWriterTests, "showTransactionsFormatsOne") {
 TEST_CASE_METHOD(FormattedWriterTests, "showTransactionsWritesFormatted") {
     setFormatted("hello");
     showTransactions();
-    ASSERT_WRITTEN("\nhello\n\n");
+    ASSERT_WRITTEN_FOR_SHOWING("hello");
 }
 
 TEST_CASE_METHOD(FormattedWriterTests, "showNetIncomeFormatsNet") {
@@ -116,6 +121,6 @@ TEST_CASE_METHOD(FormattedWriterTests, "showNetIncomeFormatsNet") {
 TEST_CASE_METHOD(FormattedWriterTests, "showNetIncomeWritesNetIncome") {
     setFormattedNetIncome("hello");
     showNetIncome();
-    ASSERT_WRITTEN("\nhello\n\n");
+    ASSERT_WRITTEN_FOR_SHOWING("hello");
 }
 }}
