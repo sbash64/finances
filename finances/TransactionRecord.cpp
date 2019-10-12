@@ -28,6 +28,10 @@ static bool verified(const VerifiableTransaction &t) {
     return t.verified;
 }
 
+static bool unverified(const VerifiableTransaction &t) {
+    return !verified(t);
+}
+
 static bool amountMatches(const Transaction &t, int amount_) {
     return amount(t) == amount_;
 }
@@ -103,7 +107,7 @@ Transactions TransactionRecord::verifiedTransactions() {
 }
 
 Transactions TransactionRecord::unverifiedTransactions() {
-    return transactions();
+    return collectIf(verifiableTransactions, unverified);
 }
 
 Transactions TransactionRecord::transactions() {
