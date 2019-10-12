@@ -82,6 +82,7 @@ protected:
     ASSERT_EQUAL(two(a, b, c, d, e, f), findByAmount(g))
 
 #define ASSERT_NET_INCOME(a) ASSERT_EQUAL(a, netIncome())
+
 #define ASSERT_THREE_TRANSACTIONS(a, b, c, d, e, f, g, h, i)\
     CHECK(\
         Transactions{\
@@ -90,10 +91,15 @@ protected:
             transaction(g, h, i)\
         } == all()\
     )
+
 #define ASSERT_NO_VERIFIED_TRANSACTIONS()\
     ASSERT_EQUAL(none(), verifiedTransactions())
+
 #define ASSERT_NO_UNVERIFIED_TRANSACTIONS()\
     ASSERT_EQUAL(none(), unverifiedTransactions())
+
+#define ASSERT_EXISTS_EXACTLY_ONE_VERIFIED_TRANSACTION()\
+    ASSERT_EQUAL(1, verifiedTransactions().size())
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNone") {
     ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(0);
@@ -237,5 +243,12 @@ TEST_CASE_METHOD(TransactionRecordTests, "canVerifyBothTransactionsOfSameAmount"
         -2000, "hyvee", "10/5/19",
         -2000, "chipotle", "10/6/19"
     );
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "onlyVerifiesOneOfTwoSameAmounts") {
+    add(-2000, "hyvee", "10/5/19");
+    add(-2000, "chipotle", "10/6/19");
+    verify(-2000);
+    ASSERT_EXISTS_EXACTLY_ONE_VERIFIED_TRANSACTION();
 }
 }}
