@@ -88,14 +88,17 @@ protected:
 #define ASSERT_ONE_VERIFIED_TRANSACTION(a, b, c)\
     ASSERT_VERIFIED_TRANSACTIONS(one(a, b, c))
 
+#define ASSERT_UNVERIFIED_TRANSACTIONS(expected)\
+    ASSERT_EQUAL(expected, unverifiedTransactions())
+
 #define ASSERT_ONE_UNVERIFIED_TRANSACTION(a, b, c)\
-    ASSERT_EQUAL(one(a, b, c), unverifiedTransactions())
+    ASSERT_UNVERIFIED_TRANSACTIONS(one(a, b, c))
 
 #define ASSERT_TWO_VERIFIED_TRANSACTIONS(a, b, c, d, e, f)\
     ASSERT_VERIFIED_TRANSACTIONS(two(a, b, c, d, e, f))
 
-#define ASSERT_TWO_TRANSACTIONS_FOR_AMOUNT(a, b, c, d, e, f, g)\
-    ASSERT_EQUAL(two(a, b, c, d, e, f), findByAmount(g))
+#define ASSERT_TWO_TRANSACTIONS_FOR_AMOUNT(a, b, c, d, e, f, amount)\
+    ASSERT_EQUAL(two(a, b, c, d, e, f), findByAmount(amount))
 
 #define ASSERT_NET_INCOME(expected)\
     ASSERT_EQUAL(expected, netIncome())
@@ -103,14 +106,11 @@ protected:
 #define ASSERT_THREE_TRANSACTIONS(a, b, c, d, e, f, g, h, i)\
     ASSERT_EQUAL(three(a, b, c, d, e, f, g, h, i), all())
 
-#define ASSERT_NO_TRANSACTIONS(a)\
-    ASSERT_EQUAL(none(), a)
-
 #define ASSERT_NO_VERIFIED_TRANSACTIONS()\
-    ASSERT_NO_TRANSACTIONS(verifiedTransactions())
+    ASSERT_VERIFIED_TRANSACTIONS(none())
 
 #define ASSERT_NO_UNVERIFIED_TRANSACTIONS()\
-    ASSERT_NO_TRANSACTIONS(unverifiedTransactions())
+    ASSERT_UNVERIFIED_TRANSACTIONS(none())
 
 #define ASSERT_EXISTS_EXACTLY_ONE_VERIFIED_TRANSACTION()\
     ASSERT_EQUAL(1, verifiedTransactions().size())
