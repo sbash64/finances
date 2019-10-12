@@ -172,17 +172,18 @@ protected:
 
 #define ASSERT_TRANSACTION_ADDED(a, b, c)\
     ASSERT_EQUAL(transaction(a, b, c), transactionAdded())
+
 #define ASSERT_TRANSACTION_REMOVED(a, b, c)\
     ASSERT_EQUAL(transaction(a, b, c), transactionRemoved())
+
 #define ASSERT_BOTH_TRANSACTIONS_PRINTED(a, b, c, d, e, f)\
-    CHECK(\
-        Transactions{\
-            transaction(a, b, c), \
-            transaction(d, e, f)\
-        } == printedTransactions()\
-    )
-#define ASSERT_NET_INCOME_PRINTED(a) ASSERT_EQUAL(a, printedNetIncome())
-#define ASSERT_AMOUNT_VERIFIED(a) ASSERT_EQUAL(a, amountVerified())
+    ASSERT_EQUAL(twoTransactions(a, b, c, d, e, f), printedTransactions())
+
+#define ASSERT_NET_INCOME_PRINTED(a)\
+    ASSERT_EQUAL(a, printedNetIncome())
+
+#define ASSERT_AMOUNT_VERIFIED(a)\
+    ASSERT_EQUAL(a, amountVerified())
 
 TEST_CASE_METHOD(PresenterTests, "addsTransaction") {
     executeAdd("-50 hyvee 10/5/19");
@@ -223,7 +224,7 @@ TEST_CASE_METHOD(PresenterTests, "printVerifiedPrintsVerifiedTransactions") {
     );
 }
 
-TEST_CASE_METHOD(PresenterTests, "printUnverifiedPrintsUnverifiedTransactions") {
+TEST_CASE_METHOD(PresenterTests, "printUnverifiedTransactions") {
     setUnverifiedTransactions({
         transaction(-1000, "chipotle", "10/6/19"),
         transaction(-5000, "hyvee", "10/4/19")
