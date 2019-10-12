@@ -42,6 +42,10 @@ protected:
         return record.verifiedTransactions();
     }
 
+    Transactions unverifiedTransactions() {
+        return record.unverifiedTransactions();
+    }
+
     Transactions all() {
         return record.transactions();
     }
@@ -85,6 +89,8 @@ protected:
     )
 #define ASSERT_NO_VERIFIED_TRANSACTIONS()\
     ASSERT_EQUAL(none(), verifiedTransactions())
+#define ASSERT_NO_UNVERIFIED_TRANSACTIONS()\
+    ASSERT_EQUAL(none(), unverifiedTransactions())
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNone") {
     ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(0);
@@ -201,5 +207,9 @@ TEST_CASE_METHOD(TransactionRecordTests, "twoOfThreeVerifiedTransactions") {
 TEST_CASE_METHOD(TransactionRecordTests, "noneVerifiedDespiteEffort") {
     verify(-3000);
     ASSERT_NO_VERIFIED_TRANSACTIONS();
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "noUnverifiedTransactions") {
+    ASSERT_NO_UNVERIFIED_TRANSACTIONS();
 }
 }}

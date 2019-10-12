@@ -102,6 +102,10 @@ Transactions TransactionRecord::verifiedTransactions() {
     return collectIf(verifiableTransactions, verified);
 }
 
+Transactions TransactionRecord::unverifiedTransactions() {
+    return {};
+}
+
 Transactions TransactionRecord::transactions() {
     Transactions transactions;
     for_each(
