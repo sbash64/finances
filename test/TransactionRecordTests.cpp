@@ -42,7 +42,7 @@ protected:
         return record.transactions();
     }
 
-    Transactions one(
+    Transactions oneTransaction(
         int amount,
         std::string label,
         std::string date
@@ -50,7 +50,7 @@ protected:
         return { transaction(amount, std::move(label), std::move(date)) };
     }
 
-    Transactions two(
+    Transactions twoTransactions(
         int amount1, std::string label1, std::string date1,
         int amount2, std::string label2, std::string date2
     ) {
@@ -60,7 +60,7 @@ protected:
         };
     }
 
-    Transactions three(
+    Transactions threeTransactions(
         int amount1, std::string label1, std::string date1,
         int amount2, std::string label2, std::string date2,
         int amount3, std::string label3, std::string date3
@@ -77,7 +77,7 @@ protected:
     ASSERT_EQUAL(expected, findByAmount(amount))
 
 #define ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(a, b, c, amount)\
-    ASSERT_TRANSACTIONS_BY_AMOUNT(one(a, b, c), amount)
+    ASSERT_TRANSACTIONS_BY_AMOUNT(oneTransaction(a, b, c), amount)
 
 #define ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(amount)\
     ASSERT_TRANSACTIONS_BY_AMOUNT(none(), amount)
@@ -86,25 +86,25 @@ protected:
     ASSERT_EQUAL(expected, verifiedTransactions())
 
 #define ASSERT_ONE_VERIFIED_TRANSACTION(a, b, c)\
-    ASSERT_VERIFIED_TRANSACTIONS(one(a, b, c))
+    ASSERT_VERIFIED_TRANSACTIONS(oneTransaction(a, b, c))
 
 #define ASSERT_UNVERIFIED_TRANSACTIONS(expected)\
     ASSERT_EQUAL(expected, unverifiedTransactions())
 
 #define ASSERT_ONE_UNVERIFIED_TRANSACTION(a, b, c)\
-    ASSERT_UNVERIFIED_TRANSACTIONS(one(a, b, c))
+    ASSERT_UNVERIFIED_TRANSACTIONS(oneTransaction(a, b, c))
 
 #define ASSERT_TWO_VERIFIED_TRANSACTIONS(a, b, c, d, e, f)\
-    ASSERT_VERIFIED_TRANSACTIONS(two(a, b, c, d, e, f))
+    ASSERT_VERIFIED_TRANSACTIONS(twoTransactions(a, b, c, d, e, f))
 
 #define ASSERT_TWO_TRANSACTIONS_FOR_AMOUNT(a, b, c, d, e, f, amount)\
-    ASSERT_EQUAL(two(a, b, c, d, e, f), findByAmount(amount))
+    ASSERT_EQUAL(twoTransactions(a, b, c, d, e, f), findByAmount(amount))
 
 #define ASSERT_NET_INCOME(expected)\
     ASSERT_EQUAL(expected, netIncome())
 
 #define ASSERT_THREE_TRANSACTIONS(a, b, c, d, e, f, g, h, i)\
-    ASSERT_EQUAL(three(a, b, c, d, e, f, g, h, i), all())
+    ASSERT_EQUAL(threeTransactions(a, b, c, d, e, f, g, h, i), all())
 
 #define ASSERT_NO_VERIFIED_TRANSACTIONS()\
     ASSERT_VERIFIED_TRANSACTIONS(none())
