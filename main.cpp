@@ -17,11 +17,11 @@ void main_() {
     ItemizedFormatter formatter;
     FormattedWriter formattedWriter{formatter, writer};
     TransactionRecord record;
-    Presenter interpreter{record, formattedWriter};
+    Presenter presenter{record, formattedWriter};
     while(1) {
         std::string next;
         std::getline(std::cin, next);
-        interpreter.execute(next);
+        presenter.execute(next);
     }
 }
 }
