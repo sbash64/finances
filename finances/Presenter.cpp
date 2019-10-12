@@ -66,6 +66,8 @@ void Presenter::execute(const std::string &s) {
             showTransactions(view, model.transactions());
         else if (matches(command, Command::printVerified))
             showTransactions(view, model.verifiedTransactions());
+        else if (matches(command, Command::printUnverified))
+            showTransactions(view, model.unverifiedTransactions());
         else if (matches(command, Command::netIncome))
             view.showNetIncome(model.netIncome());
         else if (matches(command, Command::verify))

@@ -22,7 +22,7 @@ public:
     Transactions transactions() override;
     void verify(int) override;
     Transactions verifiedTransactions() override;
-    Transactions unverifiedTransactions();
+    Transactions unverifiedTransactions() override;
 private:
     VerifiableTransactions verifiableTransactions;
 };

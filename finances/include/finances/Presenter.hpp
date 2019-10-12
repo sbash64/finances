@@ -12,6 +12,7 @@ public:
     virtual void remove(const Transaction &) = 0;
     virtual Transactions transactions() = 0;
     virtual Transactions verifiedTransactions() = 0;
+    virtual Transactions unverifiedTransactions() = 0;
     virtual int netIncome() = 0;
     virtual void verify(int amount) = 0;
 };
@@ -26,6 +27,7 @@ public:
 enum class Command {
     print,
     printVerified,
+    printUnverified,
     add,
     remove,
     verify,
@@ -38,6 +40,8 @@ constexpr const char *name(Command c) {
             return "print";
         case (Command::printVerified):
             return "printverified";
+        case (Command::printUnverified):
+            return "printunverified";
         case (Command::add):
             return "add";
         case (Command::remove):

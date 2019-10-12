@@ -33,6 +33,10 @@ public:
         verifiedTransactions_ = std::move(t);
     }
 
+    void setUnverifiedTransactions(Transactions t) {
+        unverifiedTransactions_ = std::move(t);
+    }
+
     Transactions transactions() override {
         return transactions_;
     }
@@ -52,9 +56,14 @@ public:
     Transactions verifiedTransactions() override {
         return verifiedTransactions_;
     }
+
+    Transactions unverifiedTransactions() override {
+        return unverifiedTransactions_;
+    }
 private:
     Transactions transactions_;
     Transactions verifiedTransactions_;
+    Transactions unverifiedTransactions_;
     Transaction transactionAdded_;
     Transaction transactionRemoved_;
     int netIncome_{};
@@ -112,6 +121,10 @@ protected:
         model.setVerifiedTransactions(std::move(t));
     }
 
+    void setUnverifiedTransactions(Transactions t) {
+        model.setUnverifiedTransactions(std::move(t));
+    }
+
     Transactions printedTransactions() {
         return view.shownTransactions();
     }
@@ -150,6 +163,10 @@ protected:
 
     void executePrintVerified() {
         executeCommand(Command::printVerified);
+    }
+
+    void executePrintUnverified() {
+        executeCommand(Command::printUnverified);
     }
 };
 
@@ -200,6 +217,18 @@ TEST_CASE_METHOD(PresenterTests, "printVerifiedPrintsVerifiedTransactions") {
         transaction(-5000, "hyvee", "10/4/19")
     });
     executePrintVerified();
+    ASSERT_BOTH_TRANSACTIONS_PRINTED(
+        -1000, "chipotle", "10/6/19",
+        -5000, "hyvee", "10/4/19"
+    );
+}
+
+TEST_CASE_METHOD(PresenterTests, "printUnverifiedPrintsUnverifiedTransactions") {
+    setUnverifiedTransactions({
+        transaction(-1000, "chipotle", "10/6/19"),
+        transaction(-5000, "hyvee", "10/4/19")
+    });
+    executePrintUnverified();
     ASSERT_BOTH_TRANSACTIONS_PRINTED(
         -1000, "chipotle", "10/6/19",
         -5000, "hyvee", "10/4/19"
