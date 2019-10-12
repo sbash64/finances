@@ -58,26 +58,29 @@ static void showTransactions(View &view, const Transactions &t) {
     view.showTransactions(t);
 }
 
-void Presenter::execute(const std::string &s) {
+static void execute(Model &model, View &view, const std::string &s) {
     std::stringstream stream{s};
     auto command = next(stream);
-    try {
-        if (matches(command, Command::print))
-            showTransactions(view, model.transactions());
-        else if (matches(command, Command::printVerified))
-            showTransactions(view, model.verifiedTransactions());
-        else if (matches(command, Command::printUnverified))
-            showTransactions(view, model.unverifiedTransactions());
-        else if (matches(command, Command::netIncome))
-            view.showNetIncome(model.netIncome());
-        else if (matches(command, Command::verify))
-            model.verify(amount(stream));
-        else if (matches(command, Command::add))
-            model.add(transaction(stream));
-        else if (matches(command, Command::remove))
-            model.remove(transaction(stream));
-    } catch (const std::exception &) {
+    if (matches(command, Command::print))
+        showTransactions(view, model.transactions());
+    else if (matches(command, Command::printVerified))
+        showTransactions(view, model.verifiedTransactions());
+    else if (matches(command, Command::printUnverified))
+        showTransactions(view, model.unverifiedTransactions());
+    else if (matches(command, Command::netIncome))
+        view.showNetIncome(model.netIncome());
+    else if (matches(command, Command::verify))
+        model.verify(amount(stream));
+    else if (matches(command, Command::add))
+        model.add(transaction(stream));
+    else if (matches(command, Command::remove))
+        model.remove(transaction(stream));
+}
 
+void Presenter::execute(const std::string &s) {
+    try {
+        ::finances::execute(model, view, s);
+    } catch (const std::invalid_argument &) {
     }
 }
 }
