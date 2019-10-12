@@ -69,6 +69,9 @@ protected:
 #define ASSERT_ONE_VERIFIED_TRANSACTION(a, b, c)\
     ASSERT_EQUAL(onlyOne(a, b, c), verifiedTransactions())
 
+#define ASSERT_ONE_UNVERIFIED_TRANSACTIONS(a, b, c)\
+    ASSERT_EQUAL(onlyOne(a, b, c), unverifiedTransactions())
+
 #define ASSERT_TWO_VERIFIED_TRANSACTIONS(a, b, c, d, e, f)\
     ASSERT_EQUAL(two(a, b, c, d, e, f), verifiedTransactions())
 
@@ -211,5 +214,10 @@ TEST_CASE_METHOD(TransactionRecordTests, "noneVerifiedDespiteEffort") {
 
 TEST_CASE_METHOD(TransactionRecordTests, "noUnverifiedTransactions") {
     ASSERT_NO_UNVERIFIED_TRANSACTIONS();
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "oneUnverifiedTransactions") {
+    add(-1000, "hyvee", "10/1/19");
+    ASSERT_ONE_UNVERIFIED_TRANSACTIONS(-1000, "hyvee", "10/1/19");
 }
 }}

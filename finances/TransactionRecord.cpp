@@ -103,7 +103,7 @@ Transactions TransactionRecord::verifiedTransactions() {
 }
 
 Transactions TransactionRecord::unverifiedTransactions() {
-    return {};
+    return transactions();
 }
 
 Transactions TransactionRecord::transactions() {
