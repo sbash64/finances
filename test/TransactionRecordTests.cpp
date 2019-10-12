@@ -6,14 +6,6 @@ namespace finances { namespace {
 class TransactionRecordTests {
     TransactionRecord record;
 protected:
-    Transactions onlyOne(
-        int amount,
-        std::string label,
-        std::string date
-    ) {
-        return { transaction(amount, std::move(label), std::move(date)) };
-    }
-
     void add(int amount, std::string label, std::string date) {
         record.add(transaction(amount, std::move(label), std::move(date)));
     }
@@ -50,6 +42,14 @@ protected:
         return record.transactions();
     }
 
+    Transactions one(
+        int amount,
+        std::string label,
+        std::string date
+    ) {
+        return { transaction(amount, std::move(label), std::move(date)) };
+    }
+
     Transactions two(
         int amount1, std::string label1, std::string date1,
         int amount2, std::string label2, std::string date2
@@ -77,7 +77,7 @@ protected:
     ASSERT_EQUAL(expected, findByAmount(amount))
 
 #define ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(a, b, c, amount)\
-    ASSERT_TRANSACTIONS_BY_AMOUNT(onlyOne(a, b, c), amount)
+    ASSERT_TRANSACTIONS_BY_AMOUNT(one(a, b, c), amount)
 
 #define ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(amount)\
     ASSERT_TRANSACTIONS_BY_AMOUNT(none(), amount)
@@ -86,10 +86,10 @@ protected:
     ASSERT_EQUAL(expected, verifiedTransactions())
 
 #define ASSERT_ONE_VERIFIED_TRANSACTION(a, b, c)\
-    ASSERT_VERIFIED_TRANSACTIONS(onlyOne(a, b, c))
+    ASSERT_VERIFIED_TRANSACTIONS(one(a, b, c))
 
 #define ASSERT_ONE_UNVERIFIED_TRANSACTION(a, b, c)\
-    ASSERT_EQUAL(onlyOne(a, b, c), unverifiedTransactions())
+    ASSERT_EQUAL(one(a, b, c), unverifiedTransactions())
 
 #define ASSERT_TWO_VERIFIED_TRANSACTIONS(a, b, c, d, e, f)\
     ASSERT_VERIFIED_TRANSACTIONS(two(a, b, c, d, e, f))
