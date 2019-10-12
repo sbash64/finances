@@ -73,11 +73,20 @@ protected:
     }
 };
 
-#define ASSERT_TRANSACTIONS_BY_AMOUNT(expected, amount)\
-    ASSERT_EQUAL(expected, findByAmount(amount))
+#define ASSERT_TRANSACTIONS(a)\
+    ASSERT_EQUAL(a, all())
 
-#define ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(a, b, c, amount)\
-    ASSERT_TRANSACTIONS_BY_AMOUNT(oneTransaction(a, b, c), amount)
+#define ASSERT_NO_TRANSACTIONS()\
+    ASSERT_TRANSACTIONS(none())
+
+#define ASSERT_ONE_TRANSACTION(a, b, c)\
+    ASSERT_TRANSACTIONS(oneTransaction(a, b, c))
+
+#define ASSERT_TWO_TRANSACTIONS(a, b, c, d, e, f)\
+    ASSERT_TRANSACTIONS(twoTransactions(a, b, c, d, e, f))
+
+#define ASSERT_THREE_TRANSACTIONS(a, b, c, d, e, f, g, h, i)\
+    ASSERT_TRANSACTIONS(threeTransactions(a, b, c, d, e, f, g, h, i))
 
 #define ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(amount)\
     ASSERT_TRANSACTIONS_BY_AMOUNT(none(), amount)
@@ -97,14 +106,8 @@ protected:
 #define ASSERT_TWO_VERIFIED_TRANSACTIONS(a, b, c, d, e, f)\
     ASSERT_VERIFIED_TRANSACTIONS(twoTransactions(a, b, c, d, e, f))
 
-#define ASSERT_TWO_TRANSACTIONS_FOR_AMOUNT(a, b, c, d, e, f, amount)\
-    ASSERT_EQUAL(twoTransactions(a, b, c, d, e, f), findByAmount(amount))
-
 #define ASSERT_NET_INCOME(expected)\
     ASSERT_EQUAL(expected, netIncome())
-
-#define ASSERT_THREE_TRANSACTIONS(a, b, c, d, e, f, g, h, i)\
-    ASSERT_EQUAL(threeTransactions(a, b, c, d, e, f, g, h, i), all())
 
 #define ASSERT_NO_VERIFIED_TRANSACTIONS()\
     ASSERT_VERIFIED_TRANSACTIONS(none())
@@ -116,38 +119,20 @@ protected:
     ASSERT_EQUAL(1, verifiedTransactions().size())
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNone") {
-    ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(0);
-}
-
-TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNoneFound") {
-    add(-5000, "hyvee", "10/5/19");
-    ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(0);
+    ASSERT_NO_TRANSACTIONS();
 }
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountOneFoundOnlyOne") {
     add(-5000, "hyvee", "10/5/19");
-    ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(
-        -5000, "hyvee", "10/5/19",
-        -5000
-    );
-}
-
-TEST_CASE_METHOD(TransactionRecordTests, "findByAmountOneFound") {
-    add(-5000, "hyvee", "10/5/19");
-    add(-1000, "chipotle", "10/5/19");
-    ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(
-        -5000, "hyvee", "10/5/19",
-        -5000
-    );
+    ASSERT_ONE_TRANSACTION(-5000, "hyvee", "10/5/19");
 }
 
 TEST_CASE_METHOD(TransactionRecordTests, "findByAmountBothFound") {
     add(-1000, "hyvee", "10/5/19");
     add(-1000, "chipotle", "10/5/19");
-    ASSERT_TWO_TRANSACTIONS_FOR_AMOUNT(
+    ASSERT_TWO_TRANSACTIONS(
         -1000, "hyvee", "10/5/19",
-        -1000, "chipotle", "10/5/19",
-        -1000
+        -1000, "chipotle", "10/5/19"
     );
 }
 
@@ -169,7 +154,7 @@ TEST_CASE_METHOD(TransactionRecordTests, "netIncomeTwoTransactions") {
 TEST_CASE_METHOD(TransactionRecordTests, "removeOnlyTransaction") {
     add(-5000, "hyvee", "10/5/19");
     remove(-5000, "hyvee", "10/5/19");
-    ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(-5000);
+    ASSERT_NO_TRANSACTIONS();
 }
 
 TEST_CASE_METHOD(TransactionRecordTests, "removeNonExistingTransaction") {
@@ -180,10 +165,7 @@ TEST_CASE_METHOD(TransactionRecordTests, "removeATransaction") {
     add(-5000, "hyvee", "10/5/19");
     add(-1000, "chipotle", "10/5/19");
     remove(-5000, "hyvee", "10/5/19");
-    ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(
-        -1000, "chipotle", "10/5/19",
-        -1000
-    );
+    ASSERT_ONE_TRANSACTION(-1000, "chipotle", "10/5/19");
 }
 
 TEST_CASE_METHOD(TransactionRecordTests, "all") {
