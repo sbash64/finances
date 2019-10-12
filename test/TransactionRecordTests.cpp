@@ -18,14 +18,6 @@ protected:
         record.remove(transaction(amount, std::move(label), std::move(date)));
     }
 
-    Transactions findByAmount(int amount) {
-        return record.findByAmount(amount);
-    }
-
-    Transactions none() {
-        return {};
-    }
-
     int netIncome() {
         return record.netIncome();
     }
@@ -36,6 +28,10 @@ protected:
 
     Transactions unverifiedTransactions() {
         return record.unverifiedTransactions();
+    }
+
+    Transactions none() {
+        return {};
     }
 
     Transactions all() {
@@ -88,9 +84,6 @@ protected:
 #define ASSERT_THREE_TRANSACTIONS(a, b, c, d, e, f, g, h, i)\
     ASSERT_TRANSACTIONS(threeTransactions(a, b, c, d, e, f, g, h, i))
 
-#define ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(amount)\
-    ASSERT_TRANSACTIONS_BY_AMOUNT(none(), amount)
-
 #define ASSERT_VERIFIED_TRANSACTIONS(expected)\
     ASSERT_EQUAL(expected, verifiedTransactions())
 
@@ -118,20 +111,62 @@ protected:
 #define ASSERT_EXISTS_EXACTLY_ONE_VERIFIED_TRANSACTION()\
     ASSERT_EQUAL(1, verifiedTransactions().size())
 
-TEST_CASE_METHOD(TransactionRecordTests, "findByAmountNone") {
+TEST_CASE_METHOD(TransactionRecordTests, "noTransactionsOnConstruction") {
     ASSERT_NO_TRANSACTIONS();
 }
 
-TEST_CASE_METHOD(TransactionRecordTests, "findByAmountOneFoundOnlyOne") {
+TEST_CASE_METHOD(TransactionRecordTests, "oneTransactionAdded") {
     add(-5000, "hyvee", "10/5/19");
     ASSERT_ONE_TRANSACTION(-5000, "hyvee", "10/5/19");
 }
 
-TEST_CASE_METHOD(TransactionRecordTests, "findByAmountBothFound") {
+TEST_CASE_METHOD(TransactionRecordTests, "twoTransactionsAdded") {
     add(-1000, "hyvee", "10/5/19");
     add(-1000, "chipotle", "10/5/19");
     ASSERT_TWO_TRANSACTIONS(
         -1000, "hyvee", "10/5/19",
+        -1000, "chipotle", "10/5/19"
+    );
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "removesOnlyTransaction") {
+    add(-5000, "hyvee", "10/5/19");
+    remove(-5000, "hyvee", "10/5/19");
+    ASSERT_NO_TRANSACTIONS();
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "threeTransactions") {
+    add(-2000, "hyvee", "10/5/19");
+    add(-3000, "walmart", "10/4/19");
+    add(-1000, "chipotle", "10/6/19");
+    ASSERT_THREE_TRANSACTIONS(
+        -2000, "hyvee", "10/5/19",
+        -3000, "walmart", "10/4/19",
+        -1000, "chipotle", "10/6/19"
+    );
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "removeTransactionNoneToBeginWith") {
+    remove(-5000, "hyvee", "10/5/19");
+    ASSERT_NO_TRANSACTIONS();
+}
+
+TEST_CASE_METHOD(TransactionRecordTests, "removeOneTransactionFromTwo") {
+    add(-5000, "hyvee", "10/5/19");
+    add(-1000, "chipotle", "10/5/19");
+    remove(-5000, "hyvee", "10/5/19");
+    ASSERT_ONE_TRANSACTION(-1000, "chipotle", "10/5/19");
+}
+
+TEST_CASE_METHOD(
+    TransactionRecordTests,
+    "removeOneTransactionNotFoundFromTwo"
+) {
+    add(-5000, "hyvee", "10/5/19");
+    add(-1000, "chipotle", "10/5/19");
+    remove(-4999, "hyvee", "10/5/19");
+    ASSERT_TWO_TRANSACTIONS(
+        -5000, "hyvee", "10/5/19",
         -1000, "chipotle", "10/5/19"
     );
 }
@@ -151,35 +186,14 @@ TEST_CASE_METHOD(TransactionRecordTests, "netIncomeTwoTransactions") {
     ASSERT_NET_INCOME(-6000);
 }
 
-TEST_CASE_METHOD(TransactionRecordTests, "removeOnlyTransaction") {
-    add(-5000, "hyvee", "10/5/19");
-    remove(-5000, "hyvee", "10/5/19");
-    ASSERT_NO_TRANSACTIONS();
+TEST_CASE_METHOD(
+    TransactionRecordTests,
+    "noVerifiedTransactionsOnConstruction"
+) {
+    ASSERT_NO_VERIFIED_TRANSACTIONS();
 }
 
-TEST_CASE_METHOD(TransactionRecordTests, "removeNonExistingTransaction") {
-    remove(-5000, "hyvee", "10/5/19");
-}
-
-TEST_CASE_METHOD(TransactionRecordTests, "removeATransaction") {
-    add(-5000, "hyvee", "10/5/19");
-    add(-1000, "chipotle", "10/5/19");
-    remove(-5000, "hyvee", "10/5/19");
-    ASSERT_ONE_TRANSACTION(-1000, "chipotle", "10/5/19");
-}
-
-TEST_CASE_METHOD(TransactionRecordTests, "all") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-3000, "walmart", "10/4/19");
-    add(-1000, "chipotle", "10/6/19");
-    ASSERT_THREE_TRANSACTIONS(
-        -2000, "hyvee", "10/5/19",
-        -3000, "walmart", "10/4/19",
-        -1000, "chipotle", "10/6/19"
-    );
-}
-
-TEST_CASE_METHOD(TransactionRecordTests, "noVerifiedTransactions") {
+TEST_CASE_METHOD(TransactionRecordTests, "onlyTransactionNotVerified") {
     add(-2000, "hyvee", "10/5/19");
     ASSERT_NO_VERIFIED_TRANSACTIONS();
 }
@@ -214,11 +228,14 @@ TEST_CASE_METHOD(TransactionRecordTests, "noneVerifiedDespiteEffort") {
     ASSERT_NO_VERIFIED_TRANSACTIONS();
 }
 
-TEST_CASE_METHOD(TransactionRecordTests, "noUnverifiedTransactions") {
+TEST_CASE_METHOD(
+    TransactionRecordTests,
+    "noUnverifiedTransactionsOnConstruction"
+) {
     ASSERT_NO_UNVERIFIED_TRANSACTIONS();
 }
 
-TEST_CASE_METHOD(TransactionRecordTests, "oneUnverifiedTransactions") {
+TEST_CASE_METHOD(TransactionRecordTests, "onlyTransactionUnverified") {
     add(-1000, "hyvee", "10/1/19");
     ASSERT_ONE_UNVERIFIED_TRANSACTION(-1000, "hyvee", "10/1/19");
 }
