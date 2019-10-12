@@ -68,7 +68,8 @@ void TransactionRecord::remove(const Transaction &transaction_) {
         [&](auto t) { return transaction(t) == transaction_; }
     );
     if (found(maybe, verifiableTransactions)) {
-        verify(maybe->transaction.amount);
+        if (verified(*maybe))
+            verify(maybe->transaction.amount);
         verifiableTransactions.erase(maybe);
     }
 }
