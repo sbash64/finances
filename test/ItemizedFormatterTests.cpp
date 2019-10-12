@@ -16,12 +16,11 @@ protected:
 };
 
 #define ASSERT_FORMAT_ONE_TRANSACTION(a, b, c, d)\
-    ASSERT_EQUAL(d, formatTransactions(Transactions{transaction(a, b, c)}))
+    ASSERT_EQUAL(d, formatTransactions(oneTransaction(a, b, c)))
+
 #define ASSERT_FORMAT_TWO_TRANSACTIONS(a, b, c, d, e, f, g)\
-    ASSERT_EQUAL(g, formatTransactions(Transactions{\
-        transaction(a, b, c), \
-        transaction(d, e, f)\
-    }))
+    ASSERT_EQUAL(g, formatTransactions(twoTransactions(a, b, c, d, e, f)))
+
 #define ASSERT_FORMAT_NET_INCOME(a, b)\
     ASSERT_EQUAL(b, formatNetIncome(a))
 
