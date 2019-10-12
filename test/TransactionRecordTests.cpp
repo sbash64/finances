@@ -59,44 +59,58 @@ protected:
             transaction(amount2, std::move(label2), std::move(date2))
         };
     }
+
+    Transactions three(
+        int amount1, std::string label1, std::string date1,
+        int amount2, std::string label2, std::string date2,
+        int amount3, std::string label3, std::string date3
+    ) {
+        return {
+            transaction(amount1, std::move(label1), std::move(date1)),
+            transaction(amount2, std::move(label2), std::move(date2)),
+            transaction(amount3, std::move(label3), std::move(date3))
+        };
+    }
 };
 
-#define ASSERT_TRANSACTIONS_BY_AMOUNT(a, b) ASSERT_EQUAL(a, findByAmount(b))
+#define ASSERT_TRANSACTIONS_BY_AMOUNT(expected, amount)\
+    ASSERT_EQUAL(expected, findByAmount(amount))
 
-#define ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(a, b, c, d)\
-    ASSERT_TRANSACTIONS_BY_AMOUNT(onlyOne(a, b, c), d)
+#define ASSERT_ONLY_TRANSACTION_FOR_AMOUNT(a, b, c, amount)\
+    ASSERT_TRANSACTIONS_BY_AMOUNT(onlyOne(a, b, c), amount)
+
+#define ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(amount)\
+    ASSERT_TRANSACTIONS_BY_AMOUNT(none(), amount)
+
+#define ASSERT_VERIFIED_TRANSACTIONS(expected)\
+    ASSERT_EQUAL(expected, verifiedTransactions())
 
 #define ASSERT_ONE_VERIFIED_TRANSACTION(a, b, c)\
-    ASSERT_EQUAL(onlyOne(a, b, c), verifiedTransactions())
+    ASSERT_VERIFIED_TRANSACTIONS(onlyOne(a, b, c))
 
 #define ASSERT_ONE_UNVERIFIED_TRANSACTION(a, b, c)\
     ASSERT_EQUAL(onlyOne(a, b, c), unverifiedTransactions())
 
 #define ASSERT_TWO_VERIFIED_TRANSACTIONS(a, b, c, d, e, f)\
-    ASSERT_EQUAL(two(a, b, c, d, e, f), verifiedTransactions())
-
-#define ASSERT_NO_TRANSACTIONS_FOR_AMOUNT(a)\
-    ASSERT_TRANSACTIONS_BY_AMOUNT(none(), a)
+    ASSERT_VERIFIED_TRANSACTIONS(two(a, b, c, d, e, f))
 
 #define ASSERT_TWO_TRANSACTIONS_FOR_AMOUNT(a, b, c, d, e, f, g)\
     ASSERT_EQUAL(two(a, b, c, d, e, f), findByAmount(g))
 
-#define ASSERT_NET_INCOME(a) ASSERT_EQUAL(a, netIncome())
+#define ASSERT_NET_INCOME(expected)\
+    ASSERT_EQUAL(expected, netIncome())
 
 #define ASSERT_THREE_TRANSACTIONS(a, b, c, d, e, f, g, h, i)\
-    CHECK(\
-        Transactions{\
-            transaction(a, b, c), \
-            transaction(d, e, f), \
-            transaction(g, h, i)\
-        } == all()\
-    )
+    ASSERT_EQUAL(three(a, b, c, d, e, f, g, h, i), all())
+
+#define ASSERT_NO_TRANSACTIONS(a)\
+    ASSERT_EQUAL(none(), a)
 
 #define ASSERT_NO_VERIFIED_TRANSACTIONS()\
-    ASSERT_EQUAL(none(), verifiedTransactions())
+    ASSERT_NO_TRANSACTIONS(verifiedTransactions())
 
 #define ASSERT_NO_UNVERIFIED_TRANSACTIONS()\
-    ASSERT_EQUAL(none(), unverifiedTransactions())
+    ASSERT_NO_TRANSACTIONS(unverifiedTransactions())
 
 #define ASSERT_EXISTS_EXACTLY_ONE_VERIFIED_TRANSACTION()\
     ASSERT_EQUAL(1, verifiedTransactions().size())
@@ -234,7 +248,10 @@ TEST_CASE_METHOD(TransactionRecordTests, "oneOfTwoUnverifiedTransactions") {
     ASSERT_ONE_UNVERIFIED_TRANSACTION(-1000, "chipotle", "10/6/19");
 }
 
-TEST_CASE_METHOD(TransactionRecordTests, "canVerifyBothTransactionsOfSameAmount") {
+TEST_CASE_METHOD(
+    TransactionRecordTests,
+    "canVerifyBothTransactionsOfSameAmount"
+) {
     add(-2000, "hyvee", "10/5/19");
     add(-2000, "chipotle", "10/6/19");
     verify(-2000);
@@ -254,7 +271,7 @@ TEST_CASE_METHOD(TransactionRecordTests, "onlyVerifiesOneOfTwoSameAmounts") {
 
 TEST_CASE_METHOD(
     TransactionRecordTests,
-    "removeFirstAmongOneOfTwoPossibleVerifiedTransactionsVerifiesSecond"
+    "removeFirstAmongOneOfTwoPossibleVerifiedTransactionsVerifiesOther"
 ) {
     add(-2000, "hyvee", "10/5/19");
     add(-2000, "chipotle", "10/6/19");
@@ -265,7 +282,7 @@ TEST_CASE_METHOD(
 
 TEST_CASE_METHOD(
     TransactionRecordTests,
-    "removeSecondAmongOneOfTwoPossibleVerifiedTransactionsVerifiesFirst"
+    "removeSecondAmongOneOfTwoPossibleVerifiedTransactionsVerifiesOther"
 ) {
     add(-2000, "hyvee", "10/5/19");
     add(-2000, "chipotle", "10/6/19");
