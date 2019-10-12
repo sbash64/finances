@@ -262,4 +262,15 @@ TEST_CASE_METHOD(
     remove(-2000, "hyvee", "10/5/19");
     ASSERT_ONE_VERIFIED_TRANSACTION(-2000, "chipotle", "10/6/19");
 }
+
+TEST_CASE_METHOD(
+    TransactionRecordTests,
+    "removeSecondAmongOneOfTwoPossibleVerifiedTransactionsVerifiesFirst"
+) {
+    add(-2000, "hyvee", "10/5/19");
+    add(-2000, "chipotle", "10/6/19");
+    verify(-2000);
+    remove(-2000, "chipotle", "10/6/19");
+    ASSERT_ONE_VERIFIED_TRANSACTION(-2000, "hyvee", "10/5/19");
+}
 }}
