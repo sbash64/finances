@@ -96,15 +96,6 @@ static Transactions collectIf(
     return collected;
 }
 
-Transactions TransactionRecord::findByAmount(int amount) {
-    return collectIf(
-        verifiableTransactions,
-        [=](auto transaction) {
-            return amountMatches(transaction, amount);
-        }
-    );
-}
-
 Transactions TransactionRecord::verifiedTransactions() {
     return collectIf(verifiableTransactions, verified);
 }

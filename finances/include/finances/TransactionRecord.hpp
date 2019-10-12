@@ -17,7 +17,6 @@ class TransactionRecord : public Model {
 public:
     void add(const Transaction &) override;
     void remove(const Transaction &) override;
-    Transactions findByAmount(int);
     int netIncome() override;
     Transactions transactions() override;
     void verify(int) override;
