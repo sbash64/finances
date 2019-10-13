@@ -4,7 +4,6 @@
 
 namespace finances { namespace {
 class ItemizedFormatterTests {
-    ItemizedFormatter formatter;
 protected:
     std::string formatTransactions(const Transactions &t) {
         return formatter.formatTransactions(t);
@@ -13,6 +12,8 @@ protected:
     std::string formatNetIncome(int x) {
         return formatter.formatNetIncome(x);
     }
+private:
+    ItemizedFormatter formatter;
 };
 
 #define ASSERT_FORMAT_ONE_TRANSACTION(a, b, c, d)\
@@ -24,14 +25,17 @@ protected:
 #define ASSERT_FORMAT_NET_INCOME(a, b)\
     ASSERT_EQUAL(b, formatNetIncome(a))
 
-TEST_CASE_METHOD(ItemizedFormatterTests, "formatOneTransaction") {
+#define ITEMIZED_FORMATTER_TEST(a)\
+    TEST_CASE_METHOD(ItemizedFormatterTests, a)
+
+ITEMIZED_FORMATTER_TEST("formatOneTransaction") {
     ASSERT_FORMAT_ONE_TRANSACTION(
         -5000, "hyvee", "10/5/19",
         "-50.00 hyvee 10/5/19"
     );
 }
 
-TEST_CASE_METHOD(ItemizedFormatterTests, "formatTwoTransactions") {
+ITEMIZED_FORMATTER_TEST("formatTwoTransactions") {
     ASSERT_FORMAT_TWO_TRANSACTIONS(
         -5000, "hyvee", "10/5/19",
         -979, "chipotle", "10/4/19",
@@ -40,7 +44,7 @@ TEST_CASE_METHOD(ItemizedFormatterTests, "formatTwoTransactions") {
     );
 }
 
-TEST_CASE_METHOD(ItemizedFormatterTests, "formatNetIncome") {
+ITEMIZED_FORMATTER_TEST("formatNetIncome") {
     ASSERT_FORMAT_NET_INCOME(
         -979,
         "Net Income: -9.79"
