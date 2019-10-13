@@ -56,11 +56,12 @@ constexpr const char *name(Command c) {
 }
 
 class Presenter {
-    Model &model;
-    View &view;
 public:
     Presenter(Model &, View &);
     void execute(const std::string &);
+private:
+    Model &model;
+    View &view;
 };
 }
 

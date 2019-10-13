@@ -20,12 +20,13 @@ public:
 };
 
 class FormattedWriter : public View {
-    Formatter &formatter;
-    Writer &writer;
 public:
     FormattedWriter(Formatter &, Writer &);
     void showTransactions(const Transactions &t) override;
     void showNetIncome(int x) override;
+private:
+    Formatter &formatter;
+    Writer &writer;
 };
 }
 
