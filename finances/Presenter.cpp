@@ -24,7 +24,7 @@ static int toHundredths(const std::string &s) {
     auto sign = s.front() == '-' ? "-" : "";
     auto beforeDecimal = s.substr(0, decimal);
     auto afterDecimal = s.substr(decimal + 1);
-    if (afterDecimal.size() == 1)
+    for (std::size_t i{2}; i > afterDecimal.size(); --i)
         afterDecimal += '0';
     return toHundredthsNoDecimal(beforeDecimal) + integer(sign + afterDecimal);
 }

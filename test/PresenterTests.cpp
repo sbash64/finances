@@ -195,9 +195,14 @@ TEST_CASE_METHOD(PresenterTests, "addsAnotherTransaction") {
     ASSERT_TRANSACTION_ADDED(-947, "chipotle", "10/6/19");
 }
 
-TEST_CASE_METHOD(PresenterTests, "treatsOneDecimalPlaceCorrectly") {
+TEST_CASE_METHOD(PresenterTests, "oneDecimalDigit") {
     executeAdd("-9.4 chipotle 10/6/19");
     ASSERT_TRANSACTION_ADDED(-940, "chipotle", "10/6/19");
+}
+
+TEST_CASE_METHOD(PresenterTests, "noDecimalDigits") {
+    executeAdd("-9. chipotle 10/6/19");
+    ASSERT_TRANSACTION_ADDED(-900, "chipotle", "10/6/19");
 }
 
 TEST_CASE_METHOD(PresenterTests, "removesTransaction") {
