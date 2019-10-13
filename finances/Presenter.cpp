@@ -21,9 +21,7 @@ static int toHundredths(const std::string &s) {
     auto decimal = s.find('.');
     if (decimal == std::string::npos)
         return toHundredthsNoDecimal(s);
-    auto sign = ' ';
-    if (s.front() == '-')
-        sign = '-';
+    auto sign = s.front() == '-' ? "-" : "";
     auto beforeDecimal = s.substr(0, decimal);
     auto afterDecimal = s.substr(decimal + 1);
     if (afterDecimal.size() == 1)
