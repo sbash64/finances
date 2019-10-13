@@ -65,11 +65,11 @@ protected:
     }
 
     void showOneTransaction(int amount, std::string label, std::string date) {
-        showTransactions({transaction(
+        showTransactions(oneTransaction(
             amount,
             std::move(label),
             std::move(date)
-        )});
+        ));
     }
 
     void setFormatted(std::string s) {
@@ -94,9 +94,10 @@ private:
 };
 
 #define ASSERT_ONE_TRANSACTION_TO_FORMAT(a, b, c)\
-    ASSERT_EQUAL(Transactions{transaction(a, b, c)}, transactionsToFormat())
+    ASSERT_EQUAL(oneTransaction(a, b, c), transactionsToFormat())
 
-#define ASSERT_WRITTEN(a) ASSERT_EQUAL(a, written())
+#define ASSERT_WRITTEN(a)\
+    ASSERT_EQUAL(a, written())
 
 #define ASSERT_WRITTEN_FOR_SHOWING(a)\
     ASSERT_WRITTEN(std::string{"\n"} + a + "\n\n")

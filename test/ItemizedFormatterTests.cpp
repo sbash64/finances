@@ -45,9 +45,6 @@ ITEMIZED_FORMATTER_TEST("formatTwoTransactions") {
 }
 
 ITEMIZED_FORMATTER_TEST("formatNetIncome") {
-    ASSERT_FORMAT_NET_INCOME(
-        -979,
-        "Net Income: -9.79"
-    );
+    ASSERT_FORMAT_NET_INCOME(-979, "Net Income: -9.79");
 }
 }}

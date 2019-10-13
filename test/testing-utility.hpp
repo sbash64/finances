@@ -4,11 +4,14 @@
 #include <finances/Transaction.hpp>
 #include <catch2/catch.hpp>
 #include <string>
+#include <utility>
 
 #define ASSERT_EQUAL(a, b) CHECK(a == b)
 
 namespace finances {
-inline Transaction transaction(int amount, std::string label, std::string date) {
+inline Transaction transaction(
+    int amount, std::string label, std::string date
+) {
     return {amount, std::move(label), std::move(date)};
 }
 
