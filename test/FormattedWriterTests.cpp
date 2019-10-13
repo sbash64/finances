@@ -51,9 +51,6 @@ private:
 };
 
 class FormattedWriterTests {
-    FormatterStub formatter;
-    WriterStub writer;
-    FormattedWriter printer{formatter, writer};
 protected:
     Transactions transactionsToFormat() {
         return formatter.transactionsToFormat();
@@ -90,6 +87,10 @@ protected:
     void showNetIncome(int x = {}) {
         printer.showNetIncome(x);
     }
+private:
+    FormatterStub formatter;
+    WriterStub writer;
+    FormattedWriter printer{formatter, writer};
 };
 
 #define ASSERT_ONE_TRANSACTION_TO_FORMAT(a, b, c)\
@@ -100,25 +101,29 @@ protected:
 #define ASSERT_WRITTEN_FOR_SHOWING(a)\
     ASSERT_WRITTEN(std::string{"\n"} + a + "\n\n")
 
-#define ASSERT_NET_INCOME_TO_FORMAT(a) ASSERT_EQUAL(a, netIncomeToFormat())
+#define ASSERT_NET_INCOME_TO_FORMAT(a)\
+    ASSERT_EQUAL(a, netIncomeToFormat())
 
-TEST_CASE_METHOD(FormattedWriterTests, "showTransactionsFormatsOne") {
+#define FORMATTED_WRITER_TEST(a)\
+    TEST_CASE_METHOD(FormattedWriterTests, a)
+
+FORMATTED_WRITER_TEST("showTransactionsFormatsOne") {
     showOneTransaction(-1000, "chipotle", "10/6/19");
     ASSERT_ONE_TRANSACTION_TO_FORMAT(-1000, "chipotle", "10/6/19");
 }
 
-TEST_CASE_METHOD(FormattedWriterTests, "showTransactionsWritesFormatted") {
+FORMATTED_WRITER_TEST("showTransactionsWritesFormatted") {
     setFormatted("hello");
     showTransactions();
     ASSERT_WRITTEN_FOR_SHOWING("hello");
 }
 
-TEST_CASE_METHOD(FormattedWriterTests, "showNetIncomeFormatsNet") {
+FORMATTED_WRITER_TEST("showNetIncomeFormatsNet") {
     showNetIncome(10);
     ASSERT_NET_INCOME_TO_FORMAT(10);
 }
 
-TEST_CASE_METHOD(FormattedWriterTests, "showNetIncomeWritesNetIncome") {
+FORMATTED_WRITER_TEST("showNetIncomeWritesNetIncome") {
     setFormattedNetIncome("hello");
     showNetIncome();
     ASSERT_WRITTEN_FOR_SHOWING("hello");
