@@ -93,9 +93,6 @@ private:
 };
 
 class PresenterTests {
-    ModelStub model;
-    ViewStub view;
-    Presenter presenter{model, view};
 protected:
     void execute(const std::string &s) {
         presenter.execute(s);
@@ -138,7 +135,7 @@ protected:
     }
 
     void executeCommand(Command c, const std::string &s = {}) {
-        execute(name(c) + std::string{s.empty() ? "" : " "} + s);
+        execute(name(c) + std::string(!s.empty(), ' ') + s);
     }
 
     void executeAdd(const std::string &s) {
@@ -168,6 +165,10 @@ protected:
     void executePrintUnverified() {
         executeCommand(Command::printUnverified);
     }
+private:
+    ModelStub model;
+    ViewStub view;
+    Presenter presenter{model, view};
 };
 
 #define ASSERT_TRANSACTION_ADDED(a, b, c)\
@@ -211,10 +212,10 @@ TEST_CASE_METHOD(PresenterTests, "removesTransaction") {
 }
 
 TEST_CASE_METHOD(PresenterTests, "printPrintsAllTransactions") {
-    setAllTransactions({
-        transaction(-1000, "chipotle", "10/6/19"),
-        transaction(-5000, "hyvee", "10/4/19")
-    });
+    setAllTransactions(twoTransactions(
+        -1000, "chipotle", "10/6/19",
+        -5000, "hyvee", "10/4/19"
+    ));
     executePrint();
     ASSERT_BOTH_TRANSACTIONS_PRINTED(
         -1000, "chipotle", "10/6/19",
@@ -223,10 +224,10 @@ TEST_CASE_METHOD(PresenterTests, "printPrintsAllTransactions") {
 }
 
 TEST_CASE_METHOD(PresenterTests, "printVerifiedPrintsVerifiedTransactions") {
-    setVerifiedTransactions({
-        transaction(-1000, "chipotle", "10/6/19"),
-        transaction(-5000, "hyvee", "10/4/19")
-    });
+    setVerifiedTransactions(twoTransactions(
+        -1000, "chipotle", "10/6/19",
+        -5000, "hyvee", "10/4/19"
+    ));
     executePrintVerified();
     ASSERT_BOTH_TRANSACTIONS_PRINTED(
         -1000, "chipotle", "10/6/19",
@@ -235,10 +236,10 @@ TEST_CASE_METHOD(PresenterTests, "printVerifiedPrintsVerifiedTransactions") {
 }
 
 TEST_CASE_METHOD(PresenterTests, "printUnverifiedTransactions") {
-    setUnverifiedTransactions({
-        transaction(-1000, "chipotle", "10/6/19"),
-        transaction(-5000, "hyvee", "10/4/19")
-    });
+    setUnverifiedTransactions(twoTransactions(
+        -1000, "chipotle", "10/6/19",
+        -5000, "hyvee", "10/4/19"
+    ));
     executePrintUnverified();
     ASSERT_BOTH_TRANSACTIONS_PRINTED(
         -1000, "chipotle", "10/6/19",
