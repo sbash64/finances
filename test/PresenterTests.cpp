@@ -189,27 +189,27 @@ private:
 #define PRESENTER_TEST(a)\
     TEST_CASE_METHOD(PresenterTests, a)
 
-PRESENTER_TEST("addsTransaction") {
+PRESENTER_TEST("addTransactionParsesInput") {
     executeAdd("-50 hyvee 10/5/19");
     ASSERT_TRANSACTION_ADDED(-5000, "hyvee", "10/5/19");
 }
 
-PRESENTER_TEST("addsAnotherTransaction") {
+PRESENTER_TEST("addTransactionParsesDecimal") {
     executeAdd("-9.47 chipotle 10/6/19");
     ASSERT_TRANSACTION_ADDED(-947, "chipotle", "10/6/19");
 }
 
-PRESENTER_TEST("oneDecimalDigit") {
+PRESENTER_TEST("addTransactionParsesOneDecimalDigit") {
     executeAdd("-9.4 chipotle 10/6/19");
     ASSERT_TRANSACTION_ADDED(-940, "chipotle", "10/6/19");
 }
 
-PRESENTER_TEST("noDecimalDigits") {
+PRESENTER_TEST("addTransactionParsesNoDecimalDigits") {
     executeAdd("-9. chipotle 10/6/19");
     ASSERT_TRANSACTION_ADDED(-900, "chipotle", "10/6/19");
 }
 
-PRESENTER_TEST("removesTransaction") {
+PRESENTER_TEST("removeTransactionParsesInput") {
     executeRemove("-12.34 hyvee 10/5/19");
     ASSERT_TRANSACTION_REMOVED(-1234, "hyvee", "10/5/19");
 }
@@ -238,7 +238,7 @@ PRESENTER_TEST("printVerifiedPrintsVerifiedTransactions") {
     );
 }
 
-PRESENTER_TEST("printUnverifiedTransactions") {
+PRESENTER_TEST("printUnverifiedPrintsUnverifiedTransactions") {
     setUnverifiedTransactions(twoTransactions(
         -1000, "chipotle", "10/6/19",
         -5000, "hyvee", "10/4/19"
@@ -250,13 +250,13 @@ PRESENTER_TEST("printUnverifiedTransactions") {
     );
 }
 
-PRESENTER_TEST("netPrintsNetIncome") {
+PRESENTER_TEST("netIncomePrintsNetIncome") {
     setNetIncome(5000);
     executeNetIncome();
     ASSERT_NET_INCOME_PRINTED(5000);
 }
 
-PRESENTER_TEST("verifyVerifiesAmount") {
+PRESENTER_TEST("verifyParsesInput") {
     executeVerify("-12.34");
     ASSERT_AMOUNT_VERIFIED(-1234);
 }
