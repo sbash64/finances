@@ -186,32 +186,35 @@ private:
 #define ASSERT_AMOUNT_VERIFIED(a)\
     ASSERT_EQUAL(a, amountVerified())
 
-TEST_CASE_METHOD(PresenterTests, "addsTransaction") {
+#define PRESENTER_TEST(a)\
+    TEST_CASE_METHOD(PresenterTests, a)
+
+PRESENTER_TEST("addsTransaction") {
     executeAdd("-50 hyvee 10/5/19");
     ASSERT_TRANSACTION_ADDED(-5000, "hyvee", "10/5/19");
 }
 
-TEST_CASE_METHOD(PresenterTests, "addsAnotherTransaction") {
+PRESENTER_TEST("addsAnotherTransaction") {
     executeAdd("-9.47 chipotle 10/6/19");
     ASSERT_TRANSACTION_ADDED(-947, "chipotle", "10/6/19");
 }
 
-TEST_CASE_METHOD(PresenterTests, "oneDecimalDigit") {
+PRESENTER_TEST("oneDecimalDigit") {
     executeAdd("-9.4 chipotle 10/6/19");
     ASSERT_TRANSACTION_ADDED(-940, "chipotle", "10/6/19");
 }
 
-TEST_CASE_METHOD(PresenterTests, "noDecimalDigits") {
+PRESENTER_TEST("noDecimalDigits") {
     executeAdd("-9. chipotle 10/6/19");
     ASSERT_TRANSACTION_ADDED(-900, "chipotle", "10/6/19");
 }
 
-TEST_CASE_METHOD(PresenterTests, "removesTransaction") {
+PRESENTER_TEST("removesTransaction") {
     executeRemove("-12.34 hyvee 10/5/19");
     ASSERT_TRANSACTION_REMOVED(-1234, "hyvee", "10/5/19");
 }
 
-TEST_CASE_METHOD(PresenterTests, "printPrintsAllTransactions") {
+PRESENTER_TEST("printPrintsAllTransactions") {
     setAllTransactions(twoTransactions(
         -1000, "chipotle", "10/6/19",
         -5000, "hyvee", "10/4/19"
@@ -223,7 +226,7 @@ TEST_CASE_METHOD(PresenterTests, "printPrintsAllTransactions") {
     );
 }
 
-TEST_CASE_METHOD(PresenterTests, "printVerifiedPrintsVerifiedTransactions") {
+PRESENTER_TEST("printVerifiedPrintsVerifiedTransactions") {
     setVerifiedTransactions(twoTransactions(
         -1000, "chipotle", "10/6/19",
         -5000, "hyvee", "10/4/19"
@@ -235,7 +238,7 @@ TEST_CASE_METHOD(PresenterTests, "printVerifiedPrintsVerifiedTransactions") {
     );
 }
 
-TEST_CASE_METHOD(PresenterTests, "printUnverifiedTransactions") {
+PRESENTER_TEST("printUnverifiedTransactions") {
     setUnverifiedTransactions(twoTransactions(
         -1000, "chipotle", "10/6/19",
         -5000, "hyvee", "10/4/19"
@@ -247,22 +250,22 @@ TEST_CASE_METHOD(PresenterTests, "printUnverifiedTransactions") {
     );
 }
 
-TEST_CASE_METHOD(PresenterTests, "netPrintsNetIncome") {
+PRESENTER_TEST("netPrintsNetIncome") {
     setNetIncome(5000);
     executeNetIncome();
     ASSERT_NET_INCOME_PRINTED(5000);
 }
 
-TEST_CASE_METHOD(PresenterTests, "verifyVerifiesAmount") {
+PRESENTER_TEST("verifyVerifiesAmount") {
     executeVerify("-12.34");
     ASSERT_AMOUNT_VERIFIED(-1234);
 }
 
-TEST_CASE_METHOD(PresenterTests, "unrecognizedCommandDoesNotAbort") {
+PRESENTER_TEST("unrecognizedCommandDoesNotAbort") {
     execute("jellyfish");
 }
 
-TEST_CASE_METHOD(PresenterTests, "partiallyCorrectCommandDoesNotAbort") {
+PRESENTER_TEST("partiallyCorrectCommandDoesNotAbort") {
     executeAdd("oops");
 }
 }}
