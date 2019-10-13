@@ -13,20 +13,25 @@ static int integer(const std::string &s) {
     return std::stoi(s);
 }
 
-static int toHundredthsNoDecimal(const std::string &s) {
+static int hundredthsInteger(const std::string &s) {
     return integer(s) * 100;
 }
 
-static int toHundredths(const std::string &s) {
+static std::string twoDecimalPlaces(std::string s) {
+    return s + std::string(2 - s.size(), '0');
+}
+
+static int hundredths(const std::string &s) {
     auto decimal = s.find('.');
     if (decimal == std::string::npos)
-        return toHundredthsNoDecimal(s);
+        return hundredthsInteger(s);
     auto sign = s.front() == '-' ? "-" : "";
-    auto beforeDecimal = s.substr(0, decimal);
-    auto afterDecimal = s.substr(decimal + 1);
-    for (std::size_t i{2}; i > afterDecimal.size(); --i)
-        afterDecimal += '0';
-    return toHundredthsNoDecimal(beforeDecimal) + integer(sign + afterDecimal);
+    auto beforeDecimalMark = s.substr(0, decimal);
+    auto firstDecimalPlace = decimal + 1;
+    auto afterDecimalMark = s.substr(firstDecimalPlace);
+    return
+        hundredthsInteger(beforeDecimalMark) +
+        integer(sign + twoDecimalPlaces(afterDecimalMark));
 }
 
 static std::string next(std::stringstream &s) {
@@ -44,7 +49,7 @@ static bool matches(const std::string &a, Command c) {
 }
 
 static int amount(std::stringstream &stream) {
-    return toHundredths(next(stream));
+    return hundredths(next(stream));
 }
 
 static Transaction transaction(std::stringstream &stream) {
