@@ -25,8 +25,10 @@ static int toHundredths(const std::string &s) {
     if (s.front() == '-')
         sign = '-';
     auto beforeDecimal = s.substr(0, decimal);
-    auto afterDecimal = sign + s.substr(decimal + 1);
-    return toHundredthsNoDecimal(beforeDecimal) + integer(afterDecimal);
+    auto afterDecimal = s.substr(decimal + 1);
+    if (afterDecimal.size() == 1)
+        afterDecimal += '0';
+    return toHundredthsNoDecimal(beforeDecimal) + integer(sign + afterDecimal);
 }
 
 static std::string next(std::stringstream &s) {

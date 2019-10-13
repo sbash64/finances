@@ -195,6 +195,11 @@ TEST_CASE_METHOD(PresenterTests, "addsAnotherTransaction") {
     ASSERT_TRANSACTION_ADDED(-947, "chipotle", "10/6/19");
 }
 
+TEST_CASE_METHOD(PresenterTests, "treatsOneDecimalPlaceCorrectly") {
+    executeAdd("-9.4 chipotle 10/6/19");
+    ASSERT_TRANSACTION_ADDED(-940, "chipotle", "10/6/19");
+}
+
 TEST_CASE_METHOD(PresenterTests, "removesTransaction") {
     executeRemove("-12.34 hyvee 10/5/19");
     ASSERT_TRANSACTION_REMOVED(-1234, "hyvee", "10/5/19");
