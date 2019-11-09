@@ -2,26 +2,20 @@
 #include <sstream>
 
 namespace finances {
-Presenter::Presenter(
-    Model &record,
-    View &printer
-) :
-    model{record},
-    view{printer} {}
+Presenter::Presenter(Model &record, View &printer)
+    : model{record}, view{printer} {}
 
-static int integer(const std::string &s) {
-    return std::stoi(s);
-}
+static auto integer(const std::string &s) -> int { return std::stoi(s); }
 
-static int hundredthsInteger(const std::string &s) {
+static auto hundredthsInteger(const std::string &s) -> int {
     return integer(s) * 100;
 }
 
-static std::string twoDecimalPlaces(std::string s) {
+static auto twoDecimalPlaces(const std::string &s) -> std::string {
     return s + std::string(2 - s.size(), '0');
 }
 
-static int hundredths(const std::string &s) {
+static auto hundredths(const std::string &s) -> int {
     auto decimal = s.find('.');
     if (decimal == std::string::npos)
         return hundredthsInteger(s);
@@ -29,30 +23,29 @@ static int hundredths(const std::string &s) {
     auto beforeDecimalMark = s.substr(0, decimal);
     auto firstDecimalPlace = decimal + 1;
     auto afterDecimalMark = s.substr(firstDecimalPlace);
-    return
-        hundredthsInteger(beforeDecimalMark) +
+    return hundredthsInteger(beforeDecimalMark) +
         integer(sign + twoDecimalPlaces(afterDecimalMark));
 }
 
-static std::string next(std::stringstream &s) {
+static auto next(std::stringstream &s) -> std::string {
     std::string next_;
     s >> next_;
     return next_;
 }
 
-static bool matches(const std::string &a, const std::string &b) {
+static auto matches(const std::string &a, const std::string &b) -> bool {
     return a == b;
 }
 
-static bool matches(const std::string &a, Command c) {
+static auto matches(const std::string &a, Command c) -> bool {
     return matches(a, name(c));
 }
 
-static int amount(std::stringstream &stream) {
+static auto amount(std::stringstream &stream) -> int {
     return hundredths(next(stream));
 }
 
-static Transaction transaction(std::stringstream &stream) {
+static auto transaction(std::stringstream &stream) -> Transaction {
     auto amount_ = amount(stream);
     auto label = next(stream);
     auto date = next(stream);
