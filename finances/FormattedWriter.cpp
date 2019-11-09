@@ -1,9 +1,8 @@
 #include "FormattedWriter.hpp"
 
 namespace finances {
-FormattedWriter::FormattedWriter(Formatter &formatter, Writer &writer) :
-    formatter{formatter},
-    writer{writer} {}
+FormattedWriter::FormattedWriter(Formatter &formatter, Writer &writer)
+    : formatter{formatter}, writer{writer} {}
 
 static void write(Writer &writer, const std::string &what) {
     writer.write('\n' + what + "\n\n");
