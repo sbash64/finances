@@ -2,7 +2,8 @@
 #include <finances/Presenter.hpp>
 #include <catch2/catch.hpp>
 
-namespace finances { namespace {
+namespace finances {
+namespace {
 class ModelStub : public Model {
 public:
     auto amountVerified() const {
@@ -37,11 +38,11 @@ public:
         unverifiedTransactions_ = std::move(t);
     }
 
-    Transactions transactions() override {
+    auto transactions() -> Transactions override {
         return transactions_;
     }
 
-    int netIncome() override {
+    auto netIncome() -> int override {
         return netIncome_;
     }
 
@@ -53,14 +54,15 @@ public:
         transactionRemoved_ = t;
     }
 
-    Transactions verifiedTransactions() override {
+    auto verifiedTransactions() -> Transactions override {
         return verifiedTransactions_;
     }
 
-    Transactions unverifiedTransactions() override {
+    auto unverifiedTransactions() -> Transactions override {
         return unverifiedTransactions_;
     }
-private:
+
+  private:
     Transactions transactions_;
     Transactions verifiedTransactions_;
     Transactions unverifiedTransactions_;
@@ -87,7 +89,8 @@ public:
     void showNetIncome(int x) override {
         shownNetIncome_ = x;
     }
-private:
+
+  private:
     Transactions shownTransactions_;
     int shownNetIncome_;
 };
@@ -102,11 +105,11 @@ protected:
         model.setNetIncome(x);
     }
 
-    Transaction transactionAdded() {
+    auto transactionAdded() -> Transaction {
         return model.transactionAdded();
     }
 
-    Transaction transactionRemoved() {
+    auto transactionRemoved() -> Transaction {
         return model.transactionRemoved();
     }
 
@@ -122,20 +125,20 @@ protected:
         model.setUnverifiedTransactions(std::move(t));
     }
 
-    Transactions printedTransactions() {
+    auto printedTransactions() -> Transactions {
         return view.shownTransactions();
     }
 
-    int printedNetIncome() {
+    auto printedNetIncome() -> int {
         return view.shownNetIncome();
     }
 
-    int amountVerified() {
+    auto amountVerified() -> int {
         return model.amountVerified();
     }
 
     void executeCommand(Command c, const std::string &s = {}) {
-        execute(name(c) + std::string(!s.empty(), ' ') + s);
+        execute(name(c) + std::string(s.empty() ? 0 : 1, ' ') + s);
     }
 
     void executeAdd(const std::string &s) {
@@ -165,7 +168,8 @@ protected:
     void executePrintUnverified() {
         executeCommand(Command::printUnverified);
     }
-private:
+
+  private:
     ModelStub model;
     ViewStub view;
     Presenter presenter{model, view};
@@ -268,4 +272,5 @@ PRESENTER_TEST("unrecognizedCommandDoesNotAbort") {
 PRESENTER_TEST("partiallyCorrectCommandDoesNotAbort") {
     executeAdd("oops");
 }
-}}
+}
+}

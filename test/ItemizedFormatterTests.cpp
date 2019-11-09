@@ -5,11 +5,11 @@
 namespace finances { namespace {
 class ItemizedFormatterTests {
 protected:
-    std::string formatTransactions(const Transactions &t) {
+    auto formatTransactions(const Transactions &t) -> std::string {
         return formatter.formatTransactions(t);
     }
 
-    std::string formatNetIncome(int x) {
+    auto formatNetIncome(int x) -> std::string {
         return formatter.formatNetIncome(x);
     }
 private:
@@ -47,4 +47,5 @@ ITEMIZED_FORMATTER_TEST("formatTwoTransactions") {
 ITEMIZED_FORMATTER_TEST("formatNetIncome") {
     ASSERT_FORMAT_NET_INCOME(-979, "Net Income: -9.79");
 }
-}}
+}
+}
