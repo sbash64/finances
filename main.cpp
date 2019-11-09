@@ -6,10 +6,8 @@
 
 namespace finances {
 class ConsoleWriter : public Writer {
-public:
-    void write(const std::string &s) {
-        std::cout << s;
-    }
+  public:
+    void write(const std::string &s) override { std::cout << s; }
 };
 
 void main_() {
@@ -18,7 +16,7 @@ void main_() {
     FormattedWriter formattedWriter{formatter, writer};
     TransactionRecord record;
     Presenter presenter{record, formattedWriter};
-    while(1) {
+    while (true) {
         std::string next;
         std::getline(std::cin, next);
         presenter.execute(next);
@@ -26,6 +24,4 @@ void main_() {
 }
 }
 
-int main() {
-    finances::main_();
-}
+int main() { finances::main_(); }
