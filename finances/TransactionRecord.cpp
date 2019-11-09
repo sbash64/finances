@@ -2,41 +2,34 @@
 #include <algorithm>
 #include <numeric>
 #include <functional>
+#include <utility>
 
 namespace finances {
-constexpr auto begin(const Transactions &v) {
-    return v.begin();
-}
+constexpr auto begin(const Transactions &v) { return v.begin(); }
 
-constexpr auto end(const Transactions &v) {
-    return v.end();
-}
+constexpr auto end(const Transactions &v) { return v.end(); }
 
-constexpr auto begin(const VerifiableTransactions &v) {
-    return v.begin();
-}
+constexpr auto begin(const VerifiableTransactions &v) { return v.begin(); }
 
-constexpr auto end(const VerifiableTransactions &v) {
-    return v.end();
-}
+constexpr auto end(const VerifiableTransactions &v) { return v.end(); }
 
-constexpr auto &transaction(const VerifiableTransaction &t) {
+constexpr auto transaction(const VerifiableTransaction &t) -> auto & {
     return t.transaction;
 }
 
-static bool verified(const VerifiableTransaction &t) {
+static auto verified(const VerifiableTransaction &t) -> bool {
     return t.verified;
 }
 
-static bool unverified(const VerifiableTransaction &t) {
+static auto unverified(const VerifiableTransaction &t) -> bool {
     return !verified(t);
 }
 
-static bool amountMatches(const Transaction &t, int amount_) {
+static auto amountMatches(const Transaction &t, int amount_) -> bool {
     return amount(t) == amount_;
 }
 
-static bool amountMatches(const VerifiableTransaction &t, int amount_) {
+static auto amountMatches(const VerifiableTransaction &t, int amount_) -> bool {
     return amountMatches(transaction(t), amount_);
 }
 
@@ -44,18 +37,14 @@ static void addTo(Transactions &t, const VerifiableTransaction &vt) {
     t.push_back(transaction(vt));
 }
 
-static bool found(
-    VerifiableTransactions::iterator it,
-    const VerifiableTransactions &t
-) {
+static auto found(VerifiableTransactions::iterator it,
+    const VerifiableTransactions &t) -> bool {
     return it != end(t);
 }
 
-static auto findIf(
-    VerifiableTransactions &transactions,
-    std::function<bool(const VerifiableTransaction &)> f
-) {
-    return std::find_if(begin(transactions), end(transactions), f);
+static auto findIf(VerifiableTransactions &transactions,
+    std::function<bool(const VerifiableTransaction &)> f) {
+    return std::find_if(begin(transactions), end(transactions), std::move(f));
 }
 
 void TransactionRecord::add(const Transaction &t) {
@@ -63,10 +52,8 @@ void TransactionRecord::add(const Transaction &t) {
 }
 
 void TransactionRecord::remove(const Transaction &transaction_) {
-    auto maybe = findIf(
-        verifiableTransactions,
-        [&](auto t) { return transaction(t) == transaction_; }
-    );
+    auto maybe = findIf(verifiableTransactions,
+        [&](auto t) { return transaction(t) == transaction_; });
     if (found(maybe, verifiableTransactions)) {
         if (verified(*maybe))
             verify(maybe->transaction.amount);
@@ -74,61 +61,45 @@ void TransactionRecord::remove(const Transaction &transaction_) {
     }
 }
 
-static void for_each(
-    const VerifiableTransactions &transactions,
-    std::function<void(const VerifiableTransaction &)> f
-) {
-    std::for_each(begin(transactions), end(transactions), f);
+static void for_each(const VerifiableTransactions &transactions,
+    std::function<void(const VerifiableTransaction &)> f) {
+    std::for_each(begin(transactions), end(transactions), std::move(f));
 }
 
-static Transactions collectIf(
-    const VerifiableTransactions &transactions,
-    std::function<bool(const VerifiableTransaction &)> f
-) {
+static auto collectIf(const VerifiableTransactions &transactions,
+    std::function<bool(const VerifiableTransaction &)> f) -> Transactions {
     Transactions collected;
-    for_each(
-        transactions,
-        [&](auto transaction) {
-            if (f(transaction))
-                addTo(collected, transaction);
-        }
-    );
+    for_each(transactions, [&](auto transaction) {
+        if (f(transaction))
+            addTo(collected, transaction);
+    });
     return collected;
 }
 
-Transactions TransactionRecord::verifiedTransactions() {
+auto TransactionRecord::verifiedTransactions() -> Transactions {
     return collectIf(verifiableTransactions, verified);
 }
 
-Transactions TransactionRecord::unverifiedTransactions() {
+auto TransactionRecord::unverifiedTransactions() -> Transactions {
     return collectIf(verifiableTransactions, unverified);
 }
 
-Transactions TransactionRecord::transactions() {
+auto TransactionRecord::transactions() -> Transactions {
     Transactions transactions;
-    for_each(
-        verifiableTransactions,
-        [&](auto transaction) {
-            addTo(transactions, transaction);
-        }
-    );
+    for_each(verifiableTransactions,
+        [&](auto transaction) { addTo(transactions, transaction); });
     return transactions;
 }
 
-int TransactionRecord::netIncome() {
-    return std::accumulate(
-        begin(verifiableTransactions),
-        end(verifiableTransactions),
-        0,
-        [](auto net, auto t) { return net + amount(transaction(t)); }
-    );
+auto TransactionRecord::netIncome() -> int {
+    return std::accumulate(begin(verifiableTransactions),
+        end(verifiableTransactions), 0,
+        [](auto net, auto t) { return net + amount(transaction(t)); });
 }
 
 void TransactionRecord::verify(int amount) {
-    auto found_ = findIf(
-        verifiableTransactions,
-        [=](auto t) { return amountMatches(t, amount) && unverified(t); }
-    );
+    auto found_ = findIf(verifiableTransactions,
+        [=](auto t) { return amountMatches(t, amount) && unverified(t); });
     if (found(found_, verifiableTransactions))
         found_->verified = true;
 }
