@@ -7,24 +7,25 @@
 
 namespace finances {
 class Formatter {
-public:
+  public:
     virtual ~Formatter() = default;
-    virtual std::string formatTransactions(const Transactions &) = 0;
-    virtual std::string formatNetIncome(int) = 0;
+    virtual auto formatTransactions(const Transactions &) -> std::string = 0;
+    virtual auto formatNetIncome(int) -> std::string = 0;
 };
 
 class Writer {
-public:
+  public:
     virtual ~Writer() = default;
     virtual void write(const std::string &) = 0;
 };
 
 class FormattedWriter : public View {
-public:
+  public:
     FormattedWriter(Formatter &, Writer &);
     void showTransactions(const Transactions &t) override;
     void showNetIncome(int x) override;
-private:
+
+  private:
     Formatter &formatter;
     Writer &writer;
 };
