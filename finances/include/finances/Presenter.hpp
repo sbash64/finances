@@ -6,19 +6,19 @@
 
 namespace finances {
 class Model {
-public:
+  public:
     virtual ~Model() = default;
     virtual void add(const Transaction &) = 0;
     virtual void remove(const Transaction &) = 0;
     virtual void verify(int amount) = 0;
-    virtual Transactions transactions() = 0;
-    virtual Transactions verifiedTransactions() = 0;
-    virtual Transactions unverifiedTransactions() = 0;
-    virtual int netIncome() = 0;
+    virtual auto transactions() -> Transactions = 0;
+    virtual auto verifiedTransactions() -> Transactions = 0;
+    virtual auto unverifiedTransactions() -> Transactions = 0;
+    virtual auto netIncome() -> int = 0;
 };
 
 class View {
-public:
+  public:
     virtual ~View() = default;
     virtual void showTransactions(const Transactions &) = 0;
     virtual void showNetIncome(int) = 0;
@@ -34,32 +34,33 @@ enum class Command {
     netIncome
 };
 
-constexpr const char *name(Command c) {
+constexpr auto name(Command c) -> const char * {
     switch (c) {
-        case (Command::print):
-            return "print";
-        case (Command::printVerified):
-            return "printverified";
-        case (Command::printUnverified):
-            return "printunverified";
-        case (Command::add):
-            return "add";
-        case (Command::remove):
-            return "remove";
-        case (Command::verify):
-            return "verify";
-        case (Command::netIncome):
-            return "net";
-        default:
-            return "";
+    case (Command::print):
+        return "print";
+    case (Command::printVerified):
+        return "printverified";
+    case (Command::printUnverified):
+        return "printunverified";
+    case (Command::add):
+        return "add";
+    case (Command::remove):
+        return "remove";
+    case (Command::verify):
+        return "verify";
+    case (Command::netIncome):
+        return "net";
+    default:
+        return "";
     }
 }
 
 class Presenter {
-public:
+  public:
     Presenter(Model &, View &);
     void execute(const std::string &);
-private:
+
+  private:
     Model &model;
     View &view;
 };

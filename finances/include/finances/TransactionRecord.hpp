@@ -8,21 +8,22 @@
 namespace finances {
 struct VerifiableTransaction {
     Transaction transaction;
-    bool verified;
+    bool verified{};
 };
 
 using VerifiableTransactions = std::vector<VerifiableTransaction>;
 
 class TransactionRecord : public Model {
-public:
+  public:
     void add(const Transaction &) override;
     void remove(const Transaction &) override;
-    int netIncome() override;
-    Transactions transactions() override;
+    auto netIncome() -> int override;
+    auto transactions() -> Transactions override;
     void verify(int) override;
-    Transactions verifiedTransactions() override;
-    Transactions unverifiedTransactions() override;
-private:
+    auto verifiedTransactions() -> Transactions override;
+    auto unverifiedTransactions() -> Transactions override;
+
+  private:
     VerifiableTransactions verifiableTransactions;
 };
 }
