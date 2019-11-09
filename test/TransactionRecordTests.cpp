@@ -17,26 +17,27 @@ protected:
         record.remove(transaction(amount, std::move(label), std::move(date)));
     }
 
-    int netIncome() {
+    auto netIncome() -> int {
         return record.netIncome();
     }
 
-    Transactions verifiedTransactions() {
+    auto verifiedTransactions() -> Transactions {
         return record.verifiedTransactions();
     }
 
-    Transactions unverifiedTransactions() {
+    auto unverifiedTransactions() -> Transactions {
         return record.unverifiedTransactions();
     }
 
-    Transactions all() {
+    auto all() -> Transactions {
         return record.transactions();
     }
 
-    Transactions none() {
+    static auto none() -> Transactions {
         return {};
     }
-private:
+
+  private:
     TransactionRecord record;
 };
 
@@ -252,4 +253,5 @@ TRANSACTION_RECORD_TEST("removeOneUnverifiedDoesNotVerifyOther") {
     remove(-2000, "chipotle", "10/6/19");
     ASSERT_NO_VERIFIED_TRANSACTIONS();
 }
-}}
+}
+}
