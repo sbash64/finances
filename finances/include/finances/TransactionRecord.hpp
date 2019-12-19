@@ -26,6 +26,7 @@ class TransactionRecord : public Model {
 
   private:
     VerifiableTransactions verifiableTransactions;
+    bool didVerify_{};
 };
 }
 

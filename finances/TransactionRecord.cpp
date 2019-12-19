@@ -85,7 +85,7 @@ auto TransactionRecord::unverifiedTransactions() -> Transactions {
 }
 
 auto TransactionRecord::didVerify() -> bool {
-    return {};
+    return didVerify_;
 }
 
 auto TransactionRecord::transactions() -> Transactions {
@@ -104,7 +104,9 @@ auto TransactionRecord::netIncome() -> int {
 void TransactionRecord::verify(int amount) {
     auto found_ = findIf(verifiableTransactions,
         [=](auto t) { return amountMatches(t, amount) && unverified(t); });
-    if (found(found_, verifiableTransactions))
+    if (found(found_, verifiableTransactions)) {
         found_->verified = true;
+        didVerify_ = true;
+    }
 }
 }

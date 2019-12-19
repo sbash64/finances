@@ -37,6 +37,10 @@ protected:
         return {};
     }
 
+    auto didVerify() -> bool {
+        return record.didVerify();
+    }
+
     auto didNotVerify() -> bool {
         return !record.didVerify();
     }
@@ -89,6 +93,9 @@ protected:
 
 #define ASSERT_DID_NOT_VERIFY()\
     ASSERT_TRUE(didNotVerify())
+
+#define ASSERT_DID_VERIFY()\
+    ASSERT_TRUE(didVerify())
 
 #define TRANSACTION_RECORD_TEST(a)\
     TEST_CASE_METHOD(TransactionRecordTests, a)
@@ -208,6 +215,12 @@ TRANSACTION_RECORD_TEST("noneVerifiedDidNotVerify") {
     add(-2000, "hyvee", "10/5/19");
     verify(-1000);
     ASSERT_DID_NOT_VERIFY();
+}
+
+TRANSACTION_RECORD_TEST("oneVerifiedDidVerify") {
+    add(-2000, "hyvee", "10/5/19");
+    verify(-2000);
+    ASSERT_DID_VERIFY();
 }
 
 TRANSACTION_RECORD_TEST("noUnverifiedOnConstruction") {
