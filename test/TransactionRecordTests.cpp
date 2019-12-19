@@ -207,6 +207,13 @@ TRANSACTION_RECORD_TEST("oneVerifiedDidVerify") {
     ASSERT_DID_VERIFY();
 }
 
+TRANSACTION_RECORD_TEST("oneVerifiedBeforeNoneDidNotVerify") {
+    add(-2000, "hyvee", "10/5/19");
+    verify(-2000);
+    verify(-1000);
+    ASSERT_DID_NOT_VERIFY();
+}
+
 TRANSACTION_RECORD_TEST("noUnverifiedOnConstruction") {
     ASSERT_NO_UNVERIFIED_TRANSACTIONS();
 }
