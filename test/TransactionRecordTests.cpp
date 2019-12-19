@@ -2,24 +2,23 @@
 #include <finances/TransactionRecord.hpp>
 #include <catch2/catch.hpp>
 
-namespace finances { namespace {
+namespace finances {
+namespace {
+auto none() -> Transactions { return {}; }
+
 class TransactionRecordTests {
-protected:
+  protected:
     void add(int amount, std::string label, std::string date) {
         record.add(transaction(amount, std::move(label), std::move(date)));
     }
 
-    void verify(int amount) {
-        record.verify(amount);
-    }
+    void verify(int amount) { record.verify(amount); }
 
     void remove(int amount, std::string label, std::string date) {
         record.remove(transaction(amount, std::move(label), std::move(date)));
     }
 
-    auto netIncome() -> int {
-        return record.netIncome();
-    }
+    auto netIncome() -> int { return record.netIncome(); }
 
     auto verifiedTransactions() -> Transactions {
         return record.verifiedTransactions();
@@ -29,76 +28,61 @@ protected:
         return record.unverifiedTransactions();
     }
 
-    auto all() -> Transactions {
-        return record.transactions();
-    }
+    auto all() -> Transactions { return record.transactions(); }
 
-    static auto none() -> Transactions {
-        return {};
-    }
+    auto didVerify() -> bool { return record.didVerify(); }
 
-    auto didVerify() -> bool {
-        return record.didVerify();
-    }
-
-    auto didNotVerify() -> bool {
-        return !record.didVerify();
-    }
+    auto didNotVerify() -> bool { return !didVerify(); }
 
   private:
     TransactionRecord record;
 };
 
-#define ASSERT_TRANSACTIONS(a)\
-    ASSERT_EQUAL(a, all())
+#define ASSERT_TRANSACTIONS(a) ASSERT_EQUAL(a, all())
 
-#define ASSERT_NO_TRANSACTIONS()\
-    ASSERT_TRANSACTIONS(none())
+#define ASSERT_NO_TRANSACTIONS() ASSERT_TRANSACTIONS(none())
 
-#define ASSERT_ONE_TRANSACTION(a, b, c)\
+#define ASSERT_ONE_TRANSACTION(a, b, c)                                        \
     ASSERT_TRANSACTIONS(oneTransaction(a, b, c))
 
-#define ASSERT_TWO_TRANSACTIONS(a, b, c, d, e, f)\
+#define ASSERT_TWO_TRANSACTIONS(a, b, c, d, e, f)                              \
     ASSERT_TRANSACTIONS(twoTransactions(a, b, c, d, e, f))
 
-#define ASSERT_THREE_TRANSACTIONS(a, b, c, d, e, f, g, h, i)\
+#define ASSERT_THREE_TRANSACTIONS(a, b, c, d, e, f, g, h, i)                   \
     ASSERT_TRANSACTIONS(threeTransactions(a, b, c, d, e, f, g, h, i))
 
-#define ASSERT_VERIFIED_TRANSACTIONS(expected)\
+#define ASSERT_VERIFIED_TRANSACTIONS(expected)                                 \
     ASSERT_EQUAL(expected, verifiedTransactions())
 
-#define ASSERT_ONE_VERIFIED_TRANSACTION(a, b, c)\
+#define ASSERT_ONE_VERIFIED_TRANSACTION(a, b, c)                               \
     ASSERT_VERIFIED_TRANSACTIONS(oneTransaction(a, b, c))
 
-#define ASSERT_UNVERIFIED_TRANSACTIONS(expected)\
+#define ASSERT_UNVERIFIED_TRANSACTIONS(expected)                               \
     ASSERT_EQUAL(expected, unverifiedTransactions())
 
-#define ASSERT_ONE_UNVERIFIED_TRANSACTION(a, b, c)\
+#define ASSERT_ONE_UNVERIFIED_TRANSACTION(a, b, c)                             \
     ASSERT_UNVERIFIED_TRANSACTIONS(oneTransaction(a, b, c))
 
-#define ASSERT_TWO_VERIFIED_TRANSACTIONS(a, b, c, d, e, f)\
+#define ASSERT_TWO_VERIFIED_TRANSACTIONS(a, b, c, d, e, f)                     \
     ASSERT_VERIFIED_TRANSACTIONS(twoTransactions(a, b, c, d, e, f))
 
-#define ASSERT_NET_INCOME(expected)\
-    ASSERT_EQUAL(expected, netIncome())
+#define ASSERT_NET_INCOME(expected) ASSERT_EQUAL(expected, netIncome())
 
-#define ASSERT_NO_VERIFIED_TRANSACTIONS()\
-    ASSERT_VERIFIED_TRANSACTIONS(none())
+#define ASSERT_NO_VERIFIED_TRANSACTIONS() ASSERT_VERIFIED_TRANSACTIONS(none())
 
-#define ASSERT_NO_UNVERIFIED_TRANSACTIONS()\
+#define ASSERT_NO_UNVERIFIED_TRANSACTIONS()                                    \
     ASSERT_UNVERIFIED_TRANSACTIONS(none())
 
-#define ASSERT_EXISTS_EXACTLY_ONE_VERIFIED_TRANSACTION()\
+#define ASSERT_EXISTS_EXACTLY_ONE_VERIFIED_TRANSACTION()                       \
     ASSERT_EQUAL(1, verifiedTransactions().size())
 
-#define ASSERT_DID_NOT_VERIFY()\
-    ASSERT_TRUE(didNotVerify())
+#define ASSERT_DID_NOT_VERIFY() ASSERT_TRUE(didNotVerify())
 
-#define ASSERT_DID_VERIFY()\
-    ASSERT_TRUE(didVerify())
+#define ASSERT_DID_VERIFY() ASSERT_TRUE(didVerify())
 
-#define TRANSACTION_RECORD_TEST(a)\
-    TEST_CASE_METHOD(TransactionRecordTests, a)
+#define TRANSACTION_RECORD_TEST(a) TEST_CASE_METHOD(TransactionRecordTests, a)
+
+// clang-format off
 
 TRANSACTION_RECORD_TEST("noneOnConstruction") {
     ASSERT_NO_TRANSACTIONS();
@@ -279,5 +263,8 @@ TRANSACTION_RECORD_TEST("removeOneUnverifiedDoesNotVerifyOther") {
     remove(-2000, "chipotle", "10/6/19");
     ASSERT_NO_VERIFIED_TRANSACTIONS();
 }
+
+// clang-format on
+
 }
 }
