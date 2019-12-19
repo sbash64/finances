@@ -7,6 +7,7 @@
 #include <utility>
 
 #define ASSERT_EQUAL(a, b) CHECK(a == b)
+#define ASSERT_TRUE(a) CHECK(a)
 
 namespace finances {
 inline auto transaction(int amount, std::string label, std::string date)

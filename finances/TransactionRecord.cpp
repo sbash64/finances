@@ -84,6 +84,10 @@ auto TransactionRecord::unverifiedTransactions() -> Transactions {
     return collectIf(verifiableTransactions, unverified);
 }
 
+auto TransactionRecord::didVerify() -> bool {
+    return {};
+}
+
 auto TransactionRecord::transactions() -> Transactions {
     Transactions transactions;
     for_each(verifiableTransactions,

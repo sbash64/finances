@@ -37,6 +37,10 @@ protected:
         return {};
     }
 
+    auto didNotVerify() -> bool {
+        return !record.didVerify();
+    }
+
   private:
     TransactionRecord record;
 };
@@ -82,6 +86,9 @@ protected:
 
 #define ASSERT_EXISTS_EXACTLY_ONE_VERIFIED_TRANSACTION()\
     ASSERT_EQUAL(1, verifiedTransactions().size())
+
+#define ASSERT_DID_NOT_VERIFY()\
+    ASSERT_TRUE(didNotVerify())
 
 #define TRANSACTION_RECORD_TEST(a)\
     TEST_CASE_METHOD(TransactionRecordTests, a)
@@ -195,6 +202,12 @@ TRANSACTION_RECORD_TEST("twoOfThreeVerified") {
 TRANSACTION_RECORD_TEST("oneFromNoneVerified") {
     verify(-3000);
     ASSERT_NO_VERIFIED_TRANSACTIONS();
+}
+
+TRANSACTION_RECORD_TEST("noneVerifiedDidNotVerify") {
+    add(-2000, "hyvee", "10/5/19");
+    verify(-1000);
+    ASSERT_DID_NOT_VERIFY();
 }
 
 TRANSACTION_RECORD_TEST("noUnverifiedOnConstruction") {
