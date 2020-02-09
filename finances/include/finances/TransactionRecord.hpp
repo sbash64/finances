@@ -23,12 +23,10 @@ class TransactionRecord : public Model {
     void verify(int) override;
     auto verifiedTransactions() -> Transactions override;
     auto unverifiedTransactions() -> Transactions override;
-    auto didVerify() -> bool;
 
   private:
     VerifiableTransactions verifiableTransactions;
     EventListener *listener{};
-    bool didVerify_{};
 };
 }
 
