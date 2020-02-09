@@ -20,6 +20,7 @@ class Model {
     virtual auto verifiedTransactions() -> Transactions = 0;
     virtual auto unverifiedTransactions() -> Transactions = 0;
     virtual auto netIncome() -> int = 0;
+    virtual void subscribe(EventListener *) = 0;
 };
 
 class View {

@@ -15,7 +15,7 @@ using VerifiableTransactions = std::vector<VerifiableTransaction>;
 
 class TransactionRecord : public Model {
   public:
-    void subscribe(EventListener *);
+    void subscribe(EventListener *) override;
     void add(const Transaction &) override;
     void remove(const Transaction &) override;
     auto netIncome() -> int override;

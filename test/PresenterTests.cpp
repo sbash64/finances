@@ -43,6 +43,10 @@ class ModelStub : public Model {
         return unverifiedTransactions_;
     }
 
+    void subscribe(EventListener *) override { subscribed_ = true; }
+
+    auto subscribed() const -> bool { return subscribed_; }
+
   private:
     Transactions transactions_;
     Transactions verifiedTransactions_;
@@ -51,6 +55,7 @@ class ModelStub : public Model {
     Transaction transactionRemoved_;
     int netIncome_{};
     int amountVerified_{};
+    bool subscribed_{};
 };
 
 class ViewStub : public View {
@@ -128,6 +133,8 @@ class PresenterTests {
         presenter.verified(transaction(a, std::move(b), std::move(c)));
     }
 
+    auto subscribedToModelEvents() -> bool { return model.subscribed(); }
+
   private:
     ModelStub model;
     ViewStub view;
@@ -150,9 +157,16 @@ class PresenterTests {
 
 #define ASSERT_AMOUNT_VERIFIED(a) ASSERT_EQUAL(a, amountVerified())
 
+#define ASSERT_SUBSCRIBED_TO_MODEL_EVENTS()                                    \
+    ASSERT_TRUE(subscribedToModelEvents())
+
 #define PRESENTER_TEST(a) TEST_CASE_METHOD(PresenterTests, a)
 
 // clang-format off
+
+PRESENTER_TEST("subscribesToModelEvents") {
+    ASSERT_SUBSCRIBED_TO_MODEL_EVENTS();
+}
 
 PRESENTER_TEST("addTransactionParsesInput") {
     executeAdd("-50 hyvee 10/5/19");

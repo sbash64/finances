@@ -3,7 +3,9 @@
 
 namespace finances {
 Presenter::Presenter(Model &record, View &printer)
-    : model{record}, view{printer} {}
+    : model{record}, view{printer} {
+    model.subscribe(this);
+}
 
 static auto integer(const std::string &s) -> int { return std::stoi(s); }
 
