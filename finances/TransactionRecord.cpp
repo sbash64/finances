@@ -51,6 +51,8 @@ void TransactionRecord::add(const Transaction &t) {
     verifiableTransactions.push_back({t, false});
 }
 
+void TransactionRecord::subscribe(EventListener *e) { listener = e; }
+
 void TransactionRecord::remove(const Transaction &transaction_) {
     auto maybe = findIf(verifiableTransactions,
         [&](auto t) { return transaction(t) == transaction_; });
@@ -84,9 +86,7 @@ auto TransactionRecord::unverifiedTransactions() -> Transactions {
     return collectIf(verifiableTransactions, unverified);
 }
 
-auto TransactionRecord::didVerify() -> bool {
-    return didVerify_;
-}
+auto TransactionRecord::didVerify() -> bool { return didVerify_; }
 
 auto TransactionRecord::transactions() -> Transactions {
     Transactions transactions;
@@ -104,7 +104,9 @@ auto TransactionRecord::netIncome() -> int {
 void TransactionRecord::verify(int amount) {
     auto found_ = findIf(verifiableTransactions,
         [=](auto t) { return amountMatches(t, amount) && unverified(t); });
-    if ((didVerify_ = found(found_, verifiableTransactions)))
+    if ((didVerify_ = found(found_, verifiableTransactions))) {
+        listener->verified({});
         found_->verified = true;
+    }
 }
 }

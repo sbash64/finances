@@ -7,6 +7,11 @@
 namespace finances {
 class Model {
   public:
+    class EventListener {
+      public:
+        virtual ~EventListener() = default;
+        virtual void verified(const Transaction &) = 0;
+    };
     virtual ~Model() = default;
     virtual void add(const Transaction &) = 0;
     virtual void remove(const Transaction &) = 0;

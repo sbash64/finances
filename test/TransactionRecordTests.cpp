@@ -4,9 +4,25 @@
 
 namespace finances {
 namespace {
+class ModelEventListenerStub : public Model::EventListener {
+  public:
+    auto verified() const -> bool { return verified_; }
+
+    void verified(const Transaction &t) override {
+        verifiedTransaction_ = t;
+        verified_ = true;
+    }
+
+    Transaction verifiedTransaction_{};
+    bool verified_{};
+};
+
 auto none() -> Transactions { return {}; }
 
 class TransactionRecordTests {
+  public:
+    TransactionRecordTests() { record.subscribe(&listener); }
+
   protected:
     void add(int amount, std::string label, std::string date) {
         record.add(transaction(amount, std::move(label), std::move(date)));
@@ -32,9 +48,10 @@ class TransactionRecordTests {
 
     auto didVerify() -> bool { return record.didVerify(); }
 
-    auto didNotVerify() -> bool { return !didVerify(); }
+    auto didNotVerify() -> bool { return !listener.verified(); }
 
   private:
+    ModelEventListenerStub listener;
     TransactionRecord record;
 };
 
@@ -205,13 +222,6 @@ TRANSACTION_RECORD_TEST("oneVerifiedDidVerify") {
     add(-2000, "hyvee", "10/5/19");
     verify(-2000);
     ASSERT_DID_VERIFY();
-}
-
-TRANSACTION_RECORD_TEST("oneVerifiedBeforeNoneDidNotVerify") {
-    add(-2000, "hyvee", "10/5/19");
-    verify(-2000);
-    verify(-1000);
-    ASSERT_DID_NOT_VERIFY();
 }
 
 TRANSACTION_RECORD_TEST("noUnverifiedOnConstruction") {
