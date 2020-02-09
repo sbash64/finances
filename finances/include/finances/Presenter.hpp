@@ -55,15 +55,15 @@ constexpr auto name(Command c) -> const char * {
         return "verify";
     case (Command::netIncome):
         return "net";
-    default:
-        return "";
     }
+    return "";
 }
 
-class Presenter {
+class Presenter : Model::EventListener {
   public:
     Presenter(Model &, View &);
     void execute(const std::string &);
+    void verified(const Transaction &) override;
 
   private:
     Model &model;

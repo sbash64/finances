@@ -1,34 +1,23 @@
 #include "testing-utility.hpp"
 #include <finances/Presenter.hpp>
 #include <catch2/catch.hpp>
+#include <utility>
 
 namespace finances {
 namespace {
 class ModelStub : public Model {
-public:
-    auto amountVerified() const {
-        return amountVerified_;
-    }
+  public:
+    auto amountVerified() const { return amountVerified_; }
 
-    auto transactionAdded() const {
-        return transactionAdded_;
-    }
+    auto transactionAdded() const { return transactionAdded_; }
 
-    auto transactionRemoved() const {
-        return transactionRemoved_;
-    }
+    auto transactionRemoved() const { return transactionRemoved_; }
 
-    void setNetIncome(int x) {
-        netIncome_ = x;
-    }
+    void setNetIncome(int x) { netIncome_ = x; }
 
-    void add(const Transaction &t) override {
-        transactionAdded_ = t;
-    }
+    void add(const Transaction &t) override { transactionAdded_ = t; }
 
-    void setTransactions(Transactions t) {
-        transactions_ = std::move(t);
-    }
+    void setTransactions(Transactions t) { transactions_ = std::move(t); }
 
     void setVerifiedTransactions(Transactions t) {
         verifiedTransactions_ = std::move(t);
@@ -38,21 +27,13 @@ public:
         unverifiedTransactions_ = std::move(t);
     }
 
-    auto transactions() -> Transactions override {
-        return transactions_;
-    }
+    auto transactions() -> Transactions override { return transactions_; }
 
-    auto netIncome() -> int override {
-        return netIncome_;
-    }
+    auto netIncome() -> int override { return netIncome_; }
 
-    void verify(int x) override {
-        amountVerified_ = x;
-    }
+    void verify(int x) override { amountVerified_ = x; }
 
-    void remove(const Transaction &t) override {
-        transactionRemoved_ = t;
-    }
+    void remove(const Transaction &t) override { transactionRemoved_ = t; }
 
     auto verifiedTransactions() -> Transactions override {
         return verifiedTransactions_;
@@ -73,22 +54,16 @@ public:
 };
 
 class ViewStub : public View {
-public:
-    auto shownTransactions() const {
-        return shownTransactions_;
-    }
+  public:
+    auto shownTransactions() const { return shownTransactions_; }
 
-    auto shownNetIncome() const {
-        return shownNetIncome_;
-    }
+    auto shownNetIncome() const { return shownNetIncome_; }
 
     void showTransactions(const Transactions &t) override {
         shownTransactions_ = t;
     }
 
-    void showNetIncome(int x) override {
-        shownNetIncome_ = x;
-    }
+    void showNetIncome(int x) override { shownNetIncome_ = x; }
 
   private:
     Transactions shownTransactions_;
@@ -96,18 +71,12 @@ public:
 };
 
 class PresenterTests {
-protected:
-    void execute(const std::string &s) {
-        presenter.execute(s);
-    }
+  protected:
+    void execute(const std::string &s) { presenter.execute(s); }
 
-    void setNetIncome(int x) {
-        model.setNetIncome(x);
-    }
+    void setNetIncome(int x) { model.setNetIncome(x); }
 
-    auto transactionAdded() -> Transaction {
-        return model.transactionAdded();
-    }
+    auto transactionAdded() -> Transaction { return model.transactionAdded(); }
 
     auto transactionRemoved() -> Transaction {
         return model.transactionRemoved();
@@ -129,21 +98,15 @@ protected:
         return view.shownTransactions();
     }
 
-    auto printedNetIncome() -> int {
-        return view.shownNetIncome();
-    }
+    auto printedNetIncome() -> int { return view.shownNetIncome(); }
 
-    auto amountVerified() -> int {
-        return model.amountVerified();
-    }
+    auto amountVerified() -> int { return model.amountVerified(); }
 
     void executeCommand(Command c, const std::string &s = {}) {
         execute(name(c) + std::string(s.empty() ? 0 : 1, ' ') + s);
     }
 
-    void executeAdd(const std::string &s) {
-        executeCommand(Command::add, s);
-    }
+    void executeAdd(const std::string &s) { executeCommand(Command::add, s); }
 
     void executeRemove(const std::string &s) {
         executeCommand(Command::remove, s);
@@ -153,20 +116,16 @@ protected:
         executeCommand(Command::verify, s);
     }
 
-    void executeNetIncome() {
-        executeCommand(Command::netIncome);
-    }
+    void executeNetIncome() { executeCommand(Command::netIncome); }
 
-    void executePrint() {
-        executeCommand(Command::print);
-    }
+    void executePrint() { executeCommand(Command::print); }
 
-    void executePrintVerified() {
-        executeCommand(Command::printVerified);
-    }
+    void executePrintVerified() { executeCommand(Command::printVerified); }
 
-    void executePrintUnverified() {
-        executeCommand(Command::printUnverified);
+    void executePrintUnverified() { executeCommand(Command::printUnverified); }
+
+    void verified(int a, std::string b, std::string c) {
+        presenter.verified(transaction(a, std::move(b), std::move(c)));
     }
 
   private:
@@ -175,23 +134,25 @@ protected:
     Presenter presenter{model, view};
 };
 
-#define ASSERT_TRANSACTION_ADDED(a, b, c)\
+#define ASSERT_TRANSACTION_ADDED(a, b, c)                                      \
     ASSERT_EQUAL(transaction(a, b, c), transactionAdded())
 
-#define ASSERT_TRANSACTION_REMOVED(a, b, c)\
+#define ASSERT_TRANSACTION_REMOVED(a, b, c)                                    \
     ASSERT_EQUAL(transaction(a, b, c), transactionRemoved())
 
-#define ASSERT_BOTH_TRANSACTIONS_PRINTED(a, b, c, d, e, f)\
+#define ASSERT_BOTH_TRANSACTIONS_PRINTED(a, b, c, d, e, f)                     \
     ASSERT_EQUAL(twoTransactions(a, b, c, d, e, f), printedTransactions())
 
-#define ASSERT_NET_INCOME_PRINTED(a)\
-    ASSERT_EQUAL(a, printedNetIncome())
+#define ASSERT_TRANSACTION_PRINTED(a, b, c)                                    \
+    ASSERT_EQUAL(oneTransaction(a, b, c), printedTransactions())
 
-#define ASSERT_AMOUNT_VERIFIED(a)\
-    ASSERT_EQUAL(a, amountVerified())
+#define ASSERT_NET_INCOME_PRINTED(a) ASSERT_EQUAL(a, printedNetIncome())
 
-#define PRESENTER_TEST(a)\
-    TEST_CASE_METHOD(PresenterTests, a)
+#define ASSERT_AMOUNT_VERIFIED(a) ASSERT_EQUAL(a, amountVerified())
+
+#define PRESENTER_TEST(a) TEST_CASE_METHOD(PresenterTests, a)
+
+// clang-format off
 
 PRESENTER_TEST("addTransactionParsesInput") {
     executeAdd("-50 hyvee 10/5/19");
@@ -216,6 +177,13 @@ PRESENTER_TEST("addTransactionParsesNoDecimalDigits") {
 PRESENTER_TEST("removeTransactionParsesInput") {
     executeRemove("-12.34 hyvee 10/5/19");
     ASSERT_TRANSACTION_REMOVED(-1234, "hyvee", "10/5/19");
+}
+
+PRESENTER_TEST("verifiedEventPrintsTransaction") {
+    verified(-1000, "chipotle", "10/6/19");
+    ASSERT_TRANSACTION_PRINTED(
+        -1000, "chipotle", "10/6/19"
+    );
 }
 
 PRESENTER_TEST("printPrintsAllTransactions") {
@@ -272,5 +240,8 @@ PRESENTER_TEST("unrecognizedCommandDoesNotAbort") {
 PRESENTER_TEST("partiallyCorrectCommandDoesNotAbort") {
     executeAdd("oops");
 }
+
+// clang-format on
+
 }
 }

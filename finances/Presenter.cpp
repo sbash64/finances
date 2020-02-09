@@ -81,4 +81,6 @@ void Presenter::execute(const std::string &s) {
     } catch (const std::invalid_argument &) {
     }
 }
+
+void Presenter::verified(const Transaction &t) { showTransactions(view, {t}); }
 }
