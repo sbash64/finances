@@ -43,9 +43,14 @@ class ModelStub : public Model {
         return unverifiedTransactions_;
     }
 
-    void subscribe(EventListener *) override { subscribed_ = true; }
+    void subscribe(EventListener *e) override {
+        listener = e;
+        subscribed_ = true;
+    }
 
     auto subscribed() const -> bool { return subscribed_; }
+
+    auto verified(const Transaction &t) { listener->verified(t); }
 
   private:
     Transactions transactions_;
@@ -53,6 +58,7 @@ class ModelStub : public Model {
     Transactions unverifiedTransactions_;
     Transaction transactionAdded_;
     Transaction transactionRemoved_;
+    EventListener *listener{};
     int netIncome_{};
     int amountVerified_{};
     bool subscribed_{};
@@ -130,7 +136,7 @@ class PresenterTests {
     void executePrintUnverified() { executeCommand(Command::printUnverified); }
 
     void verified(int a, std::string b, std::string c) {
-        presenter.verified(transaction(a, std::move(b), std::move(c)));
+        model.verified(transaction(a, std::move(b), std::move(c)));
     }
 
     auto subscribedToModelEvents() -> bool { return model.subscribed(); }
@@ -147,11 +153,13 @@ class PresenterTests {
 #define ASSERT_TRANSACTION_REMOVED(a, b, c)                                    \
     ASSERT_EQUAL(transaction(a, b, c), transactionRemoved())
 
+#define ASSERT_PRINTED_TRANSACTIONS(a) ASSERT_EQUAL(a, printedTransactions())
+
 #define ASSERT_BOTH_TRANSACTIONS_PRINTED(a, b, c, d, e, f)                     \
-    ASSERT_EQUAL(twoTransactions(a, b, c, d, e, f), printedTransactions())
+    ASSERT_PRINTED_TRANSACTIONS(twoTransactions(a, b, c, d, e, f))
 
 #define ASSERT_TRANSACTION_PRINTED(a, b, c)                                    \
-    ASSERT_EQUAL(oneTransaction(a, b, c), printedTransactions())
+    ASSERT_PRINTED_TRANSACTIONS(oneTransaction(a, b, c))
 
 #define ASSERT_NET_INCOME_PRINTED(a) ASSERT_EQUAL(a, printedNetIncome())
 
