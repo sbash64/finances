@@ -8,6 +8,10 @@ class ModelEventListenerStub : public Model::EventListener {
   public:
     auto verified() const -> bool { return verified_; }
 
+    auto verifiedTransaction() const -> Transaction {
+        return verifiedTransaction_;
+    }
+
     void verified(const Transaction &t) override {
         verifiedTransaction_ = t;
         verified_ = true;
@@ -48,6 +52,10 @@ class TransactionRecordTests {
 
     auto didVerify() -> bool { return record.didVerify(); }
 
+    auto verifiedTransaction() -> Transaction {
+        return listener.verifiedTransaction();
+    }
+
     auto didNotVerify() -> bool { return !listener.verified(); }
 
   private:
@@ -67,6 +75,9 @@ class TransactionRecordTests {
 
 #define ASSERT_THREE_TRANSACTIONS(a, b, c, d, e, f, g, h, i)                   \
     ASSERT_TRANSACTIONS(threeTransactions(a, b, c, d, e, f, g, h, i))
+
+#define ASSERT_VERIFIED_TRANSACTION(a, b, c)                                 \
+    ASSERT_EQUAL(transaction(a, b, c), verifiedTransaction())
 
 #define ASSERT_VERIFIED_TRANSACTIONS(expected)                                 \
     ASSERT_EQUAL(expected, verifiedTransactions())
@@ -221,7 +232,7 @@ TRANSACTION_RECORD_TEST("noneVerifiedDidNotVerify") {
 TRANSACTION_RECORD_TEST("oneVerifiedDidVerify") {
     add(-2000, "hyvee", "10/5/19");
     verify(-2000);
-    ASSERT_DID_VERIFY();
+    ASSERT_VERIFIED_TRANSACTION(-2000, "hyvee", "10/5/19");
 }
 
 TRANSACTION_RECORD_TEST("noUnverifiedOnConstruction") {

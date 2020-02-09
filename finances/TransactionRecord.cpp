@@ -105,7 +105,7 @@ void TransactionRecord::verify(int amount) {
     auto found_ = findIf(verifiableTransactions,
         [=](auto t) { return amountMatches(t, amount) && unverified(t); });
     if ((didVerify_ = found(found_, verifiableTransactions))) {
-        listener->verified({});
+        listener->verified(found_->transaction);
         found_->verified = true;
     }
 }
