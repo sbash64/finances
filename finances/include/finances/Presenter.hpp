@@ -11,6 +11,7 @@ class Model {
       public:
         virtual ~EventListener() = default;
         virtual void verified(const Transaction &) = 0;
+        virtual void added(const Transaction &) = 0;
     };
     virtual ~Model() = default;
     virtual void add(const Transaction &) = 0;
@@ -65,6 +66,7 @@ class Presenter : Model::EventListener {
     Presenter(Model &, View &);
     void execute(const std::string &);
     void verified(const Transaction &) override;
+    void added(const Transaction &) override;
 
   private:
     Model &model;

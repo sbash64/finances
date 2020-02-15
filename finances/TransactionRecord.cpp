@@ -49,6 +49,7 @@ static auto unverifiedTransaction(const Transaction &t)
 
 void TransactionRecord::add(const Transaction &t) {
     verifiableTransactions.push_back(unverifiedTransaction(t));
+    listener->added(t);
 }
 
 void TransactionRecord::subscribe(EventListener *e) { listener = e; }

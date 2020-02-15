@@ -85,4 +85,6 @@ void Presenter::execute(const std::string &s) {
 }
 
 void Presenter::verified(const Transaction &t) { showTransactions(view, {t}); }
+
+void Presenter::added(const Transaction &) {}
 }

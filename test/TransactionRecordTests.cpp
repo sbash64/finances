@@ -12,12 +12,20 @@ class ModelEventListenerStub : public Model::EventListener {
         return verifiedTransaction_;
     }
 
+    auto addedTransaction() const -> Transaction { return addedTransaction_; }
+
     void verified(const Transaction &t) override {
         verifiedTransaction_ = t;
         verified_ = true;
     }
 
+    void added(const Transaction &t) override {
+        addedTransaction_ = t;
+    }
+
+  private:
     Transaction verifiedTransaction_{};
+    Transaction addedTransaction_{};
     bool verified_{};
 };
 
@@ -56,6 +64,10 @@ class TransactionRecordTests {
 
     auto didNotVerify() -> bool { return !listener.verified(); }
 
+    auto addedTransaction() -> Transaction {
+        return listener.addedTransaction();
+    }
+
   private:
     ModelEventListenerStub listener;
     TransactionRecord record;
@@ -68,13 +80,16 @@ class TransactionRecordTests {
 #define ASSERT_ONE_TRANSACTION(a, b, c)                                        \
     ASSERT_TRANSACTIONS(oneTransaction(a, b, c))
 
+#define ASSERT_ADDED(a, b, c)                                                  \
+    ASSERT_EQUAL(transaction(a, b, c), addedTransaction())
+
 #define ASSERT_TWO_TRANSACTIONS(a, b, c, d, e, f)                              \
     ASSERT_TRANSACTIONS(twoTransactions(a, b, c, d, e, f))
 
 #define ASSERT_THREE_TRANSACTIONS(a, b, c, d, e, f, g, h, i)                   \
     ASSERT_TRANSACTIONS(threeTransactions(a, b, c, d, e, f, g, h, i))
 
-#define ASSERT_VERIFIED_TRANSACTION(a, b, c)                                 \
+#define ASSERT_VERIFIED_TRANSACTION(a, b, c)                                   \
     ASSERT_EQUAL(transaction(a, b, c), verifiedTransaction())
 
 #define ASSERT_VERIFIED_TRANSACTIONS(expected)                                 \
@@ -112,9 +127,14 @@ TRANSACTION_RECORD_TEST("noneOnConstruction") {
     ASSERT_NO_TRANSACTIONS();
 }
 
-TRANSACTION_RECORD_TEST("oneAdded") {
+TRANSACTION_RECORD_TEST("oneTransactionAdded") {
     add(-5000, "hyvee", "10/5/19");
     ASSERT_ONE_TRANSACTION(-5000, "hyvee", "10/5/19");
+}
+
+TRANSACTION_RECORD_TEST("addedTransaction") {
+    add(-5000, "hyvee", "10/5/19");
+    ASSERT_ADDED(-5000, "hyvee", "10/5/19");
 }
 
 TRANSACTION_RECORD_TEST("twoAdded") {
