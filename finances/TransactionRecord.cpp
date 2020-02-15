@@ -21,8 +21,8 @@ static auto unverified(const VerifiableTransaction &t) -> bool {
     return !verified(t);
 }
 
-static auto amountMatches(const Transaction &t, int amount_) -> bool {
-    return amount(t) == amount_;
+static auto amountMatches(const Transaction &t, int x) -> bool {
+    return amount(t) == x;
 }
 
 static void addTo(Transactions &t, const VerifiableTransaction &vt) {
@@ -39,21 +39,26 @@ static auto findIf(VerifiableTransactions &transactions,
     return std::find_if(begin(transactions), end(transactions), std::move(f));
 }
 
-void TransactionRecord::add(const Transaction &t) {
+static auto unverifiedTransaction(const Transaction &t)
+    -> VerifiableTransaction {
     VerifiableTransaction v;
     static_cast<Transaction &>(v) = t;
     v.verified = false;
-    verifiableTransactions.push_back(v);
+    return v;
+}
+
+void TransactionRecord::add(const Transaction &t) {
+    verifiableTransactions.push_back(unverifiedTransaction(t));
 }
 
 void TransactionRecord::subscribe(EventListener *e) { listener = e; }
 
-void TransactionRecord::remove(const Transaction &transaction_) {
-    auto maybe = findIf(verifiableTransactions,
-        [&](auto t) { return t == transaction_; });
+void TransactionRecord::remove(const Transaction &transaction) {
+    const auto maybe{std::find(begin(verifiableTransactions),
+        end(verifiableTransactions), transaction)};
     if (found(maybe, verifiableTransactions)) {
         if (verified(*maybe))
-            verify(maybe->amount);
+            verify(amount(*maybe));
         verifiableTransactions.erase(maybe);
     }
 }
@@ -95,11 +100,11 @@ auto TransactionRecord::netIncome() -> int {
 }
 
 void TransactionRecord::verify(int amount) {
-    auto found_ = findIf(verifiableTransactions,
-        [=](auto t) { return amountMatches(t, amount) && unverified(t); });
-    if (found(found_, verifiableTransactions)) {
-        listener->verified(*found_);
-        found_->verified = true;
+    const auto maybe{findIf(verifiableTransactions,
+        [=](auto t) { return amountMatches(t, amount) && unverified(t); })};
+    if (found(maybe, verifiableTransactions)) {
+        maybe->verified = true;
+        listener->verified(*maybe);
     }
 }
 }
