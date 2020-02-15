@@ -52,6 +52,8 @@ class ModelStub : public Model {
 
     auto verified(const Transaction &t) { listener->verified(t); }
 
+    auto added(const Transaction &t) { listener->added(t); }
+
   private:
     Transactions transactions_;
     Transactions verifiedTransactions_;
@@ -139,6 +141,10 @@ class PresenterTests {
         model.verified(transaction(a, std::move(b), std::move(c)));
     }
 
+    void added(int a, std::string b, std::string c) {
+        model.added(transaction(a, std::move(b), std::move(c)));
+    }
+
     auto subscribedToModelEvents() -> bool { return model.subscribed(); }
 
   private:
@@ -203,6 +209,13 @@ PRESENTER_TEST("removeTransactionParsesInput") {
 
 PRESENTER_TEST("verifiedEventPrintsTransaction") {
     verified(-1000, "chipotle", "10/6/19");
+    ASSERT_TRANSACTION_PRINTED(
+        -1000, "chipotle", "10/6/19"
+    );
+}
+
+PRESENTER_TEST("addedEventPrintsTransaction") {
+    added(-1000, "chipotle", "10/6/19");
     ASSERT_TRANSACTION_PRINTED(
         -1000, "chipotle", "10/6/19"
     );
