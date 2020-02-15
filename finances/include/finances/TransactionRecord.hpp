@@ -6,8 +6,7 @@
 #include <vector>
 
 namespace finances {
-struct VerifiableTransaction {
-    Transaction transaction;
+struct VerifiableTransaction : Transaction {
     bool verified{};
 };
 

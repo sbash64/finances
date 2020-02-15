@@ -13,10 +13,6 @@ constexpr auto begin(const VerifiableTransactions &v) { return v.begin(); }
 
 constexpr auto end(const VerifiableTransactions &v) { return v.end(); }
 
-constexpr auto transaction(const VerifiableTransaction &t) -> auto & {
-    return t.transaction;
-}
-
 static auto verified(const VerifiableTransaction &t) -> bool {
     return t.verified;
 }
@@ -29,12 +25,8 @@ static auto amountMatches(const Transaction &t, int amount_) -> bool {
     return amount(t) == amount_;
 }
 
-static auto amountMatches(const VerifiableTransaction &t, int amount_) -> bool {
-    return amountMatches(transaction(t), amount_);
-}
-
 static void addTo(Transactions &t, const VerifiableTransaction &vt) {
-    t.push_back(transaction(vt));
+    t.push_back(vt);
 }
 
 static auto found(VerifiableTransactions::iterator it,
@@ -48,17 +40,20 @@ static auto findIf(VerifiableTransactions &transactions,
 }
 
 void TransactionRecord::add(const Transaction &t) {
-    verifiableTransactions.push_back({t, false});
+    VerifiableTransaction v;
+    static_cast<Transaction &>(v) = t;
+    v.verified = false;
+    verifiableTransactions.push_back(v);
 }
 
 void TransactionRecord::subscribe(EventListener *e) { listener = e; }
 
 void TransactionRecord::remove(const Transaction &transaction_) {
     auto maybe = findIf(verifiableTransactions,
-        [&](auto t) { return transaction(t) == transaction_; });
+        [&](auto t) { return t == transaction_; });
     if (found(maybe, verifiableTransactions)) {
         if (verified(*maybe))
-            verify(maybe->transaction.amount);
+            verify(maybe->amount);
         verifiableTransactions.erase(maybe);
     }
 }
@@ -96,14 +91,14 @@ auto TransactionRecord::transactions() -> Transactions {
 auto TransactionRecord::netIncome() -> int {
     return std::accumulate(begin(verifiableTransactions),
         end(verifiableTransactions), 0,
-        [](auto net, auto t) { return net + amount(transaction(t)); });
+        [](auto net, auto t) { return net + amount(t); });
 }
 
 void TransactionRecord::verify(int amount) {
     auto found_ = findIf(verifiableTransactions,
         [=](auto t) { return amountMatches(t, amount) && unverified(t); });
     if (found(found_, verifiableTransactions)) {
-        listener->verified(found_->transaction);
+        listener->verified(*found_);
         found_->verified = true;
     }
 }
