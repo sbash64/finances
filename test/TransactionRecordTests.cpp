@@ -19,9 +19,7 @@ class ModelEventListenerStub : public Model::EventListener {
         verified_ = true;
     }
 
-    void added(const Transaction &t) override {
-        addedTransaction_ = t;
-    }
+    void added(const Transaction &t) override { addedTransaction_ = t; }
 
   private:
     Transaction verifiedTransaction_{};
@@ -127,14 +125,14 @@ TRANSACTION_RECORD_TEST("noneOnConstruction") {
     ASSERT_NO_TRANSACTIONS();
 }
 
-TRANSACTION_RECORD_TEST("oneTransactionAdded") {
-    add(-5000, "hyvee", "10/5/19");
-    ASSERT_ONE_TRANSACTION(-5000, "hyvee", "10/5/19");
-}
-
 TRANSACTION_RECORD_TEST("addedTransaction") {
     add(-5000, "hyvee", "10/5/19");
     ASSERT_ADDED(-5000, "hyvee", "10/5/19");
+}
+
+TRANSACTION_RECORD_TEST("oneTransactionAdded") {
+    add(-5000, "hyvee", "10/5/19");
+    ASSERT_ONE_TRANSACTION(-5000, "hyvee", "10/5/19");
 }
 
 TRANSACTION_RECORD_TEST("twoAdded") {
