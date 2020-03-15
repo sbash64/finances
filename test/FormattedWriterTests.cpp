@@ -54,7 +54,7 @@ class FormattedWriterTests {
     auto netIncomeToFormat() -> int { return formatter.netIncomeToFormat(); }
 
     void showTransactions(const Transactions &t = {}) {
-        printer.showTransactions(t);
+        printer.show(t);
     }
 
     void showOneTransaction(int amount, std::string label, std::string date) {

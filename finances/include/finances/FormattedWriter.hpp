@@ -22,7 +22,7 @@ class Writer {
 class FormattedWriter : public View {
   public:
     FormattedWriter(Formatter &, Writer &);
-    void showTransactions(const Transactions &t) override;
+    void show(const Transactions &t) override;
     void showNetIncome(int x) override;
     void show(const std::string &);
 

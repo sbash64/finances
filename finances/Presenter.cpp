@@ -54,19 +54,19 @@ static auto transaction(std::stringstream &stream) -> Transaction {
     return {amount_, label, date};
 }
 
-static void showTransactions(View &view, const Transactions &t) {
-    view.showTransactions(t);
+static void show(View &view, const Transactions &t) {
+    view.show(t);
 }
 
 static void execute(Model &model, View &view, const std::string &s) {
     std::stringstream stream{s};
     auto command = next(stream);
     if (matches(command, Command::print))
-        showTransactions(view, model.transactions());
+        show(view, model.transactions());
     else if (matches(command, Command::printVerified))
-        showTransactions(view, model.verifiedTransactions());
+        show(view, model.verifiedTransactions());
     else if (matches(command, Command::printUnverified))
-        showTransactions(view, model.unverifiedTransactions());
+        show(view, model.unverifiedTransactions());
     else if (matches(command, Command::netIncome))
         view.showNetIncome(model.netIncome());
     else if (matches(command, Command::verify))
@@ -84,7 +84,7 @@ void Presenter::execute(const std::string &s) {
     }
 }
 
-void Presenter::verified(const Transaction &t) { showTransactions(view, {t}); }
+void Presenter::verified(const Transaction &t) { show(view, {t}); }
 
-void Presenter::added(const Transaction &t) { showTransactions(view, {t}); }
+void Presenter::added(const Transaction &t) { show(view, {t}); }
 }

@@ -72,7 +72,7 @@ class ViewStub : public View {
 
     auto shownNetIncome() const { return shownNetIncome_; }
 
-    void showTransactions(const Transactions &t) override {
+    void show(const Transactions &t) override {
         shownTransactions_ = t;
     }
 

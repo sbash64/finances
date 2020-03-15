@@ -27,7 +27,7 @@ class Model {
 class View {
   public:
     virtual ~View() = default;
-    virtual void showTransactions(const Transactions &) = 0;
+    virtual void show(const Transactions &) = 0;
     virtual void showNetIncome(int) = 0;
 };
 

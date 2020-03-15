@@ -12,7 +12,7 @@ void FormattedWriter::showNetIncome(int x) {
     write(writer, formatter.formatNetIncome(x));
 }
 
-void FormattedWriter::showTransactions(const Transactions &t) {
+void FormattedWriter::show(const Transactions &t) {
     write(writer, formatter.format(t));
 }
 
