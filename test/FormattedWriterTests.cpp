@@ -15,7 +15,7 @@ class FormatterStub : public Formatter {
         return formattedNetIncome_;
     }
 
-    auto formatTransactions(const Transactions &t) -> std::string override {
+    auto format(const Transactions &t) -> std::string override {
         transactionsToFormat_ = t;
         return formattedTransactions_;
     }

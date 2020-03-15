@@ -5,8 +5,8 @@
 namespace finances { namespace {
 class ItemizedFormatterTests {
 protected:
-    auto formatTransactions(const Transactions &t) -> std::string {
-        return formatter.formatTransactions(t);
+    auto format(const Transactions &t) -> std::string {
+        return formatter.format(t);
     }
 
     auto formatNetIncome(int x) -> std::string {
@@ -17,10 +17,10 @@ private:
 };
 
 #define ASSERT_FORMAT_ONE_TRANSACTION(a, b, c, d)\
-    ASSERT_EQUAL(d, formatTransactions(oneTransaction(a, b, c)))
+    ASSERT_EQUAL(d, format(oneTransaction(a, b, c)))
 
 #define ASSERT_FORMAT_TWO_TRANSACTIONS(a, b, c, d, e, f, g)\
-    ASSERT_EQUAL(g, formatTransactions(twoTransactions(a, b, c, d, e, f)))
+    ASSERT_EQUAL(g, format(twoTransactions(a, b, c, d, e, f)))
 
 #define ASSERT_FORMAT_NET_INCOME(a, b)\
     ASSERT_EQUAL(b, formatNetIncome(a))

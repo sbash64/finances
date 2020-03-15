@@ -40,7 +40,7 @@ static auto formatTransaction(const Transaction &t) -> std::string {
 
 static void append(std::string &s, const std::string &what) { s += what; }
 
-auto ItemizedFormatter::formatTransactions(const Transactions &transactions)
+auto ItemizedFormatter::format(const Transactions &transactions)
     -> std::string {
     std::string formatted;
     bool first = true;

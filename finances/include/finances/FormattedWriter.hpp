@@ -9,7 +9,7 @@ namespace finances {
 class Formatter {
   public:
     virtual ~Formatter() = default;
-    virtual auto formatTransactions(const Transactions &) -> std::string = 0;
+    virtual auto format(const Transactions &) -> std::string = 0;
     virtual auto formatNetIncome(int) -> std::string = 0;
 };
 
