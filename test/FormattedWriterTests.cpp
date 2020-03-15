@@ -74,6 +74,8 @@ class FormattedWriterTests {
 
     void showNetIncome(int x = {}) { printer.showNetIncome(x); }
 
+    void show(const std::string &s) { printer.show(s); }
+
   private:
     FormatterStub formatter;
     WriterStub writer;
@@ -111,6 +113,11 @@ FORMATTED_WRITER_TEST("showNetIncomeFormatsNet") {
 FORMATTED_WRITER_TEST("showNetIncomeWritesNetIncome") {
     setFormattedNetIncome("hello");
     showNetIncome();
+    ASSERT_WRITTEN_FOR_SHOWING("hello");
+}
+
+FORMATTED_WRITER_TEST("showMessage") {
+    show("hello");
     ASSERT_WRITTEN_FOR_SHOWING("hello");
 }
 }

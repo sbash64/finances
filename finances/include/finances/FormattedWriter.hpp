@@ -24,6 +24,7 @@ class FormattedWriter : public View {
     FormattedWriter(Formatter &, Writer &);
     void showTransactions(const Transactions &t) override;
     void showNetIncome(int x) override;
+    void show(const std::string &);
 
   private:
     Formatter &formatter;

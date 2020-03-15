@@ -15,4 +15,8 @@ void FormattedWriter::showNetIncome(int x) {
 void FormattedWriter::showTransactions(const Transactions &t) {
     write(writer, formatter.formatTransactions(t));
 }
+
+void FormattedWriter::show(const std::string &s) {
+    write(writer, s);
+}
 }
