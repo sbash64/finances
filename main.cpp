@@ -5,12 +5,13 @@
 #include <iostream>
 
 namespace finances {
+namespace {
 class ConsoleWriter : public Writer {
   public:
     void write(const std::string &s) override { std::cout << s; }
 };
 
-void main_() {
+[[noreturn]] void main() {
     ConsoleWriter writer;
     ItemizedFormatter formatter;
     FormattedWriter formattedWriter{formatter, writer};
@@ -23,5 +24,6 @@ void main_() {
     }
 }
 }
+}
 
-int main() { finances::main_(); }
+int main() { finances::main(); }

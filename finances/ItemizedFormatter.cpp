@@ -2,7 +2,7 @@
 #include <string>
 
 namespace finances {
-auto string(int x) -> std::string { return std::to_string(x); }
+static auto string(int x) -> std::string { return std::to_string(x); }
 
 static auto hundreds(int x) -> int { return x / 100; }
 
