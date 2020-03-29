@@ -8,4 +8,4 @@ target_include_directories(finances
     PRIVATE include/finances
     PUBLIC include
 )
-target_compile_features(av-speech-in-noise PRIVATE cxx_std_17)
+target_compile_features(finances PRIVATE cxx_std_17)
