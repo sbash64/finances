@@ -18,13 +18,13 @@ static auto twoDecimalPlaces(const std::string &s) -> std::string {
 }
 
 static auto hundredths(const std::string &s) -> int {
-    auto decimal = s.find('.');
+    const auto decimal{s.find('.')};
     if (decimal == std::string::npos)
         return hundredthsInteger(s);
-    auto sign = s.front() == '-' ? "-" : "";
-    auto beforeDecimalMark = s.substr(0, decimal);
-    auto firstDecimalPlace = decimal + 1;
-    auto afterDecimalMark = s.substr(firstDecimalPlace);
+    const auto sign{s.front() == '-' ? "-" : ""};
+    const auto beforeDecimalMark{s.substr(0, decimal)};
+    const auto firstDecimalPlace{decimal + 1};
+    const auto afterDecimalMark{s.substr(firstDecimalPlace)};
     return hundredthsInteger(beforeDecimalMark) +
         integer(sign + twoDecimalPlaces(afterDecimalMark));
 }
@@ -48,19 +48,17 @@ static auto amount(std::stringstream &stream) -> int {
 }
 
 static auto transaction(std::stringstream &stream) -> Transaction {
-    auto amount_ = amount(stream);
-    auto label = next(stream);
-    auto date = next(stream);
-    return {amount_, label, date};
+    const auto amount_{amount(stream)};
+    auto label{next(stream)};
+    auto date{next(stream)};
+    return {amount_, std::move(label), std::move(date)};
 }
 
-static void show(View &view, const Transactions &t) {
-    view.show(t);
-}
+static void show(View &view, const Transactions &t) { view.show(t); }
 
 static void execute(Model &model, View &view, const std::string &s) {
     std::stringstream stream{s};
-    auto command = next(stream);
+    const auto command{next(stream)};
     if (matches(command, Command::print))
         show(view, model.transactions());
     else if (matches(command, Command::printVerified))
@@ -79,7 +77,7 @@ static void execute(Model &model, View &view, const std::string &s) {
 
 void Presenter::execute(const std::string &s) {
     try {
-        ::finances::execute(model, view, s);
+        finances::execute(model, view, s);
     } catch (const std::invalid_argument &) {
     }
 }

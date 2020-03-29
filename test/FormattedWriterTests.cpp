@@ -32,7 +32,7 @@ class FormatterStub : public Formatter {
     Transactions transactionsToFormat_;
     std::string formattedTransactions_;
     std::string formattedNetIncome_;
-    int netIncomeToFormat_;
+    int netIncomeToFormat_{};
 };
 
 class WriterStub : public Writer {
