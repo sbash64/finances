@@ -1,6 +1,6 @@
-build
-.vscode
-.clangd
+build/
+.vscode/
+.clangd/
 .clang-tidy
 .clang-format
 compile_commands.json
