@@ -6,9 +6,9 @@ add_subdirectory(finances)
 option(ENABLE_TESTS "Enable tests" OFF)
 if (${ENABLE_TESTS})
     enable_testing()
-    
-    include(FetchContent)
 
+    include(FetchContent)
+    
     FetchContent_Declare(
         Catch2
         GIT_REPOSITORY https://github.com/catchorg/Catch2
@@ -20,4 +20,4 @@ if (${ENABLE_TESTS})
 endif()
 
 add_executable(finances-console main.cpp)
-target_link_libraries(finances-console finances)
+target_link_libraries(finances-console finances readline)

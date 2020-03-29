@@ -2,6 +2,7 @@
 #include <finances/FormattedWriter.hpp>
 #include <finances/ItemizedFormatter.hpp>
 #include <finances/TransactionRecord.hpp>
+#include <readline/readline.h>
 #include <iostream>
 
 namespace finances {
@@ -17,11 +18,8 @@ class ConsoleWriter : public Writer {
     FormattedWriter formattedWriter{formatter, writer};
     TransactionRecord record;
     Presenter presenter{record, formattedWriter};
-    while (true) {
-        std::string next;
-        std::getline(std::cin, next);
-        presenter.execute(next);
-    }
+    while (true)
+        presenter.execute(readline(nullptr));
 }
 }
 }
