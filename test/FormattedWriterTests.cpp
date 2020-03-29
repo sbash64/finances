@@ -1,6 +1,6 @@
 #include "testing-utility.hpp"
-#include <catch2/catch.hpp>
 #include <finances/FormattedWriter.hpp>
+#include <catch2/catch.hpp>
 
 namespace finances {
 namespace {
@@ -53,9 +53,7 @@ class FormattedWriterTests {
 
     auto netIncomeToFormat() -> int { return formatter.netIncomeToFormat(); }
 
-    void showTransactions(const Transactions &t = {}) {
-        printer.show(t);
-    }
+    void showTransactions(const Transactions &t = {}) { printer.show(t); }
 
     void showOneTransaction(int amount, std::string label, std::string date) {
         showTransactions(

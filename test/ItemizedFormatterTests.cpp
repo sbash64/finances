@@ -2,9 +2,10 @@
 #include <finances/ItemizedFormatter.hpp>
 #include <catch2/catch.hpp>
 
-namespace finances { namespace {
+namespace finances {
+namespace {
 class ItemizedFormatterTests {
-protected:
+  protected:
     auto format(const Transactions &t) -> std::string {
         return formatter.format(t);
     }
@@ -12,21 +13,22 @@ protected:
     auto formatNetIncome(int x) -> std::string {
         return formatter.formatNetIncome(x);
     }
-private:
+
+  private:
     ItemizedFormatter formatter;
 };
 
-#define ASSERT_FORMAT_ONE_TRANSACTION(a, b, c, d)\
+#define ASSERT_FORMAT_ONE_TRANSACTION(a, b, c, d)                              \
     ASSERT_EQUAL(d, format(oneTransaction(a, b, c)))
 
-#define ASSERT_FORMAT_TWO_TRANSACTIONS(a, b, c, d, e, f, g)\
+#define ASSERT_FORMAT_TWO_TRANSACTIONS(a, b, c, d, e, f, g)                    \
     ASSERT_EQUAL(g, format(twoTransactions(a, b, c, d, e, f)))
 
-#define ASSERT_FORMAT_NET_INCOME(a, b)\
-    ASSERT_EQUAL(b, formatNetIncome(a))
+#define ASSERT_FORMAT_NET_INCOME(a, b) ASSERT_EQUAL(b, formatNetIncome(a))
 
-#define ITEMIZED_FORMATTER_TEST(a)\
-    TEST_CASE_METHOD(ItemizedFormatterTests, a)
+#define ITEMIZED_FORMATTER_TEST(a) TEST_CASE_METHOD(ItemizedFormatterTests, a)
+
+// clang-format off
 
 ITEMIZED_FORMATTER_TEST("formatOneTransaction") {
     ASSERT_FORMAT_ONE_TRANSACTION(
@@ -47,5 +49,8 @@ ITEMIZED_FORMATTER_TEST("formatTwoTransactions") {
 ITEMIZED_FORMATTER_TEST("formatNetIncome") {
     ASSERT_FORMAT_NET_INCOME(-979, "Net Income: -9.79");
 }
+
+// clang-format on
+
 }
 }
