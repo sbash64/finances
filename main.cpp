@@ -19,7 +19,7 @@ class ConsoleWriter : public Writer {
     TransactionRecord record;
     Presenter presenter{record, formattedWriter};
     while (true)
-        presenter.execute(readline(nullptr));
+        presenter.execute(readline("finances$ "));
 }
 }
 }
