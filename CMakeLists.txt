@@ -15,6 +15,13 @@ if (${ENABLE_TESTS})
         GIT_TAG v2.11.3
     )
     FetchContent_MakeAvailable(Catch2)
+    
+    FetchContent_Declare(
+        TestCppLite
+        GIT_REPOSITORY https://github.com/sbash64/testcpplite
+        GIT_TAG v1.1.0
+    )
+    FetchContent_MakeAvailable(TestCppLite)
 
     add_subdirectory(test)
 endif()
