@@ -1,5 +1,6 @@
 #include "testing-utility.hpp"
 #include <finances/TransactionRecord.hpp>
+#include <testcpplite/testcpplite.hpp>
 #include <catch2/catch.hpp>
 
 namespace finances {
@@ -119,10 +120,28 @@ class TransactionRecordTests {
 
 #define TRANSACTION_RECORD_TEST(a) TEST_CASE_METHOD(TransactionRecordTests, a)
 
+void assertEqual(testcpplite::TestResult &result, const Transaction &expected,
+    const Transaction &actual) {
+    testcpplite::assertEqual(result, expected.amount, actual.amount);
+    testcpplite::assertEqual(result, expected.date, actual.date);
+    testcpplite::assertEqual(result, expected.label, actual.label);
+}
+
+void assertEqual(testcpplite::TestResult &result, const Transactions &expected,
+    const Transactions &actual) {
+    for (size_t i{0}; i < expected.size(); ++i)
+        assertEqual(result, expected.at(i), actual.at(i));
+}
+
 // clang-format off
 
 TRANSACTION_RECORD_TEST("noneOnConstruction") {
     ASSERT_NO_TRANSACTIONS();
+}
+
+void transactionRecordHasNoneOnConstruction(testcpplite::TestResult &result) {
+    TransactionRecord record;
+    assertEqual(result, none(), record.transactions());
 }
 
 TRANSACTION_RECORD_TEST("addedTransaction") {
