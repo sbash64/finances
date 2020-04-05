@@ -149,6 +149,19 @@ TRANSACTION_RECORD_TEST("addedTransaction") {
     ASSERT_ADDED(-5000, "hyvee", "10/5/19");
 }
 
+// clang-format on
+
+void transactionRecordNotifiesListenerOnAdd(testcpplite::TestResult &result) {
+    TransactionRecord record;
+    ModelEventListenerStub listener;
+    record.subscribe(&listener);
+    record.add(transaction(-5000, "hyvee", "10/5/19"));
+    assertEqual(result, transaction(-5000, "hyvee", "10/5/19"),
+        listener.addedTransaction());
+}
+
+// clang-format off
+
 TRANSACTION_RECORD_TEST("oneTransactionAdded") {
     add(-5000, "hyvee", "10/5/19");
     ASSERT_ONE_TRANSACTION(-5000, "hyvee", "10/5/19");
