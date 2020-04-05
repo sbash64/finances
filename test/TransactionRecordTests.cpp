@@ -315,6 +315,21 @@ TRANSACTION_RECORD_TEST("removeOneFromTwo") {
     ASSERT_ONE_TRANSACTION(-1000, "chipotle", "10/5/19");
 }
 
+// clang-format on
+
+void transactionRecordHasOneAfterRemovingOne(testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -5000, "hyvee", "10/5/19");
+            add(record, -1000, "chipotle", "10/5/19");
+            remove(record, -5000, "hyvee", "10/5/19");
+            assertTransactions(
+                result, record, oneTransaction(-1000, "chipotle", "10/5/19"));
+        });
+}
+
+// clang-format off
+
 TRANSACTION_RECORD_TEST("removeOneNotFoundFromTwo") {
     add(-5000, "hyvee", "10/5/19");
     add(-1000, "chipotle", "10/5/19");
