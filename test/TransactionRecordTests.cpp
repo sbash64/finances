@@ -175,6 +175,13 @@ void assertOneTransaction(testcpplite::TestResult &result,
         oneTransaction(amount, std::move(label), std::move(date)));
 }
 
+void assertOneVerifiedTransaction(testcpplite::TestResult &result,
+    TransactionRecord &record, int amount, std::string label,
+    std::string date) {
+    assertVerifiedTransactions(result, record,
+        oneTransaction(amount, std::move(label), std::move(date)));
+}
+
 void assertTwoTransactions(testcpplite::TestResult &result,
     TransactionRecord &record, int amount1, std::string label1,
     std::string date1, int amount2, std::string label2, std::string date2) {
@@ -479,13 +486,12 @@ TRANSACTION_RECORD_TEST("oneVerified") {
 // clang-format on
 
 void transactionRecordHasOneVerifiedAfterAdd(testcpplite::TestResult &result) {
-    testTransactionRecord(
-        [&](TransactionRecord &record, ModelEventListenerStub &) {
-            add(record, -2000, "hyvee", "10/5/19");
-            record.verify(-2000);
-            assertVerifiedTransactions(
-                result, record, oneTransaction(-2000, "hyvee", "10/5/19"));
-        });
+    testTransactionRecord([&](TransactionRecord &record,
+                              ModelEventListenerStub &) {
+        add(record, -2000, "hyvee", "10/5/19");
+        record.verify(-2000);
+        assertOneVerifiedTransaction(result, record, -2000, "hyvee", "10/5/19");
+    });
 }
 
 // clang-format off
@@ -501,14 +507,13 @@ TRANSACTION_RECORD_TEST("oneOfTwoVerified") {
 
 void transactionRecordHasOneVerifiedAfterTwoAdded(
     testcpplite::TestResult &result) {
-    testTransactionRecord(
-        [&](TransactionRecord &record, ModelEventListenerStub &) {
-            add(record, -2000, "hyvee", "10/5/19");
-            add(record, -1000, "chipotle", "10/6/19");
-            record.verify(-2000);
-            assertVerifiedTransactions(
-                result, record, oneTransaction(-2000, "hyvee", "10/5/19"));
-        });
+    testTransactionRecord([&](TransactionRecord &record,
+                              ModelEventListenerStub &) {
+        add(record, -2000, "hyvee", "10/5/19");
+        add(record, -1000, "chipotle", "10/6/19");
+        record.verify(-2000);
+        assertOneVerifiedTransaction(result, record, -2000, "hyvee", "10/5/19");
+    });
 }
 
 // clang-format off
