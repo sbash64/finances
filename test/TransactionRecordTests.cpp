@@ -184,6 +184,14 @@ void assertOneVerifiedTransaction(testcpplite::TestResult &result,
         oneTransaction(amount, std::move(label), std::move(date)));
 }
 
+void assertOneUnverifiedTransaction(testcpplite::TestResult &result,
+    TransactionRecord &record, int amount, std::string label,
+    std::string date) {
+    assertEqual(result,
+        oneTransaction(amount, std::move(label), std::move(date)),
+        record.unverifiedTransactions());
+}
+
 void assertTwoTransactions(testcpplite::TestResult &result,
     TransactionRecord &record, int amount1, std::string label1,
     std::string date1, int amount2, std::string label2, std::string date2) {
@@ -638,8 +646,8 @@ void transactionRecordHasOneUnverifiedAfterAdd(
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -1000, "hyvee", "10/1/19");
-            assertEqual(result, oneTransaction(-1000, "hyvee", "10/1/19"),
-                record.unverifiedTransactions());
+            assertOneUnverifiedTransaction(
+                result, record, -1000, "hyvee", "10/1/19");
         });
 }
 
@@ -661,8 +669,8 @@ void transactionRecordHasOneUnverifiedAfterTwoAdded(
             add(record, -2000, "hyvee", "10/5/19");
             add(record, -1000, "chipotle", "10/6/19");
             verify(record, -2000);
-            assertEqual(result, oneTransaction(-1000, "chipotle", "10/6/19"),
-                record.unverifiedTransactions());
+            assertOneUnverifiedTransaction(
+                result, record, -1000, "chipotle", "10/6/19");
         });
 }
 
