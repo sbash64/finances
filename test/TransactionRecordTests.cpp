@@ -219,6 +219,21 @@ TRANSACTION_RECORD_TEST("twoAdded") {
     );
 }
 
+// clang-format on
+
+void transactionRecordHasTwoAdded(testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -1000, "hyvee", "10/5/19");
+            add(record, -1000, "chipotle", "10/5/19");
+            assertTransactions(result, record,
+                twoTransactions(
+                    -1000, "hyvee", "10/5/19", -1000, "chipotle", "10/5/19"));
+        });
+}
+
+// clang-format off
+
 TRANSACTION_RECORD_TEST("removesOne") {
     add(-5000, "hyvee", "10/5/19");
     remove(-5000, "hyvee", "10/5/19");
