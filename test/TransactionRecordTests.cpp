@@ -389,6 +389,19 @@ TRANSACTION_RECORD_TEST("netIncomeFromOne") {
     ASSERT_NET_INCOME(-1000);
 }
 
+// clang-format on
+
+void transactionRecordHasOneContributingNetIncome(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -1000, "hyvee", "10/5/19");
+            assertEqual(result, -1000, record.netIncome());
+        });
+}
+
+// clang-format off
+
 TRANSACTION_RECORD_TEST("netIncomeFromTwo") {
     add(-6132, "hyvee", "10/5/19");
     add(-1254, "chipotle", "10/5/19");
