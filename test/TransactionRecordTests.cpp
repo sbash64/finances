@@ -150,6 +150,10 @@ auto transactions(TransactionRecord &record) -> Transactions {
     return record.transactions();
 }
 
+auto verifiedTransactions(TransactionRecord &record) -> Transactions {
+    return record.verifiedTransactions();
+}
+
 void assertTransactions(testcpplite::TestResult &result,
     TransactionRecord &record, const Transactions &expected) {
     assertEqual(result, expected, transactions(record));
@@ -157,7 +161,7 @@ void assertTransactions(testcpplite::TestResult &result,
 
 void assertVerifiedTransactions(testcpplite::TestResult &result,
     TransactionRecord &record, const Transactions &expected) {
-    assertEqual(result, expected, record.verifiedTransactions());
+    assertEqual(result, expected, verifiedTransactions(record));
 }
 
 void assertUnverifiedTransactions(testcpplite::TestResult &result,
@@ -726,7 +730,7 @@ void transactionRecordHasOneVerifiedAfterAddingTwoOfSameAmount(
             add(record, -2000, "chipotle", "10/6/19");
             verify(record, -2000);
             testcpplite::assertEqual(result, Transactions::size_type{1},
-                record.verifiedTransactions().size());
+                verifiedTransactions(record).size());
         });
 }
 
