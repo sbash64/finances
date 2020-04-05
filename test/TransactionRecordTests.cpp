@@ -274,6 +274,22 @@ TRANSACTION_RECORD_TEST("threeAdded") {
     );
 }
 
+// clang-format on
+
+void transactionRecordHasThreeAdded(testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -2000, "hyvee", "10/5/19");
+            add(record, -3000, "walmart", "10/4/19");
+            add(record, -1000, "chipotle", "10/6/19");
+            assertTransactions(result, record,
+                threeTransactions(-2000, "hyvee", "10/5/19", -3000, "walmart",
+                    "10/4/19", -1000, "chipotle", "10/6/19"));
+        });
+}
+
+// clang-format off
+
 TRANSACTION_RECORD_TEST("removesOneFromNone") {
     remove(-5000, "hyvee", "10/5/19");
     ASSERT_NO_TRANSACTIONS();
