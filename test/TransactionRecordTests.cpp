@@ -746,7 +746,7 @@ TRANSACTION_RECORD_TEST("removeFirstAmongOneOfTwoVerifiesOther") {
 
 // clang-format on
 
-void transactionRecordVerifiesMatchingAmountWhenRemovingVerified(
+void transactionRecordVerifiesMatchingAmountWhenRemovingFirst(
     testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
@@ -768,6 +768,22 @@ TRANSACTION_RECORD_TEST("removeSecondAmongOneOfTwoVerifiesOther") {
     remove(-2000, "chipotle", "10/6/19");
     ASSERT_ONE_VERIFIED_TRANSACTION(-2000, "hyvee", "10/5/19");
 }
+
+// clang-format on
+
+void transactionRecordVerifiesMatchingAmountWhenRemovingSecond(
+    testcpplite::TestResult &result) {
+    testTransactionRecord([&](TransactionRecord &record,
+                              ModelEventListenerStub &) {
+        add(record, -2000, "hyvee", "10/5/19");
+        add(record, -2000, "chipotle", "10/6/19");
+        verify(record, -2000);
+        remove(record, -2000, "chipotle", "10/6/19");
+        assertOneVerifiedTransaction(result, record, -2000, "hyvee", "10/5/19");
+    });
+}
+
+// clang-format off
 
 TRANSACTION_RECORD_TEST("removeOneUnverifiedDoesNotVerifyOther") {
     add(-2000, "hyvee", "10/5/19");
