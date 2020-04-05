@@ -652,6 +652,22 @@ TRANSACTION_RECORD_TEST("oneOfTwoUnverified") {
     ASSERT_ONE_UNVERIFIED_TRANSACTION(-1000, "chipotle", "10/6/19");
 }
 
+// clang-format on
+
+void transactionRecordHasOneUnverifiedAfterTwoAdded(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -2000, "hyvee", "10/5/19");
+            add(record, -1000, "chipotle", "10/6/19");
+            verify(record, -2000);
+            assertEqual(result, oneTransaction(-1000, "chipotle", "10/6/19"),
+                record.unverifiedTransactions());
+        });
+}
+
+// clang-format off
+
 TRANSACTION_RECORD_TEST("verifyBothOfSameAmount") {
     add(-2000, "hyvee", "10/5/19");
     add(-2000, "chipotle", "10/6/19");
