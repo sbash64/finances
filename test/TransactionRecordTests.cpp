@@ -345,6 +345,23 @@ TRANSACTION_RECORD_TEST("removeOneNotFoundFromTwo") {
     );
 }
 
+// clang-format on
+
+void transactionRecordHasTwoAfterRemovingOneNotFound(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -5000, "hyvee", "10/5/19");
+            add(record, -1000, "chipotle", "10/5/19");
+            remove(record, -4999, "hyvee", "10/5/19");
+            assertTransactions(result, record,
+                twoTransactions(
+                    -5000, "hyvee", "10/5/19", -1000, "chipotle", "10/5/19"));
+        });
+}
+
+// clang-format off
+
 TRANSACTION_RECORD_TEST("netIncomeZeroOnConstruction") {
     ASSERT_NET_INCOME(0);
 }
