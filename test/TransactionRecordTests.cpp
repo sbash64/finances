@@ -1,4 +1,5 @@
 #include "testing-utility.hpp"
+#include "TransactionRecordTests.hpp"
 #include <finances/TransactionRecord.hpp>
 #include <testcpplite/testcpplite.hpp>
 #include <catch2/catch.hpp>
@@ -221,7 +222,7 @@ void assertNetIncome(
     testcpplite::TestResult &result, TransactionRecord &record, int amount) {
     assertEqual(result, amount, record.netIncome());
 }
-
+}
 // clang-format off
 
 TRANSACTION_RECORD_TEST("noneOnConstruction") {
@@ -803,6 +804,5 @@ void transactionRecordDoesNotVerifyMatchingAmountWhenRemovingOne(
             remove(record, -2000, "chipotle", "10/6/19");
             assertNoVerifiedTransactions(result, record);
         });
-}
 }
 }
