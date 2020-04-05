@@ -153,6 +153,11 @@ void assertTransactions(testcpplite::TestResult &result,
     assertEqual(result, expected, transactions(record));
 }
 
+void assertVerifiedTransactions(testcpplite::TestResult &result,
+    TransactionRecord &record, const Transactions &expected) {
+    assertEqual(result, expected, record.verifiedTransactions());
+}
+
 void assertNoTransactions(
     testcpplite::TestResult &result, TransactionRecord &record) {
     assertTransactions(result, record, none());
@@ -160,7 +165,7 @@ void assertNoTransactions(
 
 void assertNoVerifiedTransactions(
     testcpplite::TestResult &result, TransactionRecord &record) {
-    assertEqual(result, none(), record.verifiedTransactions());
+    assertVerifiedTransactions(result, record, none());
 }
 
 void assertOneTransaction(testcpplite::TestResult &result,
@@ -477,8 +482,8 @@ void transactionRecordHasOneVerifiedAfterAdd(testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -2000, "hyvee", "10/5/19");
-            assertEqual(result, oneTransaction(-2000, "hyvee", "10/5/19"),
-                record.verifiedTransactions());
+            assertVerifiedTransactions(
+                result, record, oneTransaction(-2000, "hyvee", "10/5/19"));
         });
 }
 
