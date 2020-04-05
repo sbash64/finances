@@ -158,6 +158,13 @@ void assertNoTransactions(
     assertTransactions(result, record, none());
 }
 
+void assertOneTransaction(testcpplite::TestResult &result,
+    TransactionRecord &record, int amount, std::string label,
+    std::string date) {
+    assertTransactions(result, record,
+        oneTransaction(amount, std::move(label), std::move(date)));
+}
+
 void testTransactionRecord(
     const std::function<void(TransactionRecord &, ModelEventListenerStub &)>
         &f) {
@@ -213,8 +220,7 @@ void transactionRecordHasOneAdded(testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -5000, "hyvee", "10/5/19");
-            assertTransactions(
-                result, record, oneTransaction(-5000, "hyvee", "10/5/19"));
+            assertOneTransaction(result, record, -5000, "hyvee", "10/5/19");
         });
 }
 
@@ -323,8 +329,7 @@ void transactionRecordHasOneAfterRemovingOne(testcpplite::TestResult &result) {
             add(record, -5000, "hyvee", "10/5/19");
             add(record, -1000, "chipotle", "10/5/19");
             remove(record, -5000, "hyvee", "10/5/19");
-            assertTransactions(
-                result, record, oneTransaction(-1000, "chipotle", "10/5/19"));
+            assertOneTransaction(result, record, -1000, "chipotle", "10/5/19");
         });
 }
 
