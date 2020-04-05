@@ -614,6 +614,18 @@ TRANSACTION_RECORD_TEST("noUnverifiedOnConstruction") {
     ASSERT_NO_UNVERIFIED_TRANSACTIONS();
 }
 
+// clang-format on
+
+void transactionRecordHasNoneUnverifiedOnConstruction(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            assertEqual(result, none(), record.unverifiedTransactions());
+        });
+}
+
+// clang-format off
+
 TRANSACTION_RECORD_TEST("oneUnverified") {
     add(-1000, "hyvee", "10/1/19");
     ASSERT_ONE_UNVERIFIED_TRANSACTION(-1000, "hyvee", "10/1/19");
