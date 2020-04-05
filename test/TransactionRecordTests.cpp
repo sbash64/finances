@@ -252,7 +252,7 @@ TRANSACTION_RECORD_TEST("removesOne") {
 
 // clang-format on
 
-void transactionRecordHasNoneAfterRemove(testcpplite::TestResult &result) {
+void transactionRecordHasNoneAfterRemovingOne(testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -1000, "hyvee", "10/5/19");
@@ -294,6 +294,19 @@ TRANSACTION_RECORD_TEST("removesOneFromNone") {
     remove(-5000, "hyvee", "10/5/19");
     ASSERT_NO_TRANSACTIONS();
 }
+
+// clang-format on
+
+void transactionRecordHasNoneAfterRemovingNone(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            remove(record, -2000, "hyvee", "10/5/19");
+            assertNoTransactions(result, record);
+        });
+}
+
+// clang-format off
 
 TRANSACTION_RECORD_TEST("removeOneFromTwo") {
     add(-5000, "hyvee", "10/5/19");
