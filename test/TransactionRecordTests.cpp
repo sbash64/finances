@@ -482,6 +482,7 @@ void transactionRecordHasOneVerifiedAfterAdd(testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -2000, "hyvee", "10/5/19");
+            record.verify(-2000);
             assertVerifiedTransactions(
                 result, record, oneTransaction(-2000, "hyvee", "10/5/19"));
         });
