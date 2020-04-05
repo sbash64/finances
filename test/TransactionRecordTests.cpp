@@ -139,6 +139,8 @@ void add(TransactionRecord &record, int amount, std::string label,
     record.add(transaction(amount, std::move(label), std::move(date)));
 }
 
+void verify(TransactionRecord &record, int amount) { record.verify(amount); }
+
 void remove(TransactionRecord &record, int amount, std::string label,
     std::string date) {
     record.remove(transaction(amount, std::move(label), std::move(date)));
@@ -489,7 +491,7 @@ void transactionRecordHasOneVerifiedAfterAdd(testcpplite::TestResult &result) {
     testTransactionRecord([&](TransactionRecord &record,
                               ModelEventListenerStub &) {
         add(record, -2000, "hyvee", "10/5/19");
-        record.verify(-2000);
+        verify(record, -2000);
         assertOneVerifiedTransaction(result, record, -2000, "hyvee", "10/5/19");
     });
 }
@@ -511,7 +513,7 @@ void transactionRecordHasOneVerifiedAfterTwoAdded(
                               ModelEventListenerStub &) {
         add(record, -2000, "hyvee", "10/5/19");
         add(record, -1000, "chipotle", "10/6/19");
-        record.verify(-2000);
+        verify(record, -2000);
         assertOneVerifiedTransaction(result, record, -2000, "hyvee", "10/5/19");
     });
 }
@@ -539,8 +541,8 @@ void transactionRecordHasTwoVerifiedAfterThreeAdded(
             add(record, -2000, "hyvee", "10/5/19");
             add(record, -1000, "chipotle", "10/6/19");
             add(record, -3000, "barnes noble", "10/4/19");
-            record.verify(-2000);
-            record.verify(-3000);
+            verify(record, -2000);
+            verify(record, -3000);
             assertVerifiedTransactions(result, record,
                 twoTransactions(-2000, "hyvee", "10/5/19", -3000,
                     "barnes noble", "10/4/19"));
