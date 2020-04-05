@@ -2,6 +2,7 @@
 #include <finances/TransactionRecord.hpp>
 #include <testcpplite/testcpplite.hpp>
 #include <catch2/catch.hpp>
+#include <functional>
 
 namespace finances {
 namespace {
@@ -147,16 +148,31 @@ void assertTransactions(testcpplite::TestResult &result,
     assertEqual(result, expected, transactions(record));
 }
 
+void testTransactionRecord(
+    const std::function<void(TransactionRecord &, ModelEventListenerStub &)>
+        &f) {
+    TransactionRecord record;
+    ModelEventListenerStub listener;
+    record.subscribe(&listener);
+    f(record, listener);
+}
+
 // clang-format off
 
 TRANSACTION_RECORD_TEST("noneOnConstruction") {
     ASSERT_NO_TRANSACTIONS();
 }
 
+// clang-format on
+
 void transactionRecordHasNoneOnConstruction(testcpplite::TestResult &result) {
-    TransactionRecord record;
-    assertTransactions(result, record, none());
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            assertTransactions(result, record, none());
+        });
 }
+
+// clang-format off
 
 TRANSACTION_RECORD_TEST("addedTransaction") {
     add(-5000, "hyvee", "10/5/19");
@@ -166,12 +182,12 @@ TRANSACTION_RECORD_TEST("addedTransaction") {
 // clang-format on
 
 void transactionRecordNotifiesListenerOnAdd(testcpplite::TestResult &result) {
-    TransactionRecord record;
-    ModelEventListenerStub listener;
-    record.subscribe(&listener);
-    add(record, -5000, "hyvee", "10/5/19");
-    assertEqual(result, transaction(-5000, "hyvee", "10/5/19"),
-        listener.addedTransaction());
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &listener) {
+            add(record, -5000, "hyvee", "10/5/19");
+            assertEqual(result, transaction(-5000, "hyvee", "10/5/19"),
+                listener.addedTransaction());
+        });
 }
 
 // clang-format off
