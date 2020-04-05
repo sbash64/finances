@@ -372,6 +372,18 @@ TRANSACTION_RECORD_TEST("netIncomeZeroOnConstruction") {
     ASSERT_NET_INCOME(0);
 }
 
+// clang-format on
+
+void transactionRecordHasZeroNetIncomeOnConstruction(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            assertEqual(result, 0, record.netIncome());
+        });
+}
+
+// clang-format off
+
 TRANSACTION_RECORD_TEST("netIncomeFromOne") {
     add(-1000, "hyvee", "10/5/19");
     ASSERT_NET_INCOME(-1000);
