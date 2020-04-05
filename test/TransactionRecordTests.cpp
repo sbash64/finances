@@ -530,6 +530,25 @@ TRANSACTION_RECORD_TEST("twoOfThreeVerified") {
     );
 }
 
+// clang-format on
+
+void transactionRecordHasTwoVerifiedAfterThreeAdded(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -2000, "hyvee", "10/5/19");
+            add(record, -1000, "chipotle", "10/6/19");
+            add(record, -3000, "barnes noble", "10/4/19");
+            record.verify(-2000);
+            record.verify(-3000);
+            assertVerifiedTransactions(result, record,
+                twoTransactions(-2000, "hyvee", "10/5/19", -3000,
+                    "barnes noble", "10/4/19"));
+        });
+}
+
+// clang-format off
+
 TRANSACTION_RECORD_TEST("oneFromNoneVerified") {
     verify(-3000);
     ASSERT_NO_VERIFIED_TRANSACTIONS();
