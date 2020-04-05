@@ -158,6 +158,11 @@ void assertNoTransactions(
     assertTransactions(result, record, none());
 }
 
+void assertNoVerifiedTransactions(
+    testcpplite::TestResult &result, TransactionRecord &record) {
+    assertEqual(result, none(), record.verifiedTransactions());
+}
+
 void assertOneTransaction(testcpplite::TestResult &result,
     TransactionRecord &record, int amount, std::string label,
     std::string date) {
@@ -437,7 +442,7 @@ void transactionRecordHasNoneVerifiedOnConstruction(
     testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
-            assertEqual(result, none(), record.verifiedTransactions());
+            assertNoVerifiedTransactions(result, record);
         });
 }
 
@@ -455,7 +460,7 @@ void transactionRecordHasNoneVerifiedOnAfterAdd(
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -2000, "hyvee", "10/5/19");
-            assertEqual(result, none(), record.verifiedTransactions());
+            assertNoVerifiedTransactions(result, record);
         });
 }
 
