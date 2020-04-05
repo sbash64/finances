@@ -153,6 +153,11 @@ void assertTransactions(testcpplite::TestResult &result,
     assertEqual(result, expected, transactions(record));
 }
 
+void assertNoTransactions(
+    testcpplite::TestResult &result, TransactionRecord &record) {
+    assertTransactions(result, record, none());
+}
+
 void testTransactionRecord(
     const std::function<void(TransactionRecord &, ModelEventListenerStub &)>
         &f) {
@@ -173,7 +178,7 @@ TRANSACTION_RECORD_TEST("noneOnConstruction") {
 void transactionRecordHasNoneOnConstruction(testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
-            assertTransactions(result, record, none());
+            assertNoTransactions(result, record);
         });
 }
 
@@ -252,7 +257,7 @@ void transactionRecordHasNoneAfterRemove(testcpplite::TestResult &result) {
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -1000, "hyvee", "10/5/19");
             remove(record, -1000, "hyvee", "10/5/19");
-            assertTransactions(result, record, none());
+            assertNoTransactions(result, record);
         });
 }
 
