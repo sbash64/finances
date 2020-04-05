@@ -165,6 +165,14 @@ void assertOneTransaction(testcpplite::TestResult &result,
         oneTransaction(amount, std::move(label), std::move(date)));
 }
 
+void assertTwoTransactions(testcpplite::TestResult &result,
+    TransactionRecord &record, int amount1, std::string label1,
+    std::string date1, int amount2, std::string label2, std::string date2) {
+    assertTransactions(result, record,
+        twoTransactions(amount1, std::move(label1), std::move(date1), amount2,
+            std::move(label2), std::move(date2)));
+}
+
 void testTransactionRecord(
     const std::function<void(TransactionRecord &, ModelEventListenerStub &)>
         &f) {
@@ -242,9 +250,8 @@ void transactionRecordHasTwoAdded(testcpplite::TestResult &result) {
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -1000, "hyvee", "10/5/19");
             add(record, -1000, "chipotle", "10/5/19");
-            assertTransactions(result, record,
-                twoTransactions(
-                    -1000, "hyvee", "10/5/19", -1000, "chipotle", "10/5/19"));
+            assertTwoTransactions(result, record, -1000, "hyvee", "10/5/19",
+                -1000, "chipotle", "10/5/19");
         });
 }
 
@@ -354,9 +361,8 @@ void transactionRecordHasTwoAfterRemovingOneNotFound(
             add(record, -5000, "hyvee", "10/5/19");
             add(record, -1000, "chipotle", "10/5/19");
             remove(record, -4999, "hyvee", "10/5/19");
-            assertTransactions(result, record,
-                twoTransactions(
-                    -5000, "hyvee", "10/5/19", -1000, "chipotle", "10/5/19"));
+            assertTwoTransactions(result, record, -5000, "hyvee", "10/5/19",
+                -1000, "chipotle", "10/5/19");
         });
 }
 
