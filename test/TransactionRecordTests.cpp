@@ -631,6 +631,20 @@ TRANSACTION_RECORD_TEST("oneUnverified") {
     ASSERT_ONE_UNVERIFIED_TRANSACTION(-1000, "hyvee", "10/1/19");
 }
 
+// clang-format on
+
+void transactionRecordHasOneUnverifiedAfterAdd(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -1000, "hyvee", "10/1/19");
+            assertEqual(result, oneTransaction(-1000, "hyvee", "10/1/19"),
+                record.unverifiedTransactions());
+        });
+}
+
+// clang-format off
+
 TRANSACTION_RECORD_TEST("oneOfTwoUnverified") {
     add(-2000, "hyvee", "10/5/19");
     add(-1000, "chipotle", "10/6/19");
