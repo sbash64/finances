@@ -691,6 +691,24 @@ TRANSACTION_RECORD_TEST("verifyBothOfSameAmount") {
     );
 }
 
+// clang-format on
+
+void transactionRecordHasTwoVerifiedOfSameAmount(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -2000, "hyvee", "10/5/19");
+            add(record, -2000, "chipotle", "10/6/19");
+            verify(record, -2000);
+            verify(record, -2000);
+            assertVerifiedTransactions(result, record,
+                twoTransactions(
+                    -2000, "hyvee", "10/5/19", -2000, "chipotle", "10/6/19"));
+        });
+}
+
+// clang-format off
+
 TRANSACTION_RECORD_TEST("onlyVerifiesOneOfTwoSameAmounts") {
     add(-2000, "hyvee", "10/5/19");
     add(-2000, "chipotle", "10/6/19");
