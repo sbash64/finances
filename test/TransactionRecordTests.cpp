@@ -139,6 +139,11 @@ void add(TransactionRecord &record, int amount, std::string label,
     record.add(transaction(amount, std::move(label), std::move(date)));
 }
 
+void remove(TransactionRecord &record, int amount, std::string label,
+    std::string date) {
+    record.remove(transaction(amount, std::move(label), std::move(date)));
+}
+
 auto transactions(TransactionRecord &record) -> Transactions {
     return record.transactions();
 }
@@ -239,6 +244,19 @@ TRANSACTION_RECORD_TEST("removesOne") {
     remove(-5000, "hyvee", "10/5/19");
     ASSERT_NO_TRANSACTIONS();
 }
+
+// clang-format on
+
+void transactionRecordHasNoneAfterRemove(testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -1000, "hyvee", "10/5/19");
+            remove(record, -1000, "hyvee", "10/5/19");
+            assertTransactions(result, record, none());
+        });
+}
+
+// clang-format off
 
 TRANSACTION_RECORD_TEST("threeAdded") {
     add(-2000, "hyvee", "10/5/19");
