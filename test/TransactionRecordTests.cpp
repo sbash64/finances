@@ -133,6 +133,20 @@ void assertEqual(testcpplite::TestResult &result, const Transactions &expected,
         assertEqual(result, expected.at(i), actual.at(i));
 }
 
+void add(TransactionRecord &record, int amount, std::string label,
+    std::string date) {
+    record.add(transaction(amount, std::move(label), std::move(date)));
+}
+
+auto transactions(TransactionRecord &record) -> Transactions {
+    return record.transactions();
+}
+
+void assertTransactions(testcpplite::TestResult &result,
+    TransactionRecord &record, const Transactions &expected) {
+    assertEqual(result, expected, transactions(record));
+}
+
 // clang-format off
 
 TRANSACTION_RECORD_TEST("noneOnConstruction") {
@@ -141,7 +155,7 @@ TRANSACTION_RECORD_TEST("noneOnConstruction") {
 
 void transactionRecordHasNoneOnConstruction(testcpplite::TestResult &result) {
     TransactionRecord record;
-    assertEqual(result, none(), record.transactions());
+    assertTransactions(result, record, none());
 }
 
 TRANSACTION_RECORD_TEST("addedTransaction") {
@@ -155,7 +169,7 @@ void transactionRecordNotifiesListenerOnAdd(testcpplite::TestResult &result) {
     TransactionRecord record;
     ModelEventListenerStub listener;
     record.subscribe(&listener);
-    record.add(transaction(-5000, "hyvee", "10/5/19"));
+    add(record, -5000, "hyvee", "10/5/19");
     assertEqual(result, transaction(-5000, "hyvee", "10/5/19"),
         listener.addedTransaction());
 }
@@ -167,12 +181,16 @@ TRANSACTION_RECORD_TEST("oneTransactionAdded") {
     ASSERT_ONE_TRANSACTION(-5000, "hyvee", "10/5/19");
 }
 
+// clang-format on
+
 void transactionRecordHasOneAdded(testcpplite::TestResult &result) {
     TransactionRecord record;
-    record.add(transaction(-5000, "hyvee", "10/5/19"));
-    assertEqual(result, oneTransaction(-5000, "hyvee", "10/5/19"),
-        record.transactions());
+    add(record, -5000, "hyvee", "10/5/19");
+    assertTransactions(
+        result, record, oneTransaction(-5000, "hyvee", "10/5/19"));
 }
+
+// clang-format off
 
 TRANSACTION_RECORD_TEST("twoAdded") {
     add(-1000, "hyvee", "10/5/19");
