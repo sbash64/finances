@@ -716,6 +716,22 @@ TRANSACTION_RECORD_TEST("onlyVerifiesOneOfTwoSameAmounts") {
     ASSERT_EXISTS_EXACTLY_ONE_VERIFIED_TRANSACTION();
 }
 
+// clang-format on
+
+void transactionRecordHasOneVerifiedAfterAddingTwoOfSameAmount(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -2000, "hyvee", "10/5/19");
+            add(record, -2000, "chipotle", "10/6/19");
+            verify(record, -2000);
+            testcpplite::assertEqual(
+                result, 1, record.verifiedTransactions().size());
+        });
+}
+
+// clang-format off
+
 TRANSACTION_RECORD_TEST("removeFirstAmongOneOfTwoVerifiesOther") {
     add(-2000, "hyvee", "10/5/19");
     add(-2000, "chipotle", "10/6/19");
