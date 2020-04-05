@@ -167,6 +167,13 @@ TRANSACTION_RECORD_TEST("oneTransactionAdded") {
     ASSERT_ONE_TRANSACTION(-5000, "hyvee", "10/5/19");
 }
 
+void transactionRecordHasOneAdded(testcpplite::TestResult &result) {
+    TransactionRecord record;
+    record.add(transaction(-5000, "hyvee", "10/5/19"));
+    assertEqual(result, oneTransaction(-5000, "hyvee", "10/5/19"),
+        record.transactions());
+}
+
 TRANSACTION_RECORD_TEST("twoAdded") {
     add(-1000, "hyvee", "10/5/19");
     add(-1000, "chipotle", "10/5/19");
