@@ -182,6 +182,11 @@ void testTransactionRecord(
     f(record, listener);
 }
 
+void assertNetIncome(
+    testcpplite::TestResult &result, TransactionRecord &record, int amount) {
+    assertEqual(result, amount, record.netIncome());
+}
+
 // clang-format off
 
 TRANSACTION_RECORD_TEST("noneOnConstruction") {
@@ -378,7 +383,7 @@ void transactionRecordHasZeroNetIncomeOnConstruction(
     testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
-            assertEqual(result, 0, record.netIncome());
+            assertNetIncome(result, record, 0);
         });
 }
 
@@ -396,7 +401,7 @@ void transactionRecordHasOneContributingNetIncome(
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -1000, "hyvee", "10/5/19");
-            assertEqual(result, -1000, record.netIncome());
+            assertNetIncome(result, record, -1000);
         });
 }
 
