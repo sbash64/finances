@@ -725,8 +725,8 @@ void transactionRecordHasOneVerifiedAfterAddingTwoOfSameAmount(
             add(record, -2000, "hyvee", "10/5/19");
             add(record, -2000, "chipotle", "10/6/19");
             verify(record, -2000);
-            testcpplite::assertEqual(
-                result, 1, record.verifiedTransactions().size());
+            testcpplite::assertEqual(result, Transactions::size_type{1},
+                record.verifiedTransactions().size());
         });
 }
 
