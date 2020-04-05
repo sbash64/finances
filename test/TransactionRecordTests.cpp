@@ -200,10 +200,12 @@ TRANSACTION_RECORD_TEST("oneTransactionAdded") {
 // clang-format on
 
 void transactionRecordHasOneAdded(testcpplite::TestResult &result) {
-    TransactionRecord record;
-    add(record, -5000, "hyvee", "10/5/19");
-    assertTransactions(
-        result, record, oneTransaction(-5000, "hyvee", "10/5/19"));
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -5000, "hyvee", "10/5/19");
+            assertTransactions(
+                result, record, oneTransaction(-5000, "hyvee", "10/5/19"));
+        });
 }
 
 // clang-format off
