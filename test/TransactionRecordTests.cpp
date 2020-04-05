@@ -794,5 +794,15 @@ TRANSACTION_RECORD_TEST("removeOneUnverifiedDoesNotVerifyOther") {
 
 // clang-format on
 
+void transactionRecordDoesNotVerifyMatchingAmountWhenRemovingOne(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -2000, "hyvee", "10/5/19");
+            add(record, -2000, "chipotle", "10/6/19");
+            remove(record, -2000, "chipotle", "10/6/19");
+            assertNoVerifiedTransactions(result, record);
+        });
+}
 }
 }
