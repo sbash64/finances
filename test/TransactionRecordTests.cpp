@@ -448,6 +448,19 @@ TRANSACTION_RECORD_TEST("oneNotVerified") {
     ASSERT_NO_VERIFIED_TRANSACTIONS();
 }
 
+// clang-format on
+
+void transactionRecordHasNoneVerifiedOnAfterAdd(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -2000, "hyvee", "10/5/19");
+            assertEqual(result, none(), record.verifiedTransactions());
+        });
+}
+
+// clang-format off
+
 TRANSACTION_RECORD_TEST("oneVerified") {
     add(-2000, "hyvee", "10/5/19");
     verify(-2000);
