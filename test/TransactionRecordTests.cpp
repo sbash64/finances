@@ -2,7 +2,6 @@
 #include "TransactionRecordTests.hpp"
 #include <finances/TransactionRecord.hpp>
 #include <testcpplite/testcpplite.hpp>
-#include <catch2/catch.hpp>
 #include <functional>
 
 namespace finances {
@@ -31,96 +30,6 @@ class ModelEventListenerStub : public Model::EventListener {
 };
 
 auto none() -> Transactions { return {}; }
-
-class TransactionRecordTests {
-  public:
-    TransactionRecordTests() { record.subscribe(&listener); }
-
-  protected:
-    void add(int amount, std::string label, std::string date) {
-        record.add(transaction(amount, std::move(label), std::move(date)));
-    }
-
-    void verify(int amount) { record.verify(amount); }
-
-    void remove(int amount, std::string label, std::string date) {
-        record.remove(transaction(amount, std::move(label), std::move(date)));
-    }
-
-    auto netIncome() -> int { return record.netIncome(); }
-
-    auto verifiedTransactions() -> Transactions {
-        return record.verifiedTransactions();
-    }
-
-    auto unverifiedTransactions() -> Transactions {
-        return record.unverifiedTransactions();
-    }
-
-    auto all() -> Transactions { return record.transactions(); }
-
-    auto verifiedTransaction() -> Transaction {
-        return listener.verifiedTransaction();
-    }
-
-    auto didNotVerify() -> bool { return !listener.verified(); }
-
-    auto addedTransaction() -> Transaction {
-        return listener.addedTransaction();
-    }
-
-  private:
-    ModelEventListenerStub listener;
-    TransactionRecord record;
-};
-
-#define ASSERT_TRANSACTIONS(a) ASSERT_EQUAL(a, all())
-
-#define ASSERT_NO_TRANSACTIONS() ASSERT_TRANSACTIONS(none())
-
-#define ASSERT_ONE_TRANSACTION(a, b, c)                                        \
-    ASSERT_TRANSACTIONS(oneTransaction(a, b, c))
-
-#define ASSERT_ADDED(a, b, c)                                                  \
-    ASSERT_EQUAL(transaction(a, b, c), addedTransaction())
-
-#define ASSERT_TWO_TRANSACTIONS(a, b, c, d, e, f)                              \
-    ASSERT_TRANSACTIONS(twoTransactions(a, b, c, d, e, f))
-
-#define ASSERT_THREE_TRANSACTIONS(a, b, c, d, e, f, g, h, i)                   \
-    ASSERT_TRANSACTIONS(threeTransactions(a, b, c, d, e, f, g, h, i))
-
-#define ASSERT_VERIFIED_TRANSACTION(a, b, c)                                   \
-    ASSERT_EQUAL(transaction(a, b, c), verifiedTransaction())
-
-#define ASSERT_VERIFIED_TRANSACTIONS(expected)                                 \
-    ASSERT_EQUAL(expected, verifiedTransactions())
-
-#define ASSERT_ONE_VERIFIED_TRANSACTION(a, b, c)                               \
-    ASSERT_VERIFIED_TRANSACTIONS(oneTransaction(a, b, c))
-
-#define ASSERT_UNVERIFIED_TRANSACTIONS(expected)                               \
-    ASSERT_EQUAL(expected, unverifiedTransactions())
-
-#define ASSERT_ONE_UNVERIFIED_TRANSACTION(a, b, c)                             \
-    ASSERT_UNVERIFIED_TRANSACTIONS(oneTransaction(a, b, c))
-
-#define ASSERT_TWO_VERIFIED_TRANSACTIONS(a, b, c, d, e, f)                     \
-    ASSERT_VERIFIED_TRANSACTIONS(twoTransactions(a, b, c, d, e, f))
-
-#define ASSERT_NET_INCOME(expected) ASSERT_EQUAL(expected, netIncome())
-
-#define ASSERT_NO_VERIFIED_TRANSACTIONS() ASSERT_VERIFIED_TRANSACTIONS(none())
-
-#define ASSERT_NO_UNVERIFIED_TRANSACTIONS()                                    \
-    ASSERT_UNVERIFIED_TRANSACTIONS(none())
-
-#define ASSERT_EXISTS_EXACTLY_ONE_VERIFIED_TRANSACTION()                       \
-    ASSERT_EQUAL(1, verifiedTransactions().size())
-
-#define ASSERT_DID_NOT_VERIFY() ASSERT_TRUE(didNotVerify())
-
-#define TRANSACTION_RECORD_TEST(a) TEST_CASE_METHOD(TransactionRecordTests, a)
 
 void assertEqual(testcpplite::TestResult &result, const Transaction &expected,
     const Transaction &actual) {
