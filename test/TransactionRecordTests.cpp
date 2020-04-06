@@ -224,13 +224,6 @@ void assertNetIncome(
     assertEqual(result, amount, record.netIncome());
 }
 }
-// clang-format off
-
-TRANSACTION_RECORD_TEST("noneOnConstruction") {
-    ASSERT_NO_TRANSACTIONS();
-}
-
-// clang-format on
 
 void transactionRecordHasNoneOnConstruction(testcpplite::TestResult &result) {
     testTransactionRecord(
@@ -238,15 +231,6 @@ void transactionRecordHasNoneOnConstruction(testcpplite::TestResult &result) {
             assertNoTransactions(result, record);
         });
 }
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("addedTransaction") {
-    add(-5000, "hyvee", "10/5/19");
-    ASSERT_ADDED(-5000, "hyvee", "10/5/19");
-}
-
-// clang-format on
 
 void transactionRecordNotifiesListenerOnAdd(testcpplite::TestResult &result) {
     testTransactionRecord(
@@ -257,15 +241,6 @@ void transactionRecordNotifiesListenerOnAdd(testcpplite::TestResult &result) {
         });
 }
 
-// clang-format off
-
-TRANSACTION_RECORD_TEST("oneTransactionAdded") {
-    add(-5000, "hyvee", "10/5/19");
-    ASSERT_ONE_TRANSACTION(-5000, "hyvee", "10/5/19");
-}
-
-// clang-format on
-
 void transactionRecordHasOneAdded(testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
@@ -273,19 +248,6 @@ void transactionRecordHasOneAdded(testcpplite::TestResult &result) {
             assertOneTransaction(result, record, -5000, "hyvee", "10/5/19");
         });
 }
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("twoAdded") {
-    add(-1000, "hyvee", "10/5/19");
-    add(-1000, "chipotle", "10/5/19");
-    ASSERT_TWO_TRANSACTIONS(
-        -1000, "hyvee", "10/5/19",
-        -1000, "chipotle", "10/5/19"
-    );
-}
-
-// clang-format on
 
 void transactionRecordHasTwoAdded(testcpplite::TestResult &result) {
     testTransactionRecord(
@@ -297,16 +259,6 @@ void transactionRecordHasTwoAdded(testcpplite::TestResult &result) {
         });
 }
 
-// clang-format off
-
-TRANSACTION_RECORD_TEST("removesOne") {
-    add(-5000, "hyvee", "10/5/19");
-    remove(-5000, "hyvee", "10/5/19");
-    ASSERT_NO_TRANSACTIONS();
-}
-
-// clang-format on
-
 void transactionRecordHasNoneAfterRemovingOne(testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
@@ -315,21 +267,6 @@ void transactionRecordHasNoneAfterRemovingOne(testcpplite::TestResult &result) {
             assertNoTransactions(result, record);
         });
 }
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("threeAdded") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-3000, "walmart", "10/4/19");
-    add(-1000, "chipotle", "10/6/19");
-    ASSERT_THREE_TRANSACTIONS(
-        -2000, "hyvee", "10/5/19",
-        -3000, "walmart", "10/4/19",
-        -1000, "chipotle", "10/6/19"
-    );
-}
-
-// clang-format on
 
 void transactionRecordHasThreeAdded(testcpplite::TestResult &result) {
     testTransactionRecord(
@@ -343,15 +280,6 @@ void transactionRecordHasThreeAdded(testcpplite::TestResult &result) {
         });
 }
 
-// clang-format off
-
-TRANSACTION_RECORD_TEST("removesOneFromNone") {
-    remove(-5000, "hyvee", "10/5/19");
-    ASSERT_NO_TRANSACTIONS();
-}
-
-// clang-format on
-
 void transactionRecordHasNoneAfterRemovingNone(
     testcpplite::TestResult &result) {
     testTransactionRecord(
@@ -360,17 +288,6 @@ void transactionRecordHasNoneAfterRemovingNone(
             assertNoTransactions(result, record);
         });
 }
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("removeOneFromTwo") {
-    add(-5000, "hyvee", "10/5/19");
-    add(-1000, "chipotle", "10/5/19");
-    remove(-5000, "hyvee", "10/5/19");
-    ASSERT_ONE_TRANSACTION(-1000, "chipotle", "10/5/19");
-}
-
-// clang-format on
 
 void transactionRecordHasOneAfterRemovingOne(testcpplite::TestResult &result) {
     testTransactionRecord(
@@ -381,20 +298,6 @@ void transactionRecordHasOneAfterRemovingOne(testcpplite::TestResult &result) {
             assertOneTransaction(result, record, -1000, "chipotle", "10/5/19");
         });
 }
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("removeOneNotFoundFromTwo") {
-    add(-5000, "hyvee", "10/5/19");
-    add(-1000, "chipotle", "10/5/19");
-    remove(-4999, "hyvee", "10/5/19");
-    ASSERT_TWO_TRANSACTIONS(
-        -5000, "hyvee", "10/5/19",
-        -1000, "chipotle", "10/5/19"
-    );
-}
-
-// clang-format on
 
 void transactionRecordHasTwoAfterRemovingOneNotFound(
     testcpplite::TestResult &result) {
@@ -408,14 +311,6 @@ void transactionRecordHasTwoAfterRemovingOneNotFound(
         });
 }
 
-// clang-format off
-
-TRANSACTION_RECORD_TEST("netIncomeZeroOnConstruction") {
-    ASSERT_NET_INCOME(0);
-}
-
-// clang-format on
-
 void transactionRecordHasZeroNetIncomeOnConstruction(
     testcpplite::TestResult &result) {
     testTransactionRecord(
@@ -423,15 +318,6 @@ void transactionRecordHasZeroNetIncomeOnConstruction(
             assertNetIncome(result, record, 0);
         });
 }
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("netIncomeFromOne") {
-    add(-1000, "hyvee", "10/5/19");
-    ASSERT_NET_INCOME(-1000);
-}
-
-// clang-format on
 
 void transactionRecordHasOneContributingNetIncome(
     testcpplite::TestResult &result) {
@@ -441,16 +327,6 @@ void transactionRecordHasOneContributingNetIncome(
             assertNetIncome(result, record, -1000);
         });
 }
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("netIncomeFromTwo") {
-    add(-6132, "hyvee", "10/5/19");
-    add(-1254, "chipotle", "10/5/19");
-    ASSERT_NET_INCOME(-7386);
-}
-
-// clang-format on
 
 void transactionRecordHasTwoContributingNetIncome(
     testcpplite::TestResult &result) {
@@ -462,14 +338,6 @@ void transactionRecordHasTwoContributingNetIncome(
         });
 }
 
-// clang-format off
-
-TRANSACTION_RECORD_TEST("noVerifiedOnConstruction") {
-    ASSERT_NO_VERIFIED_TRANSACTIONS();
-}
-
-// clang-format on
-
 void transactionRecordHasNoneVerifiedOnConstruction(
     testcpplite::TestResult &result) {
     testTransactionRecord(
@@ -477,15 +345,6 @@ void transactionRecordHasNoneVerifiedOnConstruction(
             assertNoVerifiedTransactions(result, record);
         });
 }
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("oneNotVerified") {
-    add(-2000, "hyvee", "10/5/19");
-    ASSERT_NO_VERIFIED_TRANSACTIONS();
-}
-
-// clang-format on
 
 void transactionRecordHasNoneVerifiedAfterAdd(testcpplite::TestResult &result) {
     testTransactionRecord(
@@ -495,16 +354,6 @@ void transactionRecordHasNoneVerifiedAfterAdd(testcpplite::TestResult &result) {
         });
 }
 
-// clang-format off
-
-TRANSACTION_RECORD_TEST("oneVerified") {
-    add(-2000, "hyvee", "10/5/19");
-    verify(-2000);
-    ASSERT_ONE_VERIFIED_TRANSACTION(-2000, "hyvee", "10/5/19");
-}
-
-// clang-format on
-
 void transactionRecordHasOneVerifiedAfterAdd(testcpplite::TestResult &result) {
     testTransactionRecord([&](TransactionRecord &record,
                               ModelEventListenerStub &) {
@@ -513,17 +362,6 @@ void transactionRecordHasOneVerifiedAfterAdd(testcpplite::TestResult &result) {
         assertOneVerifiedTransaction(result, record, -2000, "hyvee", "10/5/19");
     });
 }
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("oneOfTwoVerified") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-1000, "chipotle", "10/6/19");
-    verify(-2000);
-    ASSERT_ONE_VERIFIED_TRANSACTION(-2000, "hyvee", "10/5/19");
-}
-
-// clang-format on
 
 void transactionRecordHasOneVerifiedAfterTwoAdded(
     testcpplite::TestResult &result) {
@@ -535,22 +373,6 @@ void transactionRecordHasOneVerifiedAfterTwoAdded(
         assertOneVerifiedTransaction(result, record, -2000, "hyvee", "10/5/19");
     });
 }
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("twoOfThreeVerified") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-1000, "chipotle", "10/6/19");
-    add(-3000, "barnes noble", "10/4/19");
-    verify(-2000);
-    verify(-3000);
-    ASSERT_TWO_VERIFIED_TRANSACTIONS(
-        -2000, "hyvee", "10/5/19",
-        -3000, "barnes noble", "10/4/19"
-    );
-}
-
-// clang-format on
 
 void transactionRecordHasTwoVerifiedAfterThreeAdded(
     testcpplite::TestResult &result) {
@@ -567,15 +389,6 @@ void transactionRecordHasTwoVerifiedAfterThreeAdded(
         });
 }
 
-// clang-format off
-
-TRANSACTION_RECORD_TEST("oneFromNoneVerified") {
-    verify(-3000);
-    ASSERT_NO_VERIFIED_TRANSACTIONS();
-}
-
-// clang-format on
-
 void transactionRecordHasNoneVerifiedAfterVerify(
     testcpplite::TestResult &result) {
     testTransactionRecord(
@@ -584,16 +397,6 @@ void transactionRecordHasNoneVerifiedAfterVerify(
             assertNoVerifiedTransactions(result, record);
         });
 }
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("noneVerifiedDidNotVerify") {
-    add(-2000, "hyvee", "10/5/19");
-    verify(-1000);
-    ASSERT_DID_NOT_VERIFY();
-}
-
-// clang-format on
 
 void transactionRecordDoesNotNotifyAfterOneAddAndVerify(
     testcpplite::TestResult &result) {
@@ -604,16 +407,6 @@ void transactionRecordDoesNotNotifyAfterOneAddAndVerify(
             testcpplite::assertFalse(result, listener.verified());
         });
 }
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("oneVerifiedDidVerify") {
-    add(-2000, "hyvee", "10/5/19");
-    verify(-2000);
-    ASSERT_VERIFIED_TRANSACTION(-2000, "hyvee", "10/5/19");
-}
-
-// clang-format on
 
 void transactionRecordNotiesAfterOneAddAndVerify(
     testcpplite::TestResult &result) {
@@ -626,14 +419,6 @@ void transactionRecordNotiesAfterOneAddAndVerify(
         });
 }
 
-// clang-format off
-
-TRANSACTION_RECORD_TEST("noUnverifiedOnConstruction") {
-    ASSERT_NO_UNVERIFIED_TRANSACTIONS();
-}
-
-// clang-format on
-
 void transactionRecordHasNoneUnverifiedOnConstruction(
     testcpplite::TestResult &result) {
     testTransactionRecord(
@@ -641,15 +426,6 @@ void transactionRecordHasNoneUnverifiedOnConstruction(
             assertUnverifiedTransactions(result, record, none());
         });
 }
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("oneUnverified") {
-    add(-1000, "hyvee", "10/1/19");
-    ASSERT_ONE_UNVERIFIED_TRANSACTION(-1000, "hyvee", "10/1/19");
-}
-
-// clang-format on
 
 void transactionRecordHasOneUnverifiedAfterAdd(
     testcpplite::TestResult &result) {
@@ -660,17 +436,6 @@ void transactionRecordHasOneUnverifiedAfterAdd(
                 result, record, -1000, "hyvee", "10/1/19");
         });
 }
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("oneOfTwoUnverified") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-1000, "chipotle", "10/6/19");
-    verify(-2000);
-    ASSERT_ONE_UNVERIFIED_TRANSACTION(-1000, "chipotle", "10/6/19");
-}
-
-// clang-format on
 
 void transactionRecordHasOneUnverifiedAfterTwoAdded(
     testcpplite::TestResult &result) {
@@ -683,21 +448,6 @@ void transactionRecordHasOneUnverifiedAfterTwoAdded(
                 result, record, -1000, "chipotle", "10/6/19");
         });
 }
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("verifyBothOfSameAmount") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-2000, "chipotle", "10/6/19");
-    verify(-2000);
-    verify(-2000);
-    ASSERT_TWO_VERIFIED_TRANSACTIONS(
-        -2000, "hyvee", "10/5/19",
-        -2000, "chipotle", "10/6/19"
-    );
-}
-
-// clang-format on
 
 void transactionRecordHasTwoVerifiedOfSameAmount(
     testcpplite::TestResult &result) {
@@ -713,17 +463,6 @@ void transactionRecordHasTwoVerifiedOfSameAmount(
         });
 }
 
-// clang-format off
-
-TRANSACTION_RECORD_TEST("onlyVerifiesOneOfTwoSameAmounts") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-2000, "chipotle", "10/6/19");
-    verify(-2000);
-    ASSERT_EXISTS_EXACTLY_ONE_VERIFIED_TRANSACTION();
-}
-
-// clang-format on
-
 void transactionRecordHasOneVerifiedAfterAddingTwoOfSameAmount(
     testcpplite::TestResult &result) {
     testTransactionRecord(
@@ -735,18 +474,6 @@ void transactionRecordHasOneVerifiedAfterAddingTwoOfSameAmount(
                 verifiedTransactions(record).size());
         });
 }
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("removeFirstAmongOneOfTwoVerifiesOther") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-2000, "chipotle", "10/6/19");
-    verify(-2000);
-    remove(-2000, "hyvee", "10/5/19");
-    ASSERT_ONE_VERIFIED_TRANSACTION(-2000, "chipotle", "10/6/19");
-}
-
-// clang-format on
 
 void transactionRecordVerifiesMatchingAmountWhenRemovingFirst(
     testcpplite::TestResult &result) {
@@ -761,18 +488,6 @@ void transactionRecordVerifiesMatchingAmountWhenRemovingFirst(
         });
 }
 
-// clang-format off
-
-TRANSACTION_RECORD_TEST("removeSecondAmongOneOfTwoVerifiesOther") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-2000, "chipotle", "10/6/19");
-    verify(-2000);
-    remove(-2000, "chipotle", "10/6/19");
-    ASSERT_ONE_VERIFIED_TRANSACTION(-2000, "hyvee", "10/5/19");
-}
-
-// clang-format on
-
 void transactionRecordVerifiesMatchingAmountWhenRemovingSecond(
     testcpplite::TestResult &result) {
     testTransactionRecord([&](TransactionRecord &record,
@@ -784,17 +499,6 @@ void transactionRecordVerifiesMatchingAmountWhenRemovingSecond(
         assertOneVerifiedTransaction(result, record, -2000, "hyvee", "10/5/19");
     });
 }
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("removeOneUnverifiedDoesNotVerifyOther") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-2000, "chipotle", "10/6/19");
-    remove(-2000, "chipotle", "10/6/19");
-    ASSERT_NO_VERIFIED_TRANSACTIONS();
-}
-
-// clang-format on
 
 void transactionRecordDoesNotVerifyMatchingAmountWhenRemovingOne(
     testcpplite::TestResult &result) {
