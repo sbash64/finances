@@ -124,13 +124,14 @@ class TransactionRecordTests {
 
 void assertEqual(testcpplite::TestResult &result, const Transaction &expected,
     const Transaction &actual) {
-    testcpplite::assertEqual(result, expected.amount, actual.amount);
-    testcpplite::assertEqual(result, expected.date, actual.date);
-    testcpplite::assertEqual(result, expected.label, actual.label);
+    assertEqual(result, expected.amount, actual.amount);
+    assertEqual(result, expected.date, actual.date);
+    assertEqual(result, expected.label, actual.label);
 }
 
 void assertEqual(testcpplite::TestResult &result, const Transactions &expected,
     const Transactions &actual) {
+    assertEqual(result, expected.size(), actual.size());
     for (size_t i{0}; i < expected.size(); ++i)
         assertEqual(result, expected.at(i), actual.at(i));
 }

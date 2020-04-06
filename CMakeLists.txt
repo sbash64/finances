@@ -19,7 +19,7 @@ if (${ENABLE_TESTS})
     FetchContent_Declare(
         TestCppLite
         GIT_REPOSITORY https://github.com/sbash64/testcpplite
-        GIT_TAG v1.1.2
+        GIT_TAG v1.1.3
     )
     FetchContent_MakeAvailable(TestCppLite)
 
