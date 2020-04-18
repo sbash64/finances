@@ -7,7 +7,7 @@ namespace finances {
 void presenterSubscribesToModelEvents(testcpplite::TestResult &);
 void presenterAddsTransaction(testcpplite::TestResult &);
 void presenterAddsTransactionWithDecimal(testcpplite::TestResult &);
-void presenterAddsTransactionWithOneDecimalPoint(testcpplite::TestResult &);
+void presenterAddsTransactionWithOneDecimalDigit(testcpplite::TestResult &);
 void presenterAddsTransactionWithNoDecimalDigits(testcpplite::TestResult &);
 }
 

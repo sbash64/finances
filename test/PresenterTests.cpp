@@ -250,7 +250,7 @@ PRESENTER_TEST("addTransactionParsesOneDecimalDigit") {
 }
 }
 
-void presenterAddsTransactionWithOneDecimalPoint(
+void presenterAddsTransactionWithOneDecimalDigit(
     testcpplite::TestResult &result) {
     testPresenter([&](Presenter &presenter, ModelStub &model) {
         executeAdd(presenter, "-9.4 chipotle 10/6/19");
