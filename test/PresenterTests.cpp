@@ -4,6 +4,7 @@
 #include <testcpplite/testcpplite.hpp>
 #include <catch2/catch.hpp>
 #include <utility>
+#include <functional>
 
 namespace finances {
 namespace {
@@ -171,6 +172,13 @@ void assertTransactionAdded(testcpplite::TestResult &result, ModelStub &model,
         model.transactionAdded());
 }
 
+void testPresenter(const std::function<void(Presenter &, ModelStub &)> &f) {
+    ModelStub model;
+    ViewStub view;
+    Presenter presenter{model, view};
+    f(presenter, model);
+}
+
 #define ASSERT_TRANSACTION_ADDED(a, b, c)                                      \
     ASSERT_EQUAL(transaction(a, b, c), transactionAdded())
 
@@ -200,10 +208,9 @@ PRESENTER_TEST("subscribesToModelEvents") {
 }
 
 void presenterSubscribesToModelEvents(testcpplite::TestResult &result) {
-    ModelStub model;
-    ViewStub view;
-    Presenter presenter{model, view};
-    assertTrue(result, model.subscribed());
+    testPresenter([&](Presenter &, ModelStub &model) {
+        assertTrue(result, model.subscribed());
+    });
 }
 
 namespace {
@@ -214,11 +221,10 @@ PRESENTER_TEST("addTransactionParsesInput") {
 }
 
 void presenterAddsTransaction(testcpplite::TestResult &result) {
-    ModelStub model;
-    ViewStub view;
-    Presenter presenter{model, view};
-    executeAdd(presenter, "-50 hyvee 10/5/19");
-    assertTransactionAdded(result, model, -5000, "hyvee", "10/5/19");
+    testPresenter([&](Presenter &presenter, ModelStub &model) {
+        executeAdd(presenter, "-50 hyvee 10/5/19");
+        assertTransactionAdded(result, model, -5000, "hyvee", "10/5/19");
+    });
 }
 
 namespace {
