@@ -72,7 +72,9 @@ int main() {
                 "presenterAddsTransactionWithNoDecimalDigits"},
             {presenterRemovesTransaction, "presenterRemovesTransaction"},
             {presenterPrintsTransactionVerified,
-                "presenterPrintsTransactionVerified"}},
+                "presenterPrintsTransactionVerified"},
+            {presenterPrintsTransactionAdded,
+                "presenterPrintsTransactionAdded"}},
         std::cout);
 }
 }

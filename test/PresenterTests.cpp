@@ -158,6 +158,10 @@ void verified(ModelStub &model, int a, std::string b, std::string c) {
     model.verified(transaction(a, std::move(b), std::move(c)));
 }
 
+void added(ModelStub &model, int a, std::string b, std::string c) {
+    model.added(transaction(a, std::move(b), std::move(c)));
+}
+
 void execute(Presenter &presenter, const std::string &s) {
     presenter.execute(s);
 }
@@ -320,7 +324,7 @@ PRESENTER_TEST("verifiedEventPrintsTransaction") {
 }
 
 void presenterPrintsTransactionVerified(testcpplite::TestResult &result) {
-    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &view) {
+    testPresenter([&](Presenter &, ModelStub &model, ViewStub &view) {
         verified(model, -1000, "chipotle", "10/6/19");
         assertTransactionPrinted(result, view, -1000, "chipotle", "10/6/19");
     });
@@ -332,6 +336,16 @@ PRESENTER_TEST("addedEventPrintsTransaction") {
     added(-1000, "chipotle", "10/6/19");
     ASSERT_TRANSACTION_PRINTED(-1000, "chipotle", "10/6/19");
 }
+}
+
+void presenterPrintsTransactionAdded(testcpplite::TestResult &result) {
+    testPresenter([&](Presenter &, ModelStub &model, ViewStub &view) {
+        added(model, -1000, "chipotle", "10/6/19");
+        assertTransactionPrinted(result, view, -1000, "chipotle", "10/6/19");
+    });
+}
+
+namespace {
 
 PRESENTER_TEST("printPrintsAllTransactions") {
     setAllTransactions(twoTransactions(
