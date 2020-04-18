@@ -154,6 +154,10 @@ class PresenterTests {
     Presenter presenter{model, view};
 };
 
+void setAllTransactions(ModelStub &model, Transactions t) {
+    model.setTransactions(std::move(t));
+}
+
 void verified(ModelStub &model, int a, std::string b, std::string c) {
     model.verified(transaction(a, std::move(b), std::move(c)));
 }
@@ -166,7 +170,8 @@ void execute(Presenter &presenter, const std::string &s) {
     presenter.execute(s);
 }
 
-void executeCommand(Presenter &presenter, Command c, const std::string &s) {
+void executeCommand(
+    Presenter &presenter, Command c, const std::string &s = {}) {
     execute(presenter, name(c) + std::string(s.empty() ? 0 : 1, ' ') + s);
 }
 
@@ -176,6 +181,10 @@ void executeAdd(Presenter &presenter, const std::string &s) {
 
 void executeRemove(Presenter &presenter, const std::string &s) {
     executeCommand(presenter, Command::remove, s);
+}
+
+void executePrint(Presenter &presenter) {
+    executeCommand(presenter, Command::print);
 }
 
 void assertTransactionAdded(testcpplite::TestResult &result, ModelStub &model,
@@ -194,6 +203,15 @@ void assertTransactionPrinted(testcpplite::TestResult &result, ViewStub &view,
     int amount, std::string label, std::string date) {
     assertEqual(result,
         oneTransaction(amount, std::move(label), std::move(date)),
+        view.shownTransactions());
+}
+
+void assertBothTransactionsPrinted(testcpplite::TestResult &result,
+    ViewStub &view, int amount1, std::string label1, std::string date1,
+    int amount2, std::string label2, std::string date2) {
+    assertEqual(result,
+        twoTransactions(amount1, std::move(label1), std::move(date1), amount2,
+            std::move(label2), std::move(date2)),
         view.shownTransactions());
 }
 
@@ -354,6 +372,20 @@ PRESENTER_TEST("printPrintsAllTransactions") {
     ASSERT_BOTH_TRANSACTIONS_PRINTED(
         -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19");
 }
+}
+
+void presenterPrintsAllTransaction(testcpplite::TestResult &result) {
+    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &view) {
+        setAllTransactions(model,
+            twoTransactions(
+                -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
+        executePrint(presenter);
+        assertBothTransactionsPrinted(result, view, -1000, "chipotle",
+            "10/6/19", -5000, "hyvee", "10/4/19");
+    });
+}
+
+namespace {
 
 PRESENTER_TEST("printVerifiedPrintsVerifiedTransactions") {
     setVerifiedTransactions(twoTransactions(
