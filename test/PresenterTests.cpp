@@ -264,6 +264,17 @@ PRESENTER_TEST("addTransactionParsesNoDecimalDigits") {
     executeAdd("-9. chipotle 10/6/19");
     ASSERT_TRANSACTION_ADDED(-900, "chipotle", "10/6/19");
 }
+}
+
+void presenterAddsTransactionWithNoDecimalDigits(
+    testcpplite::TestResult &result) {
+    testPresenter([&](Presenter &presenter, ModelStub &model) {
+        executeAdd(presenter, "-9. chipotle 10/6/19");
+        assertTransactionAdded(result, model, -900, "chipotle", "10/6/19");
+    });
+}
+
+namespace {
 
 PRESENTER_TEST("removeTransactionParsesInput") {
     executeRemove("-12.34 hyvee 10/5/19");
