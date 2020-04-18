@@ -1,5 +1,7 @@
+#include "PresenterTests.hpp"
 #include "testing-utility.hpp"
 #include <finances/Presenter.hpp>
+#include <testcpplite/testcpplite.hpp>
 #include <catch2/catch.hpp>
 #include <utility>
 
@@ -174,12 +176,19 @@ class PresenterTests {
 
 #define PRESENTER_TEST(a) TEST_CASE_METHOD(PresenterTests, a)
 
-// clang-format off
-
 PRESENTER_TEST("subscribesToModelEvents") {
     ASSERT_SUBSCRIBED_TO_MODEL_EVENTS();
 }
+}
 
+void presenterSubscribesToModelEvents(testcpplite::TestResult &result) {
+    ModelStub model;
+    ViewStub view;
+    Presenter presenter{model, view};
+    assertTrue(result, model.subscribed());
+}
+
+namespace {
 PRESENTER_TEST("addTransactionParsesInput") {
     executeAdd("-50 hyvee 10/5/19");
     ASSERT_TRANSACTION_ADDED(-5000, "hyvee", "10/5/19");
@@ -207,52 +216,36 @@ PRESENTER_TEST("removeTransactionParsesInput") {
 
 PRESENTER_TEST("verifiedEventPrintsTransaction") {
     verified(-1000, "chipotle", "10/6/19");
-    ASSERT_TRANSACTION_PRINTED(
-        -1000, "chipotle", "10/6/19"
-    );
+    ASSERT_TRANSACTION_PRINTED(-1000, "chipotle", "10/6/19");
 }
 
 PRESENTER_TEST("addedEventPrintsTransaction") {
     added(-1000, "chipotle", "10/6/19");
-    ASSERT_TRANSACTION_PRINTED(
-        -1000, "chipotle", "10/6/19"
-    );
+    ASSERT_TRANSACTION_PRINTED(-1000, "chipotle", "10/6/19");
 }
 
 PRESENTER_TEST("printPrintsAllTransactions") {
     setAllTransactions(twoTransactions(
-        -1000, "chipotle", "10/6/19",
-        -5000, "hyvee", "10/4/19"
-    ));
+        -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
     executePrint();
     ASSERT_BOTH_TRANSACTIONS_PRINTED(
-        -1000, "chipotle", "10/6/19",
-        -5000, "hyvee", "10/4/19"
-    );
+        -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19");
 }
 
 PRESENTER_TEST("printVerifiedPrintsVerifiedTransactions") {
     setVerifiedTransactions(twoTransactions(
-        -1000, "chipotle", "10/6/19",
-        -5000, "hyvee", "10/4/19"
-    ));
+        -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
     executePrintVerified();
     ASSERT_BOTH_TRANSACTIONS_PRINTED(
-        -1000, "chipotle", "10/6/19",
-        -5000, "hyvee", "10/4/19"
-    );
+        -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19");
 }
 
 PRESENTER_TEST("printUnverifiedPrintsUnverifiedTransactions") {
     setUnverifiedTransactions(twoTransactions(
-        -1000, "chipotle", "10/6/19",
-        -5000, "hyvee", "10/4/19"
-    ));
+        -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
     executePrintUnverified();
     ASSERT_BOTH_TRANSACTIONS_PRINTED(
-        -1000, "chipotle", "10/6/19",
-        -5000, "hyvee", "10/4/19"
-    );
+        -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19");
 }
 
 PRESENTER_TEST("netIncomePrintsNetIncome") {
@@ -266,13 +259,9 @@ PRESENTER_TEST("verifyParsesInput") {
     ASSERT_AMOUNT_VERIFIED(-1234);
 }
 
-PRESENTER_TEST("unrecognizedCommandDoesNotAbort") {
-    execute("jellyfish");
-}
+PRESENTER_TEST("unrecognizedCommandDoesNotAbort") { execute("jellyfish"); }
 
-PRESENTER_TEST("partiallyCorrectCommandDoesNotAbort") {
-    executeAdd("oops");
-}
+PRESENTER_TEST("partiallyCorrectCommandDoesNotAbort") { executeAdd("oops"); }
 
 // clang-format on
 

@@ -1,4 +1,5 @@
 #include "TransactionRecordTests.hpp"
+#include "PresenterTests.hpp"
 #include <testcpplite/testcpplite.hpp>
 #define CATCH_CONFIG_RUNNER
 #include <catch2/catch.hpp>
@@ -59,7 +60,7 @@ int main() {
             {transactionRecordVerifiesMatchingAmountWhenRemovingSecond,
                 "transactionRecordVerifiesMatchingAmountWhenRemovingSecond"},
             {transactionRecordDoesNotVerifyMatchingAmountWhenRemovingOne,
-                "transactionRecordDoesNotVerifyMatchingAmountWhenRemovingOne"}},
+                "transactionRecordDoesNotVerifyMatchingAmountWhenRemovingOne"}, {presenterSubscribesToModelEvents, "presenterSubscribesToModelEvents"}},
         std::cout);
 }
 }
