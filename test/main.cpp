@@ -65,7 +65,9 @@ int main() {
                 "presenterSubscribesToModelEvents"},
             {presenterAddsTransaction, "presenterAddsTransaction"},
             {presenterAddsTransactionWithDecimal,
-                "presenterAddsTransactionWithDecimal"}},
+                "presenterAddsTransactionWithDecimal"},
+            {presenterAddsTransactionWithOneDecimalPoint,
+                "presenterAddsTransactionWithOneDecimalPoint"}},
         std::cout);
 }
 }

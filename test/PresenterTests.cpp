@@ -248,6 +248,17 @@ PRESENTER_TEST("addTransactionParsesOneDecimalDigit") {
     executeAdd("-9.4 chipotle 10/6/19");
     ASSERT_TRANSACTION_ADDED(-940, "chipotle", "10/6/19");
 }
+}
+
+void presenterAddsTransactionWithOneDecimalPoint(
+    testcpplite::TestResult &result) {
+    testPresenter([&](Presenter &presenter, ModelStub &model) {
+        executeAdd(presenter, "-9.4 chipotle 10/6/19");
+        assertTransactionAdded(result, model, -940, "chipotle", "10/6/19");
+    });
+}
+
+namespace {
 
 PRESENTER_TEST("addTransactionParsesNoDecimalDigits") {
     executeAdd("-9. chipotle 10/6/19");
