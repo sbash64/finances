@@ -31,13 +31,6 @@ class ModelEventListenerStub : public Model::EventListener {
 
 auto none() -> Transactions { return {}; }
 
-void assertEqual(testcpplite::TestResult &result, const Transaction &expected,
-    const Transaction &actual) {
-    assertEqual(result, expected.amount, actual.amount);
-    assertEqual(result, expected.date, actual.date);
-    assertEqual(result, expected.label, actual.label);
-}
-
 void assertEqual(testcpplite::TestResult &result, const Transactions &expected,
     const Transactions &actual) {
     assertEqual(result, expected.size(), actual.size());

@@ -2,6 +2,7 @@
 #define TEST_TESTING_UTILITY_HPP_
 
 #include <finances/Transaction.hpp>
+#include <testcpplite/testcpplite.hpp>
 #include <catch2/catch.hpp>
 #include <string>
 #include <utility>
@@ -32,6 +33,13 @@ inline auto threeTransactions(int amount1, std::string label1,
     return {transaction(amount1, std::move(label1), std::move(date1)),
         transaction(amount2, std::move(label2), std::move(date2)),
         transaction(amount3, std::move(label3), std::move(date3))};
+}
+
+inline void assertEqual(testcpplite::TestResult &result, const Transaction &expected,
+    const Transaction &actual) {
+    assertEqual(result, expected.amount, actual.amount);
+    assertEqual(result, expected.date, actual.date);
+    assertEqual(result, expected.label, actual.label);
 }
 }
 

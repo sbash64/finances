@@ -60,7 +60,10 @@ int main() {
             {transactionRecordVerifiesMatchingAmountWhenRemovingSecond,
                 "transactionRecordVerifiesMatchingAmountWhenRemovingSecond"},
             {transactionRecordDoesNotVerifyMatchingAmountWhenRemovingOne,
-                "transactionRecordDoesNotVerifyMatchingAmountWhenRemovingOne"}, {presenterSubscribesToModelEvents, "presenterSubscribesToModelEvents"}},
+                "transactionRecordDoesNotVerifyMatchingAmountWhenRemovingOne"},
+            {presenterSubscribesToModelEvents,
+                "presenterSubscribesToModelEvents"},
+            {presenterAddsTransaction, "presenterAddsTransaction"}},
         std::cout);
 }
 }

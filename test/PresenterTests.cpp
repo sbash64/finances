@@ -153,6 +153,24 @@ class PresenterTests {
     Presenter presenter{model, view};
 };
 
+void execute(Presenter &presenter, const std::string &s) {
+    presenter.execute(s);
+}
+
+void executeCommand(Presenter &presenter, Command c, const std::string &s) {
+    execute(presenter, name(c) + std::string(s.empty() ? 0 : 1, ' ') + s);
+}
+
+void executeAdd(Presenter &presenter, const std::string &s) {
+    executeCommand(presenter, Command::add, s);
+}
+
+void assertTransactionAdded(testcpplite::TestResult &result, ModelStub &model,
+    int amount, std::string label, std::string date) {
+    assertEqual(result, transaction(amount, std::move(label), std::move(date)),
+        model.transactionAdded());
+}
+
 #define ASSERT_TRANSACTION_ADDED(a, b, c)                                      \
     ASSERT_EQUAL(transaction(a, b, c), transactionAdded())
 
@@ -193,6 +211,17 @@ PRESENTER_TEST("addTransactionParsesInput") {
     executeAdd("-50 hyvee 10/5/19");
     ASSERT_TRANSACTION_ADDED(-5000, "hyvee", "10/5/19");
 }
+}
+
+void presenterAddsTransaction(testcpplite::TestResult &result) {
+    ModelStub model;
+    ViewStub view;
+    Presenter presenter{model, view};
+    executeAdd(presenter, "-50 hyvee 10/5/19");
+    assertTransactionAdded(result, model, -5000, "hyvee", "10/5/19");
+}
+
+namespace {
 
 PRESENTER_TEST("addTransactionParsesDecimal") {
     executeAdd("-9.47 chipotle 10/6/19");
