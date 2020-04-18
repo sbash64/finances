@@ -70,7 +70,9 @@ int main() {
                 "presenterAddsTransactionWithOneDecimalDigit"},
             {presenterAddsTransactionWithNoDecimalDigits,
                 "presenterAddsTransactionWithNoDecimalDigits"},
-            {presenterRemovesTransaction, "presenterRemovesTransaction"}},
+            {presenterRemovesTransaction, "presenterRemovesTransaction"},
+            {presenterPrintsTransactionVerified,
+                "presenterPrintsTransactionVerified"}},
         std::cout);
 }
 }

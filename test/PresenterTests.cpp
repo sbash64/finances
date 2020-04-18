@@ -154,6 +154,10 @@ class PresenterTests {
     Presenter presenter{model, view};
 };
 
+void verified(ModelStub &model, int a, std::string b, std::string c) {
+    model.verified(transaction(a, std::move(b), std::move(c)));
+}
+
 void execute(Presenter &presenter, const std::string &s) {
     presenter.execute(s);
 }
@@ -182,11 +186,19 @@ void assertTransactionRemoved(testcpplite::TestResult &result, ModelStub &model,
         model.transactionRemoved());
 }
 
-void testPresenter(const std::function<void(Presenter &, ModelStub &)> &f) {
+void assertTransactionPrinted(testcpplite::TestResult &result, ViewStub &view,
+    int amount, std::string label, std::string date) {
+    assertEqual(result,
+        oneTransaction(amount, std::move(label), std::move(date)),
+        view.shownTransactions());
+}
+
+void testPresenter(
+    const std::function<void(Presenter &, ModelStub &, ViewStub &)> &f) {
     ModelStub model;
     ViewStub view;
     Presenter presenter{model, view};
-    f(presenter, model);
+    f(presenter, model, view);
 }
 
 #define ASSERT_TRANSACTION_ADDED(a, b, c)                                      \
@@ -218,7 +230,7 @@ PRESENTER_TEST("subscribesToModelEvents") {
 }
 
 void presenterSubscribesToModelEvents(testcpplite::TestResult &result) {
-    testPresenter([&](Presenter &, ModelStub &model) {
+    testPresenter([&](Presenter &, ModelStub &model, ViewStub &) {
         assertTrue(result, model.subscribed());
     });
 }
@@ -231,7 +243,7 @@ PRESENTER_TEST("addTransactionParsesInput") {
 }
 
 void presenterAddsTransaction(testcpplite::TestResult &result) {
-    testPresenter([&](Presenter &presenter, ModelStub &model) {
+    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
         executeAdd(presenter, "-50 hyvee 10/5/19");
         assertTransactionAdded(result, model, -5000, "hyvee", "10/5/19");
     });
@@ -246,7 +258,7 @@ PRESENTER_TEST("addTransactionParsesDecimal") {
 }
 
 void presenterAddsTransactionWithDecimal(testcpplite::TestResult &result) {
-    testPresenter([&](Presenter &presenter, ModelStub &model) {
+    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
         executeAdd(presenter, "-9.47 chipotle 10/6/19");
         assertTransactionAdded(result, model, -947, "chipotle", "10/6/19");
     });
@@ -262,7 +274,7 @@ PRESENTER_TEST("addTransactionParsesOneDecimalDigit") {
 
 void presenterAddsTransactionWithOneDecimalDigit(
     testcpplite::TestResult &result) {
-    testPresenter([&](Presenter &presenter, ModelStub &model) {
+    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
         executeAdd(presenter, "-9.4 chipotle 10/6/19");
         assertTransactionAdded(result, model, -940, "chipotle", "10/6/19");
     });
@@ -278,7 +290,7 @@ PRESENTER_TEST("addTransactionParsesNoDecimalDigits") {
 
 void presenterAddsTransactionWithNoDecimalDigits(
     testcpplite::TestResult &result) {
-    testPresenter([&](Presenter &presenter, ModelStub &model) {
+    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
         executeAdd(presenter, "-9. chipotle 10/6/19");
         assertTransactionAdded(result, model, -900, "chipotle", "10/6/19");
     });
@@ -293,7 +305,7 @@ PRESENTER_TEST("removeTransactionParsesInput") {
 }
 
 void presenterRemovesTransaction(testcpplite::TestResult &result) {
-    testPresenter([&](Presenter &presenter, ModelStub &model) {
+    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
         executeRemove(presenter, "-12.34 hyvee 10/5/19");
         assertTransactionRemoved(result, model, -1234, "hyvee", "10/5/19");
     });
@@ -305,6 +317,16 @@ PRESENTER_TEST("verifiedEventPrintsTransaction") {
     verified(-1000, "chipotle", "10/6/19");
     ASSERT_TRANSACTION_PRINTED(-1000, "chipotle", "10/6/19");
 }
+}
+
+void presenterPrintsTransactionVerified(testcpplite::TestResult &result) {
+    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &view) {
+        verified(model, -1000, "chipotle", "10/6/19");
+        assertTransactionPrinted(result, view, -1000, "chipotle", "10/6/19");
+    });
+}
+
+namespace {
 
 PRESENTER_TEST("addedEventPrintsTransaction") {
     added(-1000, "chipotle", "10/6/19");

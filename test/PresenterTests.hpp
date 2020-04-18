@@ -10,6 +10,7 @@ void presenterAddsTransactionWithDecimal(testcpplite::TestResult &);
 void presenterAddsTransactionWithOneDecimalDigit(testcpplite::TestResult &);
 void presenterAddsTransactionWithNoDecimalDigits(testcpplite::TestResult &);
 void presenterRemovesTransaction(testcpplite::TestResult &);
+void presenterPrintsTransactionVerified(testcpplite::TestResult &);
 }
 
 #endif

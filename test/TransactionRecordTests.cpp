@@ -31,13 +31,6 @@ class ModelEventListenerStub : public Model::EventListener {
 
 auto none() -> Transactions { return {}; }
 
-void assertEqual(testcpplite::TestResult &result, const Transactions &expected,
-    const Transactions &actual) {
-    assertEqual(result, expected.size(), actual.size());
-    for (size_t i{0}; i < expected.size(); ++i)
-        assertEqual(result, expected.at(i), actual.at(i));
-}
-
 void add(TransactionRecord &record, int amount, std::string label,
     std::string date) {
     record.add(transaction(amount, std::move(label), std::move(date)));

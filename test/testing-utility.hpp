@@ -41,6 +41,13 @@ inline void assertEqual(testcpplite::TestResult &result, const Transaction &expe
     assertEqual(result, expected.date, actual.date);
     assertEqual(result, expected.label, actual.label);
 }
+
+inline void assertEqual(testcpplite::TestResult &result, const Transactions &expected,
+    const Transactions &actual) {
+    assertEqual(result, expected.size(), actual.size());
+    for (size_t i{0}; i < expected.size(); ++i)
+        assertEqual(result, expected.at(i), actual.at(i));
+}
 }
 
 #endif
