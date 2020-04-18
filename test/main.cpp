@@ -69,7 +69,8 @@ int main() {
             {presenterAddsTransactionWithOneDecimalDigit,
                 "presenterAddsTransactionWithOneDecimalDigit"},
             {presenterAddsTransactionWithNoDecimalDigits,
-                "presenterAddsTransactionWithNoDecimalDigits"}},
+                "presenterAddsTransactionWithNoDecimalDigits"},
+            {presenterRemovesTransaction, "presenterRemovesTransaction"}},
         std::cout);
 }
 }

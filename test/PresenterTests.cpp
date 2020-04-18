@@ -166,10 +166,20 @@ void executeAdd(Presenter &presenter, const std::string &s) {
     executeCommand(presenter, Command::add, s);
 }
 
+void executeRemove(Presenter &presenter, const std::string &s) {
+    executeCommand(presenter, Command::remove, s);
+}
+
 void assertTransactionAdded(testcpplite::TestResult &result, ModelStub &model,
     int amount, std::string label, std::string date) {
     assertEqual(result, transaction(amount, std::move(label), std::move(date)),
         model.transactionAdded());
+}
+
+void assertTransactionRemoved(testcpplite::TestResult &result, ModelStub &model,
+    int amount, std::string label, std::string date) {
+    assertEqual(result, transaction(amount, std::move(label), std::move(date)),
+        model.transactionRemoved());
 }
 
 void testPresenter(const std::function<void(Presenter &, ModelStub &)> &f) {
@@ -280,6 +290,16 @@ PRESENTER_TEST("removeTransactionParsesInput") {
     executeRemove("-12.34 hyvee 10/5/19");
     ASSERT_TRANSACTION_REMOVED(-1234, "hyvee", "10/5/19");
 }
+}
+
+void presenterRemovesTransaction(testcpplite::TestResult &result) {
+    testPresenter([&](Presenter &presenter, ModelStub &model) {
+        executeRemove(presenter, "-12.34 hyvee 10/5/19");
+        assertTransactionRemoved(result, model, -1234, "hyvee", "10/5/19");
+    });
+}
+
+namespace {
 
 PRESENTER_TEST("verifiedEventPrintsTransaction") {
     verified(-1000, "chipotle", "10/6/19");
