@@ -63,7 +63,9 @@ int main() {
                 "transactionRecordDoesNotVerifyMatchingAmountWhenRemovingOne"},
             {presenterSubscribesToModelEvents,
                 "presenterSubscribesToModelEvents"},
-            {presenterAddsTransaction, "presenterAddsTransaction"}},
+            {presenterAddsTransaction, "presenterAddsTransaction"},
+            {presenterAddsTransactionWithDecimal,
+                "presenterAddsTransactionWithDecimal"}},
         std::cout);
 }
 }

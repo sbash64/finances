@@ -6,6 +6,7 @@
 namespace finances {
 void presenterSubscribesToModelEvents(testcpplite::TestResult &);
 void presenterAddsTransaction(testcpplite::TestResult &);
+void presenterAddsTransactionWithDecimal(testcpplite::TestResult &);
 }
 
 #endif
