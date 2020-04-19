@@ -2,7 +2,6 @@
 #include "testing-utility.hpp"
 #include <finances/Presenter.hpp>
 #include <testcpplite/testcpplite.hpp>
-#include <catch2/catch.hpp>
 #include <utility>
 #include <functional>
 
@@ -82,76 +81,6 @@ class ViewStub : public View {
   private:
     Transactions shownTransactions_;
     int shownNetIncome_;
-};
-
-class PresenterTests {
-  protected:
-    void execute(const std::string &s) { presenter.execute(s); }
-
-    void setNetIncome(int x) { model.setNetIncome(x); }
-
-    auto transactionAdded() -> Transaction { return model.transactionAdded(); }
-
-    auto transactionRemoved() -> Transaction {
-        return model.transactionRemoved();
-    }
-
-    void setAllTransactions(Transactions t) {
-        model.setTransactions(std::move(t));
-    }
-
-    void setVerifiedTransactions(Transactions t) {
-        model.setVerifiedTransactions(std::move(t));
-    }
-
-    void setUnverifiedTransactions(Transactions t) {
-        model.setUnverifiedTransactions(std::move(t));
-    }
-
-    auto printedTransactions() -> Transactions {
-        return view.shownTransactions();
-    }
-
-    auto printedNetIncome() -> int { return view.shownNetIncome(); }
-
-    auto amountVerified() -> int { return model.amountVerified(); }
-
-    void executeCommand(Command c, const std::string &s = {}) {
-        execute(name(c) + std::string(s.empty() ? 0 : 1, ' ') + s);
-    }
-
-    void executeAdd(const std::string &s) { executeCommand(Command::add, s); }
-
-    void executeRemove(const std::string &s) {
-        executeCommand(Command::remove, s);
-    }
-
-    void executeVerify(const std::string &s) {
-        executeCommand(Command::verify, s);
-    }
-
-    void executeNetIncome() { executeCommand(Command::netIncome); }
-
-    void executePrint() { executeCommand(Command::print); }
-
-    void executePrintVerified() { executeCommand(Command::printVerified); }
-
-    void executePrintUnverified() { executeCommand(Command::printUnverified); }
-
-    void verified(int a, std::string b, std::string c) {
-        model.verified(transaction(a, std::move(b), std::move(c)));
-    }
-
-    void added(int a, std::string b, std::string c) {
-        model.added(transaction(a, std::move(b), std::move(c)));
-    }
-
-    auto subscribedToModelEvents() -> bool { return model.subscribed(); }
-
-  private:
-    ModelStub model;
-    ViewStub view;
-    Presenter presenter{model, view};
 };
 
 void setAllTransactions(ModelStub &model, Transactions t) {
@@ -258,46 +187,12 @@ void testPresenter(
     Presenter presenter{model, view};
     f(presenter, model, view);
 }
-
-#define ASSERT_TRANSACTION_ADDED(a, b, c)                                      \
-    ASSERT_EQUAL(transaction(a, b, c), transactionAdded())
-
-#define ASSERT_TRANSACTION_REMOVED(a, b, c)                                    \
-    ASSERT_EQUAL(transaction(a, b, c), transactionRemoved())
-
-#define ASSERT_PRINTED_TRANSACTIONS(a) ASSERT_EQUAL(a, printedTransactions())
-
-#define ASSERT_BOTH_TRANSACTIONS_PRINTED(a, b, c, d, e, f)                     \
-    ASSERT_PRINTED_TRANSACTIONS(twoTransactions(a, b, c, d, e, f))
-
-#define ASSERT_TRANSACTION_PRINTED(a, b, c)                                    \
-    ASSERT_PRINTED_TRANSACTIONS(oneTransaction(a, b, c))
-
-#define ASSERT_NET_INCOME_PRINTED(a) ASSERT_EQUAL(a, printedNetIncome())
-
-#define ASSERT_AMOUNT_VERIFIED(a) ASSERT_EQUAL(a, amountVerified())
-
-#define ASSERT_SUBSCRIBED_TO_MODEL_EVENTS()                                    \
-    ASSERT_TRUE(subscribedToModelEvents())
-
-#define PRESENTER_TEST(a) TEST_CASE_METHOD(PresenterTests, a)
-
-PRESENTER_TEST("subscribesToModelEvents") {
-    ASSERT_SUBSCRIBED_TO_MODEL_EVENTS();
-}
 }
 
 void presenterSubscribesToModelEvents(testcpplite::TestResult &result) {
     testPresenter([&](Presenter &, ModelStub &model, ViewStub &) {
         assertTrue(result, model.subscribed());
     });
-}
-
-namespace {
-PRESENTER_TEST("addTransactionParsesInput") {
-    executeAdd("-50 hyvee 10/5/19");
-    ASSERT_TRANSACTION_ADDED(-5000, "hyvee", "10/5/19");
-}
 }
 
 void presenterAddsTransaction(testcpplite::TestResult &result) {
@@ -307,27 +202,11 @@ void presenterAddsTransaction(testcpplite::TestResult &result) {
     });
 }
 
-namespace {
-
-PRESENTER_TEST("addTransactionParsesDecimal") {
-    executeAdd("-9.47 chipotle 10/6/19");
-    ASSERT_TRANSACTION_ADDED(-947, "chipotle", "10/6/19");
-}
-}
-
 void presenterAddsTransactionWithDecimal(testcpplite::TestResult &result) {
     testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
         executeAdd(presenter, "-9.47 chipotle 10/6/19");
         assertTransactionAdded(result, model, -947, "chipotle", "10/6/19");
     });
-}
-
-namespace {
-
-PRESENTER_TEST("addTransactionParsesOneDecimalDigit") {
-    executeAdd("-9.4 chipotle 10/6/19");
-    ASSERT_TRANSACTION_ADDED(-940, "chipotle", "10/6/19");
-}
 }
 
 void presenterAddsTransactionWithOneDecimalDigit(
@@ -338,28 +217,12 @@ void presenterAddsTransactionWithOneDecimalDigit(
     });
 }
 
-namespace {
-
-PRESENTER_TEST("addTransactionParsesNoDecimalDigits") {
-    executeAdd("-9. chipotle 10/6/19");
-    ASSERT_TRANSACTION_ADDED(-900, "chipotle", "10/6/19");
-}
-}
-
 void presenterAddsTransactionWithNoDecimalDigits(
     testcpplite::TestResult &result) {
     testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
         executeAdd(presenter, "-9. chipotle 10/6/19");
         assertTransactionAdded(result, model, -900, "chipotle", "10/6/19");
     });
-}
-
-namespace {
-
-PRESENTER_TEST("removeTransactionParsesInput") {
-    executeRemove("-12.34 hyvee 10/5/19");
-    ASSERT_TRANSACTION_REMOVED(-1234, "hyvee", "10/5/19");
-}
 }
 
 void presenterRemovesTransaction(testcpplite::TestResult &result) {
@@ -369,14 +232,6 @@ void presenterRemovesTransaction(testcpplite::TestResult &result) {
     });
 }
 
-namespace {
-
-PRESENTER_TEST("verifiedEventPrintsTransaction") {
-    verified(-1000, "chipotle", "10/6/19");
-    ASSERT_TRANSACTION_PRINTED(-1000, "chipotle", "10/6/19");
-}
-}
-
 void presenterPrintsTransactionVerified(testcpplite::TestResult &result) {
     testPresenter([&](Presenter &, ModelStub &model, ViewStub &view) {
         verified(model, -1000, "chipotle", "10/6/19");
@@ -384,30 +239,11 @@ void presenterPrintsTransactionVerified(testcpplite::TestResult &result) {
     });
 }
 
-namespace {
-
-PRESENTER_TEST("addedEventPrintsTransaction") {
-    added(-1000, "chipotle", "10/6/19");
-    ASSERT_TRANSACTION_PRINTED(-1000, "chipotle", "10/6/19");
-}
-}
-
 void presenterPrintsTransactionAdded(testcpplite::TestResult &result) {
     testPresenter([&](Presenter &, ModelStub &model, ViewStub &view) {
         added(model, -1000, "chipotle", "10/6/19");
         assertTransactionPrinted(result, view, -1000, "chipotle", "10/6/19");
     });
-}
-
-namespace {
-
-PRESENTER_TEST("printPrintsAllTransactions") {
-    setAllTransactions(twoTransactions(
-        -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
-    executePrint();
-    ASSERT_BOTH_TRANSACTIONS_PRINTED(
-        -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19");
-}
 }
 
 void presenterPrintsAllTransaction(testcpplite::TestResult &result) {
@@ -421,17 +257,6 @@ void presenterPrintsAllTransaction(testcpplite::TestResult &result) {
     });
 }
 
-namespace {
-
-PRESENTER_TEST("printVerifiedPrintsVerifiedTransactions") {
-    setVerifiedTransactions(twoTransactions(
-        -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
-    executePrintVerified();
-    ASSERT_BOTH_TRANSACTIONS_PRINTED(
-        -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19");
-}
-}
-
 void presenterPrintsAllVerifiedTransaction(testcpplite::TestResult &result) {
     testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &view) {
         setVerifiedTransactions(model,
@@ -441,17 +266,6 @@ void presenterPrintsAllVerifiedTransaction(testcpplite::TestResult &result) {
         assertBothTransactionsPrinted(result, view, -1000, "chipotle",
             "10/6/19", -5000, "hyvee", "10/4/19");
     });
-}
-
-namespace {
-
-PRESENTER_TEST("printUnverifiedPrintsUnverifiedTransactions") {
-    setUnverifiedTransactions(twoTransactions(
-        -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
-    executePrintUnverified();
-    ASSERT_BOTH_TRANSACTIONS_PRINTED(
-        -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19");
-}
 }
 
 void presenterPrintsUnverifiedTransaction(testcpplite::TestResult &result) {
@@ -465,15 +279,6 @@ void presenterPrintsUnverifiedTransaction(testcpplite::TestResult &result) {
     });
 }
 
-namespace {
-
-PRESENTER_TEST("netIncomePrintsNetIncome") {
-    setNetIncome(5000);
-    executeNetIncome();
-    ASSERT_NET_INCOME_PRINTED(5000);
-}
-}
-
 void presenterPrintsNetIncome(testcpplite::TestResult &result) {
     testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &view) {
         setNetIncome(model, 5000);
@@ -482,46 +287,22 @@ void presenterPrintsNetIncome(testcpplite::TestResult &result) {
     });
 }
 
-namespace {
-
-PRESENTER_TEST("verifyParsesInput") {
-    executeVerify("-12.34");
-    ASSERT_AMOUNT_VERIFIED(-1234);
-}
-}
-
 void presenterVerifiesAmount(testcpplite::TestResult &result) {
-    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &view) {
+    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
         executeVerify(presenter, "-12.34");
         assertAmountVerified(result, model, -1234);
     });
 }
 
-namespace {
-
-PRESENTER_TEST("unrecognizedCommandDoesNotAbort") { execute("jellyfish"); }
-}
-
-void presenterDoesNotAbortOnUnrecognizedCommand(testcpplite::TestResult &result) {
-    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &view) {
+void presenterDoesNotAbortOnUnrecognizedCommand(testcpplite::TestResult &) {
+    testPresenter([&](Presenter &presenter, ModelStub &, ViewStub &) {
         execute(presenter, "jellyfish");
     });
 }
 
-namespace {
-
-PRESENTER_TEST("partiallyCorrectCommandDoesNotAbort") { executeAdd("oops"); }
-}
-
-void presenterDoesNotAbortOnPartiallyCorrectCommand(testcpplite::TestResult &result) {
-    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &view) {
+void presenterDoesNotAbortOnPartiallyCorrectCommand(testcpplite::TestResult &) {
+    testPresenter([&](Presenter &presenter, ModelStub &, ViewStub &) {
         executeAdd(presenter, "oops");
     });
-}
-
-namespace {
-
-// clang-format on
-
 }
 }
