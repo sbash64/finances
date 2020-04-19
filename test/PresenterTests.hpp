@@ -13,6 +13,7 @@ void presenterRemovesTransaction(testcpplite::TestResult &);
 void presenterPrintsTransactionVerified(testcpplite::TestResult &);
 void presenterPrintsTransactionAdded(testcpplite::TestResult &);
 void presenterPrintsAllTransaction(testcpplite::TestResult &);
+void presenterPrintsAllVerifiedTransaction(testcpplite::TestResult &);
 }
 
 #endif

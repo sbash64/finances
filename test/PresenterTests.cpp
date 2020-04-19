@@ -158,6 +158,10 @@ void setAllTransactions(ModelStub &model, Transactions t) {
     model.setTransactions(std::move(t));
 }
 
+void setVerifiedTransactions(ModelStub &model, Transactions t) {
+    model.setVerifiedTransactions(std::move(t));
+}
+
 void verified(ModelStub &model, int a, std::string b, std::string c) {
     model.verified(transaction(a, std::move(b), std::move(c)));
 }
@@ -185,6 +189,10 @@ void executeRemove(Presenter &presenter, const std::string &s) {
 
 void executePrint(Presenter &presenter) {
     executeCommand(presenter, Command::print);
+}
+
+void executePrintVerified(Presenter &presenter) {
+    executeCommand(presenter, Command::printVerified);
 }
 
 void assertTransactionAdded(testcpplite::TestResult &result, ModelStub &model,
@@ -394,6 +402,20 @@ PRESENTER_TEST("printVerifiedPrintsVerifiedTransactions") {
     ASSERT_BOTH_TRANSACTIONS_PRINTED(
         -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19");
 }
+}
+
+void presenterPrintsAllVerifiedTransaction(testcpplite::TestResult &result) {
+    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &view) {
+        setVerifiedTransactions(model,
+            twoTransactions(
+                -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
+        executePrintVerified(presenter);
+        assertBothTransactionsPrinted(result, view, -1000, "chipotle",
+            "10/6/19", -5000, "hyvee", "10/4/19");
+    });
+}
+
+namespace {
 
 PRESENTER_TEST("printUnverifiedPrintsUnverifiedTransactions") {
     setUnverifiedTransactions(twoTransactions(

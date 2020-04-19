@@ -75,7 +75,9 @@ int main() {
                 "presenterPrintsTransactionVerified"},
             {presenterPrintsTransactionAdded,
                 "presenterPrintsTransactionAdded"},
-            {presenterPrintsAllTransaction, "presenterPrintsAllTransaction"}},
+            {presenterPrintsAllTransaction, "presenterPrintsAllTransaction"},
+            {presenterPrintsAllVerifiedTransaction,
+                "presenterPrintsAllVerifiedTransaction"}},
         std::cout);
 }
 }
