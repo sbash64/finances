@@ -1,6 +1,8 @@
 #include "testing-utility.hpp"
 #include <finances/ItemizedFormatter.hpp>
+#include <testcpplite/testcpplite.hpp>
 #include <catch2/catch.hpp>
+#include <functional>
 
 namespace finances {
 namespace {
@@ -18,6 +20,16 @@ class ItemizedFormatterTests {
     ItemizedFormatter formatter;
 };
 
+auto format(ItemizedFormatter &formatter, const Transactions &t)
+    -> std::string {
+    return formatter.format(t);
+}
+
+void testItemizedFormatter(const std::function<void(ItemizedFormatter &)> &f) {
+    ItemizedFormatter formatter;
+    f(formatter);
+}
+
 #define ASSERT_FORMAT_ONE_TRANSACTION(a, b, c, d)                              \
     ASSERT_EQUAL(d, format(oneTransaction(a, b, c)))
 
@@ -28,24 +40,26 @@ class ItemizedFormatterTests {
 
 #define ITEMIZED_FORMATTER_TEST(a) TEST_CASE_METHOD(ItemizedFormatterTests, a)
 
-// clang-format off
-
 ITEMIZED_FORMATTER_TEST("formatOneTransaction") {
     ASSERT_FORMAT_ONE_TRANSACTION(
-        -5000, "hyvee", "10/5/19",
-        "-50.00 hyvee 10/5/19"
-    );
+        -5000, "hyvee", "10/5/19", "-50.00 hyvee 10/5/19");
 }
-
+}
+void itemizedFormatterFormatsOneTransaction(testcpplite::TestResult &result) {
+    testItemizedFormatter([&](ItemizedFormatter &formatter) {
+        assertEqual(result, "-50.00 hyvee 10/5/19",
+            format(formatter, oneTransaction(-5000, "hyvee", "10/5/19")));
+    });
+}
+namespace {
 ITEMIZED_FORMATTER_TEST("formatTwoTransactions") {
-    ASSERT_FORMAT_TWO_TRANSACTIONS(
-        -5000, "hyvee", "10/5/19",
-        -979, "chipotle", "10/4/19",
+    ASSERT_FORMAT_TWO_TRANSACTIONS(-5000, "hyvee", "10/5/19", -979, "chipotle",
+        "10/4/19",
         "-50.00 hyvee 10/5/19\n"
-        "-9.79 chipotle 10/4/19"
-    );
+        "-9.79 chipotle 10/4/19");
 }
-
+}
+namespace {
 ITEMIZED_FORMATTER_TEST("formatNetIncome") {
     ASSERT_FORMAT_NET_INCOME(-979, "Net Income: -9.79");
 }
