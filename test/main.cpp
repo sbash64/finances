@@ -88,7 +88,9 @@ int main() {
             {presenterDoesNotAbortOnPartiallyCorrectCommand,
                 "presenterDoesNotAbortOnPartiallyCorrectCommand"},
             {itemizedFormatterFormatsOneTransaction,
-                "itemizedFormatterFormatsOneTransaction"}},
+                "itemizedFormatterFormatsOneTransaction"},
+            {itemizedFormatterFormatsTwoTransactions,
+                "itemizedFormatterFormatsTwoTransactions"}},
         std::cout);
 }
 }

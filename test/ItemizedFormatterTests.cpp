@@ -59,6 +59,17 @@ ITEMIZED_FORMATTER_TEST("formatTwoTransactions") {
         "-9.79 chipotle 10/4/19");
 }
 }
+
+void itemizedFormatterFormatsTwoTransactions(testcpplite::TestResult &result) {
+    testItemizedFormatter([&](ItemizedFormatter &formatter) {
+        assertEqual(result,
+            "-50.00 hyvee 10/5/19\n"
+            "-9.79 chipotle 10/4/19",
+            format(formatter,
+                twoTransactions(
+                    -5000, "hyvee", "10/5/19", -979, "chipotle", "10/4/19")));
+    });
+}
 namespace {
 ITEMIZED_FORMATTER_TEST("formatNetIncome") {
     ASSERT_FORMAT_NET_INCOME(-979, "Net Income: -9.79");
