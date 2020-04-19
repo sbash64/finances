@@ -500,6 +500,15 @@ void presenterVerifiesAmount(testcpplite::TestResult &result) {
 namespace {
 
 PRESENTER_TEST("unrecognizedCommandDoesNotAbort") { execute("jellyfish"); }
+}
+
+void presenterDoesNotAbortOnUnrecognizedCommand(testcpplite::TestResult &result) {
+    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &view) {
+        execute(presenter, "jellyfish");
+    });
+}
+
+namespace {
 
 PRESENTER_TEST("partiallyCorrectCommandDoesNotAbort") { executeAdd("oops"); }
 

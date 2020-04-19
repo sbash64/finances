@@ -81,7 +81,9 @@ int main() {
             {presenterPrintsUnverifiedTransaction,
                 "presenterPrintsUnverifiedTransaction"},
             {presenterPrintsNetIncome, "presenterPrintsNetIncome"},
-            {presenterVerifiesAmount, "presenterVerifiesAmount"}},
+            {presenterVerifiesAmount, "presenterVerifiesAmount"},
+            {presenterDoesNotAbortOnUnrecognizedCommand,
+                "presenterDoesNotAbortOnUnrecognizedCommand"}},
         std::cout);
 }
 }

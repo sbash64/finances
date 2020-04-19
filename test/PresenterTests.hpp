@@ -17,6 +17,7 @@ void presenterPrintsAllVerifiedTransaction(testcpplite::TestResult &);
 void presenterPrintsUnverifiedTransaction(testcpplite::TestResult &);
 void presenterPrintsNetIncome(testcpplite::TestResult &);
 void presenterVerifiesAmount(testcpplite::TestResult &);
+void presenterDoesNotAbortOnUnrecognizedCommand(testcpplite::TestResult &);
 }
 
 #endif
