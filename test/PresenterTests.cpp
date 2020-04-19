@@ -511,6 +511,15 @@ void presenterDoesNotAbortOnUnrecognizedCommand(testcpplite::TestResult &result)
 namespace {
 
 PRESENTER_TEST("partiallyCorrectCommandDoesNotAbort") { executeAdd("oops"); }
+}
+
+void presenterDoesNotAbortOnPartiallyCorrectCommand(testcpplite::TestResult &result) {
+    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &view) {
+        executeAdd(presenter, "oops");
+    });
+}
+
+namespace {
 
 // clang-format on
 

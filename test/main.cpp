@@ -83,7 +83,9 @@ int main() {
             {presenterPrintsNetIncome, "presenterPrintsNetIncome"},
             {presenterVerifiesAmount, "presenterVerifiesAmount"},
             {presenterDoesNotAbortOnUnrecognizedCommand,
-                "presenterDoesNotAbortOnUnrecognizedCommand"}},
+                "presenterDoesNotAbortOnUnrecognizedCommand"},
+            {presenterDoesNotAbortOnPartiallyCorrectCommand,
+                "presenterDoesNotAbortOnPartiallyCorrectCommand"}},
         std::cout);
 }
 }
