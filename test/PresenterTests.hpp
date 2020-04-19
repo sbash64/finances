@@ -14,6 +14,7 @@ void presenterPrintsTransactionVerified(testcpplite::TestResult &);
 void presenterPrintsTransactionAdded(testcpplite::TestResult &);
 void presenterPrintsAllTransaction(testcpplite::TestResult &);
 void presenterPrintsAllVerifiedTransaction(testcpplite::TestResult &);
+void presenterPrintsUnverifiedTransaction(testcpplite::TestResult &);
 }
 
 #endif
