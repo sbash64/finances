@@ -15,6 +15,7 @@ void presenterPrintsTransactionAdded(testcpplite::TestResult &);
 void presenterPrintsAllTransaction(testcpplite::TestResult &);
 void presenterPrintsAllVerifiedTransaction(testcpplite::TestResult &);
 void presenterPrintsUnverifiedTransaction(testcpplite::TestResult &);
+void presenterPrintsNetIncome(testcpplite::TestResult &);
 }
 
 #endif

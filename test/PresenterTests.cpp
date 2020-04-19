@@ -174,6 +174,10 @@ void added(ModelStub &model, int a, std::string b, std::string c) {
     model.added(transaction(a, std::move(b), std::move(c)));
 }
 
+void setNetIncome(ModelStub &model, int x) {
+    model.setNetIncome(x);
+}
+
 void execute(Presenter &presenter, const std::string &s) {
     presenter.execute(s);
 }
@@ -203,6 +207,10 @@ void executePrintUnverified(Presenter &presenter) {
     executeCommand(presenter, Command::printUnverified);
 }
 
+void executeNetIncome(Presenter &presenter) {
+    executeCommand(presenter, Command::netIncome);
+}
+
 void assertTransactionAdded(testcpplite::TestResult &result, ModelStub &model,
     int amount, std::string label, std::string date) {
     assertEqual(result, transaction(amount, std::move(label), std::move(date)),
@@ -229,6 +237,10 @@ void assertBothTransactionsPrinted(testcpplite::TestResult &result,
         twoTransactions(amount1, std::move(label1), std::move(date1), amount2,
             std::move(label2), std::move(date2)),
         view.shownTransactions());
+}
+
+void assertNetIncomePrinted(testcpplite::TestResult &result, ViewStub &view, int x) {
+    assertEqual(result, x, view.shownNetIncome());
 }
 
 void testPresenter(
@@ -452,6 +464,17 @@ PRESENTER_TEST("netIncomePrintsNetIncome") {
     executeNetIncome();
     ASSERT_NET_INCOME_PRINTED(5000);
 }
+}
+
+void presenterPrintsNetIncome(testcpplite::TestResult &result) {
+    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &view) {
+        setNetIncome(model, 5000);
+        executeNetIncome(presenter);
+        assertNetIncomePrinted(result, view, 5000);
+    });
+}
+
+namespace {
 
 PRESENTER_TEST("verifyParsesInput") {
     executeVerify("-12.34");
