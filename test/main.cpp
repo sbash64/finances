@@ -90,7 +90,9 @@ int main() {
             {itemizedFormatterFormatsOneTransaction,
                 "itemizedFormatterFormatsOneTransaction"},
             {itemizedFormatterFormatsTwoTransactions,
-                "itemizedFormatterFormatsTwoTransactions"}},
+                "itemizedFormatterFormatsTwoTransactions"},
+            {itemizedFormatterFormatsNetIncome,
+                "itemizedFormatterFormatsNetIncome"}},
         std::cout);
 }
 }

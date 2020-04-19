@@ -74,8 +74,11 @@ namespace {
 ITEMIZED_FORMATTER_TEST("formatNetIncome") {
     ASSERT_FORMAT_NET_INCOME(-979, "Net Income: -9.79");
 }
-
-// clang-format on
-
+}
+void itemizedFormatterFormatsNetIncome(testcpplite::TestResult &result) {
+    testItemizedFormatter([&](ItemizedFormatter &formatter) {
+        assertEqual(
+            result, "Net Income: -9.79", formatter.formatNetIncome(-979));
+    });
 }
 }

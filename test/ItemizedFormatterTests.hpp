@@ -6,6 +6,7 @@
 namespace finances {
 void itemizedFormatterFormatsOneTransaction(testcpplite::TestResult &);
 void itemizedFormatterFormatsTwoTransactions(testcpplite::TestResult &);
+void itemizedFormatterFormatsNetIncome(testcpplite::TestResult &);
 }
 
 #endif
