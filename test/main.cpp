@@ -80,7 +80,8 @@ int main() {
                 "presenterPrintsAllVerifiedTransaction"},
             {presenterPrintsUnverifiedTransaction,
                 "presenterPrintsUnverifiedTransaction"},
-            {presenterPrintsNetIncome, "presenterPrintsNetIncome"}},
+            {presenterPrintsNetIncome, "presenterPrintsNetIncome"},
+            {presenterVerifiesAmount, "presenterVerifiesAmount"}},
         std::cout);
 }
 }
