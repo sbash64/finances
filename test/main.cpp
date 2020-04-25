@@ -1,6 +1,7 @@
 #include "TransactionRecordTests.hpp"
 #include "PresenterTests.hpp"
 #include "ItemizedFormatterTests.hpp"
+#include "FormattedWriterTests.hpp"
 #include <testcpplite/testcpplite.hpp>
 #define CATCH_CONFIG_RUNNER
 #include <catch2/catch.hpp>
@@ -92,7 +93,9 @@ int main() {
             {itemizedFormatterFormatsTwoTransactions,
                 "itemizedFormatterFormatsTwoTransactions"},
             {itemizedFormatterFormatsNetIncome,
-                "itemizedFormatterFormatsNetIncome"}},
+                "itemizedFormatterFormatsNetIncome"},
+            {formattedWriterFormatsOneTransaction,
+                "formattedWriterFormatsOneTransaction"}},
         std::cout);
 }
 }

@@ -1,5 +1,7 @@
+#include "FormattedWriterTests.hpp"
 #include "testing-utility.hpp"
 #include <finances/FormattedWriter.hpp>
+#include <testcpplite/testcpplite.hpp>
 #include <catch2/catch.hpp>
 
 namespace finances {
@@ -80,6 +82,36 @@ class FormattedWriterTests {
     FormattedWriter printer{formatter, writer};
 };
 
+void showTransactions(FormattedWriter &printer, const Transactions &t = {}) {
+    printer.show(t);
+}
+
+void showOneTransaction(
+    FormattedWriter &printer, int amount, std::string label, std::string date) {
+    showTransactions(
+        printer, oneTransaction(amount, std::move(label), std::move(date)));
+}
+
+auto transactionsToFormat(FormatterStub &formatter) -> Transactions {
+    return formatter.transactionsToFormat();
+}
+
+void assertOneTransactionToFormat(testcpplite::TestResult &result,
+    FormatterStub &formatter, int amount, std::string label, std::string date) {
+    assertEqual(result,
+        oneTransaction(amount, std::move(label), std::move(date)),
+        transactionsToFormat(formatter));
+}
+
+void testFormattedWriter(
+    const std::function<void(FormattedWriter &, FormatterStub &, WriterStub &)>
+        &f) {
+    FormatterStub formatter;
+    WriterStub writer;
+    FormattedWriter printer{formatter, writer};
+    f(printer, formatter, writer);
+}
+
 #define ASSERT_ONE_TRANSACTION_TO_FORMAT(a, b, c)                              \
     ASSERT_EQUAL(oneTransaction(a, b, c), transactionsToFormat())
 
@@ -91,11 +123,25 @@ class FormattedWriterTests {
 #define ASSERT_NET_INCOME_TO_FORMAT(a) ASSERT_EQUAL(a, netIncomeToFormat())
 
 #define FORMATTED_WRITER_TEST(a) TEST_CASE_METHOD(FormattedWriterTests, a)
+}
 
+namespace {
 FORMATTED_WRITER_TEST("showTransactionsFormatsOne") {
     showOneTransaction(-1000, "chipotle", "10/6/19");
     ASSERT_ONE_TRANSACTION_TO_FORMAT(-1000, "chipotle", "10/6/19");
 }
+}
+
+void formattedWriterFormatsOneTransaction(testcpplite::TestResult &result) {
+    testFormattedWriter(
+        [&](FormattedWriter &printer, FormatterStub &formatter, WriterStub &) {
+            showOneTransaction(printer, -1000, "chipotle", "10/6/19");
+            assertOneTransactionToFormat(
+                result, formatter, -1000, "chipotle", "10/6/19");
+        });
+}
+
+namespace {
 
 FORMATTED_WRITER_TEST("showTransactionsWritesFormatted") {
     setFormatted("hello");
