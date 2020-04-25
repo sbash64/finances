@@ -2,7 +2,6 @@
 #include "testing-utility.hpp"
 #include <finances/FormattedWriter.hpp>
 #include <testcpplite/testcpplite.hpp>
-#include <catch2/catch.hpp>
 
 namespace finances {
 namespace {
@@ -45,41 +44,6 @@ class WriterStub : public Writer {
 
   private:
     std::string written_;
-};
-
-class FormattedWriterTests {
-  protected:
-    auto transactionsToFormat() -> Transactions {
-        return formatter.transactionsToFormat();
-    }
-
-    auto netIncomeToFormat() -> int { return formatter.netIncomeToFormat(); }
-
-    void showTransactions(const Transactions &t = {}) { printer.show(t); }
-
-    void showOneTransaction(int amount, std::string label, std::string date) {
-        showTransactions(
-            oneTransaction(amount, std::move(label), std::move(date)));
-    }
-
-    void setFormatted(std::string s) {
-        formatter.setFormattedTransactions(std::move(s));
-    }
-
-    void setFormattedNetIncome(std::string s) {
-        formatter.setFormattedNetIncome(std::move(s));
-    }
-
-    auto written() -> std::string { return writer.written(); }
-
-    void showNetIncome(int x = {}) { printer.showNetIncome(x); }
-
-    void show(const std::string &s) { printer.show(s); }
-
-  private:
-    FormatterStub formatter;
-    WriterStub writer;
-    FormattedWriter printer{formatter, writer};
 };
 
 void showTransactions(FormattedWriter &printer, const Transactions &t = {}) {
@@ -135,25 +99,6 @@ void testFormattedWriter(
     FormattedWriter printer{formatter, writer};
     f(printer, formatter, writer);
 }
-
-#define ASSERT_ONE_TRANSACTION_TO_FORMAT(a, b, c)                              \
-    ASSERT_EQUAL(oneTransaction(a, b, c), transactionsToFormat())
-
-#define ASSERT_WRITTEN(a) ASSERT_EQUAL(a, written())
-
-#define ASSERT_WRITTEN_FOR_SHOWING(a)                                          \
-    ASSERT_WRITTEN(std::string{"\n"} + a + "\n\n")
-
-#define ASSERT_NET_INCOME_TO_FORMAT(a) ASSERT_EQUAL(a, netIncomeToFormat())
-
-#define FORMATTED_WRITER_TEST(a) TEST_CASE_METHOD(FormattedWriterTests, a)
-}
-
-namespace {
-FORMATTED_WRITER_TEST("showTransactionsFormatsOne") {
-    showOneTransaction(-1000, "chipotle", "10/6/19");
-    ASSERT_ONE_TRANSACTION_TO_FORMAT(-1000, "chipotle", "10/6/19");
-}
 }
 
 void formattedWriterFormatsOneTransaction(testcpplite::TestResult &result) {
@@ -163,15 +108,6 @@ void formattedWriterFormatsOneTransaction(testcpplite::TestResult &result) {
             assertOneTransactionToFormat(
                 result, formatter, -1000, "chipotle", "10/6/19");
         });
-}
-
-namespace {
-
-FORMATTED_WRITER_TEST("showTransactionsWritesFormatted") {
-    setFormatted("hello");
-    showTransactions();
-    ASSERT_WRITTEN_FOR_SHOWING("hello");
-}
 }
 
 void formattedWriterWritesFormattedTransactions(
@@ -184,29 +120,12 @@ void formattedWriterWritesFormattedTransactions(
     });
 }
 
-namespace {
-
-FORMATTED_WRITER_TEST("showNetIncomeFormatsNet") {
-    showNetIncome(10);
-    ASSERT_NET_INCOME_TO_FORMAT(10);
-}
-}
-
 void formattedWriterFormatsNetIncome(testcpplite::TestResult &result) {
     testFormattedWriter([&](FormattedWriter &printer, FormatterStub &formatter,
                             WriterStub &writer) {
         showNetIncome(printer, 10);
         assertNetIncomeToFormat(result, formatter, 10);
     });
-}
-
-namespace {
-
-FORMATTED_WRITER_TEST("showNetIncomeWritesNetIncome") {
-    setFormattedNetIncome("hello");
-    showNetIncome();
-    ASSERT_WRITTEN_FOR_SHOWING("hello");
-}
 }
 
 void formattedWriterWritesNetIncome(testcpplite::TestResult &result) {
@@ -216,14 +135,6 @@ void formattedWriterWritesNetIncome(testcpplite::TestResult &result) {
         showNetIncome(printer);
         assertWrittenForShowing(result, writer, "hello");
     });
-}
-
-namespace {
-
-FORMATTED_WRITER_TEST("showMessage") {
-    show("hello");
-    ASSERT_WRITTEN_FOR_SHOWING("hello");
-}
 }
 
 void formattedWriterShowsMessage(testcpplite::TestResult &result) {

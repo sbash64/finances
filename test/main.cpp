@@ -3,8 +3,6 @@
 #include "ItemizedFormatterTests.hpp"
 #include "FormattedWriterTests.hpp"
 #include <testcpplite/testcpplite.hpp>
-#define CATCH_CONFIG_RUNNER
-#include <catch2/catch.hpp>
 #include <iostream>
 
 namespace finances {
@@ -106,7 +104,4 @@ int main() {
 }
 }
 
-int main(int argc, char *argv[]) {
-    finances::main();
-    return Catch::Session().run(argc, argv);
-}
+int main() { return finances::main(); }
