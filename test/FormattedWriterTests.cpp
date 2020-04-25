@@ -112,6 +112,15 @@ void setFormattedTransactions(FormatterStub &formatter, std::string s) {
     formatter.setFormattedTransactions(std::move(s));
 }
 
+void showNetIncome(FormattedWriter &printer, int x) {
+    printer.showNetIncome(x);
+}
+
+void assertNetIncomeToFormat(
+    testcpplite::TestResult &result, FormatterStub &formatter, int x) {
+    assertEqual(result, x, formatter.netIncomeToFormat());
+}
+
 void testFormattedWriter(
     const std::function<void(FormattedWriter &, FormatterStub &, WriterStub &)>
         &f) {
@@ -175,6 +184,17 @@ FORMATTED_WRITER_TEST("showNetIncomeFormatsNet") {
     showNetIncome(10);
     ASSERT_NET_INCOME_TO_FORMAT(10);
 }
+}
+
+void formattedWriterFormatsNetIncome(testcpplite::TestResult &result) {
+    testFormattedWriter([&](FormattedWriter &printer, FormatterStub &formatter,
+                            WriterStub &writer) {
+        showNetIncome(printer, 10);
+        assertNetIncomeToFormat(result, formatter, 10);
+    });
+}
+
+namespace {
 
 FORMATTED_WRITER_TEST("showNetIncomeWritesNetIncome") {
     setFormattedNetIncome("hello");
