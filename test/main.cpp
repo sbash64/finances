@@ -99,7 +99,8 @@ int main() {
             {formattedWriterWritesFormattedTransactions,
                 "formattedWriterWritesFormattedTransactions"},
             {formattedWriterFormatsNetIncome,
-                "formattedWriterFormatsNetIncome"}},
+                "formattedWriterFormatsNetIncome"},
+            {formattedWriterWritesNetIncome, "formattedWriterWritesNetIncome"}},
         std::cout);
 }
 }

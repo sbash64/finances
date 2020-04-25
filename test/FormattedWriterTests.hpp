@@ -7,6 +7,7 @@ namespace finances {
 void formattedWriterFormatsOneTransaction(testcpplite::TestResult &);
 void formattedWriterWritesFormattedTransactions(testcpplite::TestResult &);
 void formattedWriterFormatsNetIncome(testcpplite::TestResult &);
+void formattedWriterWritesNetIncome(testcpplite::TestResult &);
 }
 
 #endif
