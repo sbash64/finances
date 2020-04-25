@@ -59,11 +59,6 @@ void showNetIncome(FormattedWriter &printer, int x = {}) {
     printer.showNetIncome(x);
 }
 
-void assertNetIncomeToFormat(
-    testcpplite::TestResult &result, FormatterStub &formatter, int x) {
-    assertEqual(result, x, formatter.netIncomeToFormat());
-}
-
 void show(FormattedWriter &printer, const std::string &s) { printer.show(s); }
 
 void testFormattedWriter(
@@ -99,7 +94,7 @@ void formattedWriterFormatsNetIncome(testcpplite::TestResult &result) {
     testFormattedWriter(
         [&](FormattedWriter &printer, FormatterStub &formatter, WriterStub &) {
             showNetIncome(printer, 10);
-            assertNetIncomeToFormat(result, formatter, 10);
+            assertEqual(result, 10, formatter.netIncomeToFormat());
         });
 }
 
