@@ -50,13 +50,6 @@ void showTransactions(FormattedWriter &printer, const Transactions &t = {}) {
     printer.show(t);
 }
 
-void assertOneTransactionToFormat(testcpplite::TestResult &result,
-    FormatterStub &formatter, int amount, std::string label, std::string date) {
-    assertEqual(result,
-        oneTransaction(amount, std::move(label), std::move(date)),
-        formatter.transactionsToFormat());
-}
-
 void assertWrittenForShowing(
     testcpplite::TestResult &result, WriterStub &writer, const std::string &s) {
     assertEqual(result, '\n' + s + "\n\n", writer.written());
@@ -95,8 +88,8 @@ void formattedWriterFormatsOneTransaction(testcpplite::TestResult &result) {
     testFormattedWriter([&](FormattedWriter &printer, FormatterStub &formatter,
                             WriterStub &) {
         showTransactions(printer, oneTransaction(-1000, "chipotle", "10/6/19"));
-        assertOneTransactionToFormat(
-            result, formatter, -1000, "chipotle", "10/6/19");
+        assertEqual(result, oneTransaction(-1000, "chipotle", "10/6/19"),
+            formatter.transactionsToFormat());
     });
 }
 
