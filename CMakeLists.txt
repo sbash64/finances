@@ -10,13 +10,6 @@ if (${ENABLE_TESTS})
     include(FetchContent)
     
     FetchContent_Declare(
-        Catch2
-        GIT_REPOSITORY https://github.com/catchorg/Catch2
-        GIT_TAG v2.11.3
-    )
-    FetchContent_MakeAvailable(Catch2)
-    
-    FetchContent_Declare(
         TestCppLite
         GIT_REPOSITORY https://github.com/sbash64/testcpplite
         GIT_TAG v1.1.3
