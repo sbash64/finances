@@ -55,10 +55,6 @@ void assertWrittenForShowing(
     assertEqual(result, '\n' + s + "\n\n", writer.written());
 }
 
-void setFormattedTransactions(FormatterStub &formatter, std::string s) {
-    formatter.setFormattedTransactions(std::move(s));
-}
-
 void showNetIncome(FormattedWriter &printer, int x = {}) {
     printer.showNetIncome(x);
 }
@@ -97,7 +93,7 @@ void formattedWriterWritesFormattedTransactions(
     testcpplite::TestResult &result) {
     testFormattedWriter([&](FormattedWriter &printer, FormatterStub &formatter,
                             WriterStub &writer) {
-        setFormattedTransactions(formatter, "hello");
+        formatter.setFormattedTransactions("hello");
         showTransactions(printer);
         assertWrittenForShowing(result, writer, "hello");
     });
