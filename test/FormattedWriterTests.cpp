@@ -59,8 +59,6 @@ void showNetIncome(FormattedWriter &printer, int x = {}) {
     printer.showNetIncome(x);
 }
 
-void show(FormattedWriter &printer, const std::string &s) { printer.show(s); }
-
 void testFormattedWriter(
     const std::function<void(FormattedWriter &, FormatterStub &, WriterStub &)>
         &f) {
@@ -110,7 +108,7 @@ void formattedWriterWritesNetIncome(testcpplite::TestResult &result) {
 void formattedWriterShowsMessage(testcpplite::TestResult &result) {
     testFormattedWriter(
         [&](FormattedWriter &printer, FormatterStub &, WriterStub &writer) {
-            show(printer, "hello");
+            printer.show("hello");
             assertWrittenForShowing(result, writer, "hello");
         });
 }
