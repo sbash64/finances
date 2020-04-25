@@ -50,21 +50,11 @@ void showTransactions(FormattedWriter &printer, const Transactions &t = {}) {
     printer.show(t);
 }
 
-void showOneTransaction(
-    FormattedWriter &printer, int amount, std::string label, std::string date) {
-    showTransactions(
-        printer, oneTransaction(amount, std::move(label), std::move(date)));
-}
-
-auto transactionsToFormat(FormatterStub &formatter) -> Transactions {
-    return formatter.transactionsToFormat();
-}
-
 void assertOneTransactionToFormat(testcpplite::TestResult &result,
     FormatterStub &formatter, int amount, std::string label, std::string date) {
     assertEqual(result,
         oneTransaction(amount, std::move(label), std::move(date)),
-        transactionsToFormat(formatter));
+        formatter.transactionsToFormat());
 }
 
 void assertWrittenForShowing(
@@ -102,12 +92,12 @@ void testFormattedWriter(
 }
 
 void formattedWriterFormatsOneTransaction(testcpplite::TestResult &result) {
-    testFormattedWriter(
-        [&](FormattedWriter &printer, FormatterStub &formatter, WriterStub &) {
-            showOneTransaction(printer, -1000, "chipotle", "10/6/19");
-            assertOneTransactionToFormat(
-                result, formatter, -1000, "chipotle", "10/6/19");
-        });
+    testFormattedWriter([&](FormattedWriter &printer, FormatterStub &formatter,
+                            WriterStub &) {
+        showTransactions(printer, oneTransaction(-1000, "chipotle", "10/6/19"));
+        assertOneTransactionToFormat(
+            result, formatter, -1000, "chipotle", "10/6/19");
+    });
 }
 
 void formattedWriterWritesFormattedTransactions(
@@ -121,11 +111,11 @@ void formattedWriterWritesFormattedTransactions(
 }
 
 void formattedWriterFormatsNetIncome(testcpplite::TestResult &result) {
-    testFormattedWriter([&](FormattedWriter &printer, FormatterStub &formatter,
-                            WriterStub &writer) {
-        showNetIncome(printer, 10);
-        assertNetIncomeToFormat(result, formatter, 10);
-    });
+    testFormattedWriter(
+        [&](FormattedWriter &printer, FormatterStub &formatter, WriterStub &) {
+            showNetIncome(printer, 10);
+            assertNetIncomeToFormat(result, formatter, 10);
+        });
 }
 
 void formattedWriterWritesNetIncome(testcpplite::TestResult &result) {
@@ -138,10 +128,10 @@ void formattedWriterWritesNetIncome(testcpplite::TestResult &result) {
 }
 
 void formattedWriterShowsMessage(testcpplite::TestResult &result) {
-    testFormattedWriter([&](FormattedWriter &printer, FormatterStub &formatter,
-                            WriterStub &writer) {
-        show(printer, "hello");
-        assertWrittenForShowing(result, writer, "hello");
-    });
+    testFormattedWriter(
+        [&](FormattedWriter &printer, FormatterStub &, WriterStub &writer) {
+            show(printer, "hello");
+            assertWrittenForShowing(result, writer, "hello");
+        });
 }
 }
