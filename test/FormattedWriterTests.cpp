@@ -125,6 +125,8 @@ void assertNetIncomeToFormat(
     assertEqual(result, x, formatter.netIncomeToFormat());
 }
 
+void show(FormattedWriter &printer, const std::string &s) { printer.show(s); }
+
 void testFormattedWriter(
     const std::function<void(FormattedWriter &, FormatterStub &, WriterStub &)>
         &f) {
@@ -222,5 +224,13 @@ FORMATTED_WRITER_TEST("showMessage") {
     show("hello");
     ASSERT_WRITTEN_FOR_SHOWING("hello");
 }
+}
+
+void formattedWriterShowsMessage(testcpplite::TestResult &result) {
+    testFormattedWriter([&](FormattedWriter &printer, FormatterStub &formatter,
+                            WriterStub &writer) {
+        show(printer, "hello");
+        assertWrittenForShowing(result, writer, "hello");
+    });
 }
 }

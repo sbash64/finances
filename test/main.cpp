@@ -100,7 +100,8 @@ int main() {
                 "formattedWriterWritesFormattedTransactions"},
             {formattedWriterFormatsNetIncome,
                 "formattedWriterFormatsNetIncome"},
-            {formattedWriterWritesNetIncome, "formattedWriterWritesNetIncome"}},
+            {formattedWriterWritesNetIncome, "formattedWriterWritesNetIncome"},
+            {formattedWriterShowsMessage, "formattedWriterShowsMessage"}},
         std::cout);
 }
 }
