@@ -103,6 +103,15 @@ void assertOneTransactionToFormat(testcpplite::TestResult &result,
         transactionsToFormat(formatter));
 }
 
+void assertWrittenForShowing(
+    testcpplite::TestResult &result, WriterStub &writer, const std::string &s) {
+    assertEqual(result, '\n' + s + "\n\n", writer.written());
+}
+
+void setFormattedTransactions(FormatterStub &formatter, std::string s) {
+    formatter.setFormattedTransactions(std::move(s));
+}
+
 void testFormattedWriter(
     const std::function<void(FormattedWriter &, FormatterStub &, WriterStub &)>
         &f) {
@@ -148,6 +157,19 @@ FORMATTED_WRITER_TEST("showTransactionsWritesFormatted") {
     showTransactions();
     ASSERT_WRITTEN_FOR_SHOWING("hello");
 }
+}
+
+void formattedWriterWritesFormattedTransactions(
+    testcpplite::TestResult &result) {
+    testFormattedWriter([&](FormattedWriter &printer, FormatterStub &formatter,
+                            WriterStub &writer) {
+        setFormattedTransactions(formatter, "hello");
+        showTransactions(printer);
+        assertWrittenForShowing(result, writer, "hello");
+    });
+}
+
+namespace {
 
 FORMATTED_WRITER_TEST("showNetIncomeFormatsNet") {
     showNetIncome(10);

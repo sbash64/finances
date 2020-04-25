@@ -95,7 +95,9 @@ int main() {
             {itemizedFormatterFormatsNetIncome,
                 "itemizedFormatterFormatsNetIncome"},
             {formattedWriterFormatsOneTransaction,
-                "formattedWriterFormatsOneTransaction"}},
+                "formattedWriterFormatsOneTransaction"},
+            {formattedWriterWritesFormattedTransactions,
+                "formattedWriterWritesFormattedTransactions"}},
         std::cout);
 }
 }
