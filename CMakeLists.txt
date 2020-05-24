@@ -3,8 +3,8 @@ project(Finances VERSION 0.0.1 LANGUAGES CXX)
 
 add_subdirectory(finances)
 
-option(ENABLE_TESTS "Enable tests" OFF)
-if (${ENABLE_TESTS})
+if (${WITH_TESTS})
+    set(WITH_TESTS OFF)
     enable_testing()
 
     include(FetchContent)
