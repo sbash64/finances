@@ -2,9 +2,9 @@ name: ctest
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   test:
@@ -15,14 +15,14 @@ jobs:
         compiler: [g++, clang++]
         os: [ubuntu-latest]
     steps:
-    - name: install readline
-      run: sudo apt-get update && sudo apt-get install libreadline-dev 
-    - uses: actions/checkout@v2
-    - name: generate build system
-      env:
-        CXX: ${{ matrix.compiler }}
-      run: cmake -S . -B build -DWITH_TESTS=1 -DCMAKE_BUILD_TYPE=Release
-    - name: build
-      run: cmake --build build
-    - name: test
-      run: cd build && ctest
+      - name: install readline
+        run: sudo apt-get update && sudo apt-get install libreadline-dev
+      - uses: actions/checkout@v2
+      - name: generate build system
+        env:
+          CXX: ${{ matrix.compiler }}
+        run: cmake -S . -B build -DWITH_TESTS=1 -DCMAKE_BUILD_TYPE=Release
+      - name: build
+        run: cmake --build build
+      - name: test
+        run: cd build && ctest
