@@ -6,7 +6,7 @@
 #include <iostream>
 
 namespace finances {
-int main() {
+static int main() {
     return testcpplite::test(
         {{transactionRecordHasNoneOnConstruction,
              "transactionRecordHasNoneOnConstruction"},
