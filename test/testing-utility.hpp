@@ -2,12 +2,9 @@
 #define TEST_TESTING_UTILITY_HPP_
 
 #include <finances/Transaction.hpp>
-#include <catch2/catch.hpp>
+#include <testcpplite/testcpplite.hpp>
 #include <string>
 #include <utility>
-
-#define ASSERT_EQUAL(a, b) CHECK(a == b)
-#define ASSERT_TRUE(a) CHECK(a)
 
 namespace finances {
 inline auto transaction(int amount, std::string label, std::string date)
@@ -32,6 +29,20 @@ inline auto threeTransactions(int amount1, std::string label1,
     return {transaction(amount1, std::move(label1), std::move(date1)),
         transaction(amount2, std::move(label2), std::move(date2)),
         transaction(amount3, std::move(label3), std::move(date3))};
+}
+
+inline void assertEqual(testcpplite::TestResult &result, const Transaction &expected,
+    const Transaction &actual) {
+    assertEqual(result, expected.amount, actual.amount);
+    assertEqual(result, expected.date, actual.date);
+    assertEqual(result, expected.label, actual.label);
+}
+
+inline void assertEqual(testcpplite::TestResult &result, const Transactions &expected,
+    const Transactions &actual) {
+    assertEqual(result, expected.size(), actual.size());
+    for (size_t i{0}; i < expected.size(); ++i)
+        assertEqual(result, expected.at(i), actual.at(i));
 }
 }
 

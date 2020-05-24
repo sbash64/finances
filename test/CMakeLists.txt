@@ -5,5 +5,5 @@ add_executable(tests
     ItemizedFormatterTests.cpp
     main.cpp
 )
-target_link_libraries(tests PRIVATE Catch2::Catch2 finances)
+target_link_libraries(tests PRIVATE testcpplite finances)
 add_test(NAME tests COMMAND tests)

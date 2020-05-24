@@ -1,6 +1,8 @@
 #include "testing-utility.hpp"
+#include "TransactionRecordTests.hpp"
 #include <finances/TransactionRecord.hpp>
-#include <catch2/catch.hpp>
+#include <testcpplite/testcpplite.hpp>
+#include <functional>
 
 namespace finances {
 namespace {
@@ -29,284 +31,378 @@ class ModelEventListenerStub : public Model::EventListener {
 
 auto none() -> Transactions { return {}; }
 
-class TransactionRecordTests {
-  public:
-    TransactionRecordTests() { record.subscribe(&listener); }
+void add(TransactionRecord &record, int amount, std::string label,
+    std::string date) {
+    record.add(transaction(amount, std::move(label), std::move(date)));
+}
 
-  protected:
-    void add(int amount, std::string label, std::string date) {
-        record.add(transaction(amount, std::move(label), std::move(date)));
-    }
+void verify(TransactionRecord &record, int amount) { record.verify(amount); }
 
-    void verify(int amount) { record.verify(amount); }
+void remove(TransactionRecord &record, int amount, std::string label,
+    std::string date) {
+    record.remove(transaction(amount, std::move(label), std::move(date)));
+}
 
-    void remove(int amount, std::string label, std::string date) {
-        record.remove(transaction(amount, std::move(label), std::move(date)));
-    }
+auto transactions(TransactionRecord &record) -> Transactions {
+    return record.transactions();
+}
 
-    auto netIncome() -> int { return record.netIncome(); }
+auto verifiedTransactions(TransactionRecord &record) -> Transactions {
+    return record.verifiedTransactions();
+}
 
-    auto verifiedTransactions() -> Transactions {
-        return record.verifiedTransactions();
-    }
+void assertTransactions(testcpplite::TestResult &result,
+    TransactionRecord &record, const Transactions &expected) {
+    assertEqual(result, expected, transactions(record));
+}
 
-    auto unverifiedTransactions() -> Transactions {
-        return record.unverifiedTransactions();
-    }
+void assertVerifiedTransactions(testcpplite::TestResult &result,
+    TransactionRecord &record, const Transactions &expected) {
+    assertEqual(result, expected, verifiedTransactions(record));
+}
 
-    auto all() -> Transactions { return record.transactions(); }
+void assertUnverifiedTransactions(testcpplite::TestResult &result,
+    TransactionRecord &record, const Transactions &expected) {
+    assertEqual(result, expected, record.unverifiedTransactions());
+}
 
-    auto verifiedTransaction() -> Transaction {
-        return listener.verifiedTransaction();
-    }
+void assertNoTransactions(
+    testcpplite::TestResult &result, TransactionRecord &record) {
+    assertTransactions(result, record, none());
+}
 
-    auto didNotVerify() -> bool { return !listener.verified(); }
+void assertNoVerifiedTransactions(
+    testcpplite::TestResult &result, TransactionRecord &record) {
+    assertVerifiedTransactions(result, record, none());
+}
 
-    auto addedTransaction() -> Transaction {
-        return listener.addedTransaction();
-    }
+void assertOneTransaction(testcpplite::TestResult &result,
+    TransactionRecord &record, int amount, std::string label,
+    std::string date) {
+    assertTransactions(result, record,
+        oneTransaction(amount, std::move(label), std::move(date)));
+}
 
-  private:
-    ModelEventListenerStub listener;
+void assertOneVerifiedTransaction(testcpplite::TestResult &result,
+    TransactionRecord &record, int amount, std::string label,
+    std::string date) {
+    assertVerifiedTransactions(result, record,
+        oneTransaction(amount, std::move(label), std::move(date)));
+}
+
+void assertOneUnverifiedTransaction(testcpplite::TestResult &result,
+    TransactionRecord &record, int amount, std::string label,
+    std::string date) {
+    assertUnverifiedTransactions(result, record,
+        oneTransaction(amount, std::move(label), std::move(date)));
+}
+
+void assertTwoTransactions(testcpplite::TestResult &result,
+    TransactionRecord &record, int amount1, std::string label1,
+    std::string date1, int amount2, std::string label2, std::string date2) {
+    assertTransactions(result, record,
+        twoTransactions(amount1, std::move(label1), std::move(date1), amount2,
+            std::move(label2), std::move(date2)));
+}
+
+void testTransactionRecord(
+    const std::function<void(TransactionRecord &, ModelEventListenerStub &)>
+        &f) {
     TransactionRecord record;
-};
-
-#define ASSERT_TRANSACTIONS(a) ASSERT_EQUAL(a, all())
-
-#define ASSERT_NO_TRANSACTIONS() ASSERT_TRANSACTIONS(none())
-
-#define ASSERT_ONE_TRANSACTION(a, b, c)                                        \
-    ASSERT_TRANSACTIONS(oneTransaction(a, b, c))
-
-#define ASSERT_ADDED(a, b, c)                                                  \
-    ASSERT_EQUAL(transaction(a, b, c), addedTransaction())
-
-#define ASSERT_TWO_TRANSACTIONS(a, b, c, d, e, f)                              \
-    ASSERT_TRANSACTIONS(twoTransactions(a, b, c, d, e, f))
-
-#define ASSERT_THREE_TRANSACTIONS(a, b, c, d, e, f, g, h, i)                   \
-    ASSERT_TRANSACTIONS(threeTransactions(a, b, c, d, e, f, g, h, i))
-
-#define ASSERT_VERIFIED_TRANSACTION(a, b, c)                                   \
-    ASSERT_EQUAL(transaction(a, b, c), verifiedTransaction())
-
-#define ASSERT_VERIFIED_TRANSACTIONS(expected)                                 \
-    ASSERT_EQUAL(expected, verifiedTransactions())
-
-#define ASSERT_ONE_VERIFIED_TRANSACTION(a, b, c)                               \
-    ASSERT_VERIFIED_TRANSACTIONS(oneTransaction(a, b, c))
-
-#define ASSERT_UNVERIFIED_TRANSACTIONS(expected)                               \
-    ASSERT_EQUAL(expected, unverifiedTransactions())
-
-#define ASSERT_ONE_UNVERIFIED_TRANSACTION(a, b, c)                             \
-    ASSERT_UNVERIFIED_TRANSACTIONS(oneTransaction(a, b, c))
-
-#define ASSERT_TWO_VERIFIED_TRANSACTIONS(a, b, c, d, e, f)                     \
-    ASSERT_VERIFIED_TRANSACTIONS(twoTransactions(a, b, c, d, e, f))
-
-#define ASSERT_NET_INCOME(expected) ASSERT_EQUAL(expected, netIncome())
-
-#define ASSERT_NO_VERIFIED_TRANSACTIONS() ASSERT_VERIFIED_TRANSACTIONS(none())
-
-#define ASSERT_NO_UNVERIFIED_TRANSACTIONS()                                    \
-    ASSERT_UNVERIFIED_TRANSACTIONS(none())
-
-#define ASSERT_EXISTS_EXACTLY_ONE_VERIFIED_TRANSACTION()                       \
-    ASSERT_EQUAL(1, verifiedTransactions().size())
-
-#define ASSERT_DID_NOT_VERIFY() ASSERT_TRUE(didNotVerify())
-
-#define TRANSACTION_RECORD_TEST(a) TEST_CASE_METHOD(TransactionRecordTests, a)
-
-// clang-format off
-
-TRANSACTION_RECORD_TEST("noneOnConstruction") {
-    ASSERT_NO_TRANSACTIONS();
+    ModelEventListenerStub listener;
+    record.subscribe(&listener);
+    f(record, listener);
 }
 
-TRANSACTION_RECORD_TEST("addedTransaction") {
-    add(-5000, "hyvee", "10/5/19");
-    ASSERT_ADDED(-5000, "hyvee", "10/5/19");
+void assertNetIncome(
+    testcpplite::TestResult &result, TransactionRecord &record, int amount) {
+    assertEqual(result, amount, record.netIncome());
+}
 }
 
-TRANSACTION_RECORD_TEST("oneTransactionAdded") {
-    add(-5000, "hyvee", "10/5/19");
-    ASSERT_ONE_TRANSACTION(-5000, "hyvee", "10/5/19");
+void transactionRecordHasNoneOnConstruction(testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            assertNoTransactions(result, record);
+        });
 }
 
-TRANSACTION_RECORD_TEST("twoAdded") {
-    add(-1000, "hyvee", "10/5/19");
-    add(-1000, "chipotle", "10/5/19");
-    ASSERT_TWO_TRANSACTIONS(
-        -1000, "hyvee", "10/5/19",
-        -1000, "chipotle", "10/5/19"
-    );
+void transactionRecordNotifiesListenerOnAdd(testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &listener) {
+            add(record, -5000, "hyvee", "10/5/19");
+            assertEqual(result, transaction(-5000, "hyvee", "10/5/19"),
+                listener.addedTransaction());
+        });
 }
 
-TRANSACTION_RECORD_TEST("removesOne") {
-    add(-5000, "hyvee", "10/5/19");
-    remove(-5000, "hyvee", "10/5/19");
-    ASSERT_NO_TRANSACTIONS();
+void transactionRecordHasOneAdded(testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -5000, "hyvee", "10/5/19");
+            assertOneTransaction(result, record, -5000, "hyvee", "10/5/19");
+        });
 }
 
-TRANSACTION_RECORD_TEST("threeAdded") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-3000, "walmart", "10/4/19");
-    add(-1000, "chipotle", "10/6/19");
-    ASSERT_THREE_TRANSACTIONS(
-        -2000, "hyvee", "10/5/19",
-        -3000, "walmart", "10/4/19",
-        -1000, "chipotle", "10/6/19"
-    );
+void transactionRecordHasTwoAdded(testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -1000, "hyvee", "10/5/19");
+            add(record, -1000, "chipotle", "10/5/19");
+            assertTwoTransactions(result, record, -1000, "hyvee", "10/5/19",
+                -1000, "chipotle", "10/5/19");
+        });
 }
 
-TRANSACTION_RECORD_TEST("removesOneFromNone") {
-    remove(-5000, "hyvee", "10/5/19");
-    ASSERT_NO_TRANSACTIONS();
+void transactionRecordHasNoneAfterRemovingOne(testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -1000, "hyvee", "10/5/19");
+            remove(record, -1000, "hyvee", "10/5/19");
+            assertNoTransactions(result, record);
+        });
 }
 
-TRANSACTION_RECORD_TEST("removeOneFromTwo") {
-    add(-5000, "hyvee", "10/5/19");
-    add(-1000, "chipotle", "10/5/19");
-    remove(-5000, "hyvee", "10/5/19");
-    ASSERT_ONE_TRANSACTION(-1000, "chipotle", "10/5/19");
+void transactionRecordHasThreeAdded(testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -2000, "hyvee", "10/5/19");
+            add(record, -3000, "walmart", "10/4/19");
+            add(record, -1000, "chipotle", "10/6/19");
+            assertTransactions(result, record,
+                threeTransactions(-2000, "hyvee", "10/5/19", -3000, "walmart",
+                    "10/4/19", -1000, "chipotle", "10/6/19"));
+        });
 }
 
-TRANSACTION_RECORD_TEST("removeOneNotFoundFromTwo") {
-    add(-5000, "hyvee", "10/5/19");
-    add(-1000, "chipotle", "10/5/19");
-    remove(-4999, "hyvee", "10/5/19");
-    ASSERT_TWO_TRANSACTIONS(
-        -5000, "hyvee", "10/5/19",
-        -1000, "chipotle", "10/5/19"
-    );
+void transactionRecordHasNoneAfterRemovingNone(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            remove(record, -2000, "hyvee", "10/5/19");
+            assertNoTransactions(result, record);
+        });
 }
 
-TRANSACTION_RECORD_TEST("netIncomeZeroOnConstruction") {
-    ASSERT_NET_INCOME(0);
+void transactionRecordHasOneAfterRemovingOne(testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -5000, "hyvee", "10/5/19");
+            add(record, -1000, "chipotle", "10/5/19");
+            remove(record, -5000, "hyvee", "10/5/19");
+            assertOneTransaction(result, record, -1000, "chipotle", "10/5/19");
+        });
 }
 
-TRANSACTION_RECORD_TEST("netIncomeFromOne") {
-    add(-1000, "hyvee", "10/5/19");
-    ASSERT_NET_INCOME(-1000);
+void transactionRecordHasTwoAfterRemovingOneNotFound(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -5000, "hyvee", "10/5/19");
+            add(record, -1000, "chipotle", "10/5/19");
+            remove(record, -4999, "hyvee", "10/5/19");
+            assertTwoTransactions(result, record, -5000, "hyvee", "10/5/19",
+                -1000, "chipotle", "10/5/19");
+        });
 }
 
-TRANSACTION_RECORD_TEST("netIncomeFromTwo") {
-    add(-6132, "hyvee", "10/5/19");
-    add(-1254, "chipotle", "10/5/19");
-    ASSERT_NET_INCOME(-7386);
+void transactionRecordHasZeroNetIncomeOnConstruction(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            assertNetIncome(result, record, 0);
+        });
 }
 
-TRANSACTION_RECORD_TEST("noVerifiedOnConstruction") {
-    ASSERT_NO_VERIFIED_TRANSACTIONS();
+void transactionRecordHasOneContributingNetIncome(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -1000, "hyvee", "10/5/19");
+            assertNetIncome(result, record, -1000);
+        });
 }
 
-TRANSACTION_RECORD_TEST("oneNotVerified") {
-    add(-2000, "hyvee", "10/5/19");
-    ASSERT_NO_VERIFIED_TRANSACTIONS();
+void transactionRecordHasTwoContributingNetIncome(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -6132, "hyvee", "10/5/19");
+            add(record, -1254, "chipotle", "10/5/19");
+            assertNetIncome(result, record, -7386);
+        });
 }
 
-TRANSACTION_RECORD_TEST("oneVerified") {
-    add(-2000, "hyvee", "10/5/19");
-    verify(-2000);
-    ASSERT_ONE_VERIFIED_TRANSACTION(-2000, "hyvee", "10/5/19");
+void transactionRecordHasNoneVerifiedOnConstruction(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            assertNoVerifiedTransactions(result, record);
+        });
 }
 
-TRANSACTION_RECORD_TEST("oneOfTwoVerified") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-1000, "chipotle", "10/6/19");
-    verify(-2000);
-    ASSERT_ONE_VERIFIED_TRANSACTION(-2000, "hyvee", "10/5/19");
+void transactionRecordHasNoneVerifiedAfterAdd(testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -2000, "hyvee", "10/5/19");
+            assertNoVerifiedTransactions(result, record);
+        });
 }
 
-TRANSACTION_RECORD_TEST("twoOfThreeVerified") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-1000, "chipotle", "10/6/19");
-    add(-3000, "barnes noble", "10/4/19");
-    verify(-2000);
-    verify(-3000);
-    ASSERT_TWO_VERIFIED_TRANSACTIONS(
-        -2000, "hyvee", "10/5/19",
-        -3000, "barnes noble", "10/4/19"
-    );
+void transactionRecordHasOneVerifiedAfterAdd(testcpplite::TestResult &result) {
+    testTransactionRecord([&](TransactionRecord &record,
+                              ModelEventListenerStub &) {
+        add(record, -2000, "hyvee", "10/5/19");
+        verify(record, -2000);
+        assertOneVerifiedTransaction(result, record, -2000, "hyvee", "10/5/19");
+    });
 }
 
-TRANSACTION_RECORD_TEST("oneFromNoneVerified") {
-    verify(-3000);
-    ASSERT_NO_VERIFIED_TRANSACTIONS();
+void transactionRecordHasOneVerifiedAfterTwoAdded(
+    testcpplite::TestResult &result) {
+    testTransactionRecord([&](TransactionRecord &record,
+                              ModelEventListenerStub &) {
+        add(record, -2000, "hyvee", "10/5/19");
+        add(record, -1000, "chipotle", "10/6/19");
+        verify(record, -2000);
+        assertOneVerifiedTransaction(result, record, -2000, "hyvee", "10/5/19");
+    });
 }
 
-TRANSACTION_RECORD_TEST("noneVerifiedDidNotVerify") {
-    add(-2000, "hyvee", "10/5/19");
-    verify(-1000);
-    ASSERT_DID_NOT_VERIFY();
+void transactionRecordHasTwoVerifiedAfterThreeAdded(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -2000, "hyvee", "10/5/19");
+            add(record, -1000, "chipotle", "10/6/19");
+            add(record, -3000, "barnes noble", "10/4/19");
+            verify(record, -2000);
+            verify(record, -3000);
+            assertVerifiedTransactions(result, record,
+                twoTransactions(-2000, "hyvee", "10/5/19", -3000,
+                    "barnes noble", "10/4/19"));
+        });
 }
 
-TRANSACTION_RECORD_TEST("oneVerifiedDidVerify") {
-    add(-2000, "hyvee", "10/5/19");
-    verify(-2000);
-    ASSERT_VERIFIED_TRANSACTION(-2000, "hyvee", "10/5/19");
+void transactionRecordHasNoneVerifiedAfterVerify(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            verify(record, -3000);
+            assertNoVerifiedTransactions(result, record);
+        });
 }
 
-TRANSACTION_RECORD_TEST("noUnverifiedOnConstruction") {
-    ASSERT_NO_UNVERIFIED_TRANSACTIONS();
+void transactionRecordDoesNotNotifyAfterOneAddAndVerify(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &listener) {
+            add(record, -2000, "hyvee", "10/5/19");
+            verify(record, -1000);
+            testcpplite::assertFalse(result, listener.verified());
+        });
 }
 
-TRANSACTION_RECORD_TEST("oneUnverified") {
-    add(-1000, "hyvee", "10/1/19");
-    ASSERT_ONE_UNVERIFIED_TRANSACTION(-1000, "hyvee", "10/1/19");
+void transactionRecordNotiesAfterOneAddAndVerify(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &listener) {
+            add(record, -2000, "hyvee", "10/5/19");
+            verify(record, -2000);
+            assertEqual(result, transaction(-2000, "hyvee", "10/5/19"),
+                listener.verifiedTransaction());
+        });
 }
 
-TRANSACTION_RECORD_TEST("oneOfTwoUnverified") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-1000, "chipotle", "10/6/19");
-    verify(-2000);
-    ASSERT_ONE_UNVERIFIED_TRANSACTION(-1000, "chipotle", "10/6/19");
+void transactionRecordHasNoneUnverifiedOnConstruction(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            assertUnverifiedTransactions(result, record, none());
+        });
 }
 
-TRANSACTION_RECORD_TEST("verifyBothOfSameAmount") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-2000, "chipotle", "10/6/19");
-    verify(-2000);
-    verify(-2000);
-    ASSERT_TWO_VERIFIED_TRANSACTIONS(
-        -2000, "hyvee", "10/5/19",
-        -2000, "chipotle", "10/6/19"
-    );
+void transactionRecordHasOneUnverifiedAfterAdd(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -1000, "hyvee", "10/1/19");
+            assertOneUnverifiedTransaction(
+                result, record, -1000, "hyvee", "10/1/19");
+        });
 }
 
-TRANSACTION_RECORD_TEST("onlyVerifiesOneOfTwoSameAmounts") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-2000, "chipotle", "10/6/19");
-    verify(-2000);
-    ASSERT_EXISTS_EXACTLY_ONE_VERIFIED_TRANSACTION();
+void transactionRecordHasOneUnverifiedAfterTwoAdded(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -2000, "hyvee", "10/5/19");
+            add(record, -1000, "chipotle", "10/6/19");
+            verify(record, -2000);
+            assertOneUnverifiedTransaction(
+                result, record, -1000, "chipotle", "10/6/19");
+        });
 }
 
-TRANSACTION_RECORD_TEST("removeFirstAmongOneOfTwoVerifiesOther") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-2000, "chipotle", "10/6/19");
-    verify(-2000);
-    remove(-2000, "hyvee", "10/5/19");
-    ASSERT_ONE_VERIFIED_TRANSACTION(-2000, "chipotle", "10/6/19");
+void transactionRecordHasTwoVerifiedOfSameAmount(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -2000, "hyvee", "10/5/19");
+            add(record, -2000, "chipotle", "10/6/19");
+            verify(record, -2000);
+            verify(record, -2000);
+            assertVerifiedTransactions(result, record,
+                twoTransactions(
+                    -2000, "hyvee", "10/5/19", -2000, "chipotle", "10/6/19"));
+        });
 }
 
-TRANSACTION_RECORD_TEST("removeSecondAmongOneOfTwoVerifiesOther") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-2000, "chipotle", "10/6/19");
-    verify(-2000);
-    remove(-2000, "chipotle", "10/6/19");
-    ASSERT_ONE_VERIFIED_TRANSACTION(-2000, "hyvee", "10/5/19");
+void transactionRecordHasOneVerifiedAfterAddingTwoOfSameAmount(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -2000, "hyvee", "10/5/19");
+            add(record, -2000, "chipotle", "10/6/19");
+            verify(record, -2000);
+            testcpplite::assertEqual(result, Transactions::size_type{1},
+                verifiedTransactions(record).size());
+        });
 }
 
-TRANSACTION_RECORD_TEST("removeOneUnverifiedDoesNotVerifyOther") {
-    add(-2000, "hyvee", "10/5/19");
-    add(-2000, "chipotle", "10/6/19");
-    remove(-2000, "chipotle", "10/6/19");
-    ASSERT_NO_VERIFIED_TRANSACTIONS();
+void transactionRecordVerifiesMatchingAmountWhenRemovingFirst(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -2000, "hyvee", "10/5/19");
+            add(record, -2000, "chipotle", "10/6/19");
+            verify(record, -2000);
+            remove(record, -2000, "hyvee", "10/5/19");
+            assertOneVerifiedTransaction(
+                result, record, -2000, "chipotle", "10/6/19");
+        });
 }
 
-// clang-format on
+void transactionRecordVerifiesMatchingAmountWhenRemovingSecond(
+    testcpplite::TestResult &result) {
+    testTransactionRecord([&](TransactionRecord &record,
+                              ModelEventListenerStub &) {
+        add(record, -2000, "hyvee", "10/5/19");
+        add(record, -2000, "chipotle", "10/6/19");
+        verify(record, -2000);
+        remove(record, -2000, "chipotle", "10/6/19");
+        assertOneVerifiedTransaction(result, record, -2000, "hyvee", "10/5/19");
+    });
+}
 
+void transactionRecordDoesNotVerifyMatchingAmountWhenRemovingOne(
+    testcpplite::TestResult &result) {
+    testTransactionRecord(
+        [&](TransactionRecord &record, ModelEventListenerStub &) {
+            add(record, -2000, "hyvee", "10/5/19");
+            add(record, -2000, "chipotle", "10/6/19");
+            remove(record, -2000, "chipotle", "10/6/19");
+            assertNoVerifiedTransactions(result, record);
+        });
 }
 }

@@ -1,6 +1,7 @@
+#include "FormattedWriterTests.hpp"
 #include "testing-utility.hpp"
 #include <finances/FormattedWriter.hpp>
-#include <catch2/catch.hpp>
+#include <testcpplite/testcpplite.hpp>
 
 namespace finances {
 namespace {
@@ -45,78 +46,70 @@ class WriterStub : public Writer {
     std::string written_;
 };
 
-class FormattedWriterTests {
-  protected:
-    auto transactionsToFormat() -> Transactions {
-        return formatter.transactionsToFormat();
-    }
+void showTransactions(FormattedWriter &printer, const Transactions &t = {}) {
+    printer.show(t);
+}
 
-    auto netIncomeToFormat() -> int { return formatter.netIncomeToFormat(); }
+void assertWrittenForShowing(
+    testcpplite::TestResult &result, WriterStub &writer, const std::string &s) {
+    assertEqual(result, '\n' + s + "\n\n", writer.written());
+}
 
-    void showTransactions(const Transactions &t = {}) { printer.show(t); }
+void showNetIncome(FormattedWriter &printer, int x = {}) {
+    printer.showNetIncome(x);
+}
 
-    void showOneTransaction(int amount, std::string label, std::string date) {
-        showTransactions(
-            oneTransaction(amount, std::move(label), std::move(date)));
-    }
-
-    void setFormatted(std::string s) {
-        formatter.setFormattedTransactions(std::move(s));
-    }
-
-    void setFormattedNetIncome(std::string s) {
-        formatter.setFormattedNetIncome(std::move(s));
-    }
-
-    auto written() -> std::string { return writer.written(); }
-
-    void showNetIncome(int x = {}) { printer.showNetIncome(x); }
-
-    void show(const std::string &s) { printer.show(s); }
-
-  private:
+void testFormattedWriter(
+    const std::function<void(FormattedWriter &, FormatterStub &, WriterStub &)>
+        &f) {
     FormatterStub formatter;
     WriterStub writer;
     FormattedWriter printer{formatter, writer};
-};
-
-#define ASSERT_ONE_TRANSACTION_TO_FORMAT(a, b, c)                              \
-    ASSERT_EQUAL(oneTransaction(a, b, c), transactionsToFormat())
-
-#define ASSERT_WRITTEN(a) ASSERT_EQUAL(a, written())
-
-#define ASSERT_WRITTEN_FOR_SHOWING(a)                                          \
-    ASSERT_WRITTEN(std::string{"\n"} + a + "\n\n")
-
-#define ASSERT_NET_INCOME_TO_FORMAT(a) ASSERT_EQUAL(a, netIncomeToFormat())
-
-#define FORMATTED_WRITER_TEST(a) TEST_CASE_METHOD(FormattedWriterTests, a)
-
-FORMATTED_WRITER_TEST("showTransactionsFormatsOne") {
-    showOneTransaction(-1000, "chipotle", "10/6/19");
-    ASSERT_ONE_TRANSACTION_TO_FORMAT(-1000, "chipotle", "10/6/19");
+    f(printer, formatter, writer);
+}
 }
 
-FORMATTED_WRITER_TEST("showTransactionsWritesFormatted") {
-    setFormatted("hello");
-    showTransactions();
-    ASSERT_WRITTEN_FOR_SHOWING("hello");
+void formattedWriterFormatsOneTransaction(testcpplite::TestResult &result) {
+    testFormattedWriter([&](FormattedWriter &printer, FormatterStub &formatter,
+                            WriterStub &) {
+        showTransactions(printer, oneTransaction(-1000, "chipotle", "10/6/19"));
+        assertEqual(result, oneTransaction(-1000, "chipotle", "10/6/19"),
+            formatter.transactionsToFormat());
+    });
 }
 
-FORMATTED_WRITER_TEST("showNetIncomeFormatsNet") {
-    showNetIncome(10);
-    ASSERT_NET_INCOME_TO_FORMAT(10);
+void formattedWriterWritesFormattedTransactions(
+    testcpplite::TestResult &result) {
+    testFormattedWriter([&](FormattedWriter &printer, FormatterStub &formatter,
+                            WriterStub &writer) {
+        formatter.setFormattedTransactions("hello");
+        showTransactions(printer);
+        assertWrittenForShowing(result, writer, "hello");
+    });
 }
 
-FORMATTED_WRITER_TEST("showNetIncomeWritesNetIncome") {
-    setFormattedNetIncome("hello");
-    showNetIncome();
-    ASSERT_WRITTEN_FOR_SHOWING("hello");
+void formattedWriterFormatsNetIncome(testcpplite::TestResult &result) {
+    testFormattedWriter(
+        [&](FormattedWriter &printer, FormatterStub &formatter, WriterStub &) {
+            showNetIncome(printer, 10);
+            assertEqual(result, 10, formatter.netIncomeToFormat());
+        });
 }
 
-FORMATTED_WRITER_TEST("showMessage") {
-    show("hello");
-    ASSERT_WRITTEN_FOR_SHOWING("hello");
+void formattedWriterWritesNetIncome(testcpplite::TestResult &result) {
+    testFormattedWriter([&](FormattedWriter &printer, FormatterStub &formatter,
+                            WriterStub &writer) {
+        formatter.setFormattedNetIncome("hello");
+        showNetIncome(printer);
+        assertWrittenForShowing(result, writer, "hello");
+    });
 }
+
+void formattedWriterShowsMessage(testcpplite::TestResult &result) {
+    testFormattedWriter(
+        [&](FormattedWriter &printer, FormatterStub &, WriterStub &writer) {
+            printer.show("hello");
+            assertWrittenForShowing(result, writer, "hello");
+        });
 }
 }
