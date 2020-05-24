@@ -13,8 +13,10 @@ jobs:
     strategy:
       matrix:
         compiler: [g++, clang++]
-        os: [ubuntu-latest, macOS-latest]
+        os: [ubuntu-latest]
     steps:
+    - name: install readline
+      run: sudo apt-get install lib64readline-dev 
     - uses: actions/checkout@v2
     - name: generate build system
       env:
