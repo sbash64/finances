@@ -16,7 +16,7 @@ jobs:
         os: [ubuntu-latest]
     steps:
     - name: install readline
-      run: sudo apt-get install lib64readline-dev 
+      run: sudo apt-get update && sudo apt-get install lib64readline-dev 
     - uses: actions/checkout@v2
     - name: generate build system
       env:
