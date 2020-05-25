@@ -30,9 +30,9 @@ static auto hundredths(const std::string &s) -> int {
 }
 
 static auto next(std::stringstream &s) -> std::string {
-    std::string next_;
-    s >> next_;
-    return next_;
+    std::string next;
+    s >> next;
+    return next;
 }
 
 static auto matches(const std::string &a, const std::string &b) -> bool {
@@ -56,50 +56,31 @@ static auto transaction(std::stringstream &stream) -> Transaction {
 
 static void show(View &view, const Transactions &t) { view.show(t); }
 
-static void execute(Model &model, View &view, const std::string &s) {
-    std::stringstream stream{s};
-    const auto command{next(stream)};
-    if (matches(command, Command::print))
-        show(view, model.transactions());
-    else if (matches(command, Command::printVerified))
-        show(view, model.verifiedTransactions());
-    else if (matches(command, Command::printUnverified))
-        show(view, model.unverifiedTransactions());
-    else if (matches(command, Command::netIncome))
-        view.showNetIncome(model.netIncome());
-    else if (matches(command, Command::verify))
-        model.verify(amount(stream));
-    else if (matches(command, Command::add))
-        model.add(transaction(stream));
-    else if (matches(command, Command::remove))
-        model.remove(transaction(stream));
-}
-
 void Presenter::execute(const std::string &s) {
     try {
         std::stringstream stream{s};
-        const auto command{next(stream)};
-        if (matches(command, Command::print))
+        const auto first{next(stream)};
+        if (matches(first, Command::print))
             show(view, model.transactions());
-        else if (matches(command, Command::printVerified))
+        else if (matches(first, Command::printVerified))
             show(view, model.verifiedTransactions());
-        else if (matches(command, Command::printUnverified))
+        else if (matches(first, Command::printUnverified))
             show(view, model.unverifiedTransactions());
-        else if (matches(command, Command::netIncome))
+        else if (matches(first, Command::netIncome))
             view.showNetIncome(model.netIncome());
-        else if (matches(command, Command::verify))
+        else if (matches(first, Command::verify))
             model.verify(amount(stream));
-        else if (matches(command, Command::add))
+        else if (matches(first, Command::add))
             model.add(transaction(stream));
-        else if (matches(command, Command::remove))
+        else if (matches(first, Command::remove))
             model.remove(transaction(stream));
         else if (labelEntered)
-            model.add({amountAdding, labelAdding, command});
+            model.add({amountAdding, labelAdding, first});
         else if (amountEntered) {
-            labelAdding = command;
+            labelAdding = first;
             labelEntered = true;
         } else {
-            amountAdding = hundredths(command);
+            amountAdding = hundredths(first);
             amountEntered = true;
         }
     } catch (const std::invalid_argument &) {
