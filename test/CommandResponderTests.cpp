@@ -111,7 +111,8 @@ void execute(CommandResponder &commandResponder, const std::string &s) {
 
 void executeCommand(
     CommandResponder &commandResponder, Command c, const std::string &s = {}) {
-    execute(commandResponder, name(c) + std::string(s.empty() ? 0 : 1, ' ') + s);
+    execute(
+        commandResponder, name(c) + std::string(s.empty() ? 0 : 1, ' ') + s);
 }
 
 void add(CommandResponder &commandResponder, const std::string &s) {
@@ -205,7 +206,8 @@ void commandResponderAddsTransactionInSteps(testcpplite::TestResult &result) {
         });
 }
 
-void commandResponderAddsTwoTransactionsInSteps(testcpplite::TestResult &result) {
+void commandResponderAddsTwoTransactionsInSteps(
+    testcpplite::TestResult &result) {
     testCommandResponder(
         [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &) {
             execute(commandResponder, "-50");
@@ -226,7 +228,8 @@ void commandResponderAddsTransaction(testcpplite::TestResult &result) {
         });
 }
 
-void commandResponderAddsTransactionWithDecimal(testcpplite::TestResult &result) {
+void commandResponderAddsTransactionWithDecimal(
+    testcpplite::TestResult &result) {
     testCommandResponder(
         [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &) {
             add(commandResponder, "-9.47 chipotle 10/6/19");
@@ -260,63 +263,68 @@ void commandResponderRemovesTransaction(testcpplite::TestResult &result) {
         });
 }
 
-void commandResponderPrintsTransactionVerified(testcpplite::TestResult &result) {
-    testCommandResponder([&](CommandResponder &, ModelStub &model, ViewStub &view) {
+void commandResponderPrintsTransactionVerified(
+    testcpplite::TestResult &result) {
+    testCommandResponder([&](CommandResponder &, ModelStub &model,
+                             ViewStub &view) {
         verified(model, -1000, "chipotle", "10/6/19");
         assertTransactionPrinted(result, view, -1000, "chipotle", "10/6/19");
     });
 }
 
 void commandResponderPrintsTransactionAdded(testcpplite::TestResult &result) {
-    testCommandResponder([&](CommandResponder &, ModelStub &model, ViewStub &view) {
+    testCommandResponder([&](CommandResponder &, ModelStub &model,
+                             ViewStub &view) {
         added(model, -1000, "chipotle", "10/6/19");
         assertTransactionPrinted(result, view, -1000, "chipotle", "10/6/19");
     });
 }
 
 void commandResponderPrintsAllTransaction(testcpplite::TestResult &result) {
-    testCommandResponder(
-        [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &view) {
-            setAllTransactions(model,
-                twoTransactions(
-                    -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
-            print(commandResponder);
-            assertBothTransactionsPrinted(result, view, -1000, "chipotle",
-                "10/6/19", -5000, "hyvee", "10/4/19");
-        });
+    testCommandResponder([&](CommandResponder &commandResponder,
+                             ModelStub &model, ViewStub &view) {
+        setAllTransactions(model,
+            twoTransactions(
+                -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
+        print(commandResponder);
+        assertBothTransactionsPrinted(result, view, -1000, "chipotle",
+            "10/6/19", -5000, "hyvee", "10/4/19");
+    });
 }
 
-void commandResponderPrintsAllVerifiedTransaction(testcpplite::TestResult &result) {
-    testCommandResponder(
-        [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &view) {
-            setVerifiedTransactions(model,
-                twoTransactions(
-                    -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
-            printVerified(commandResponder);
-            assertBothTransactionsPrinted(result, view, -1000, "chipotle",
-                "10/6/19", -5000, "hyvee", "10/4/19");
-        });
+void commandResponderPrintsAllVerifiedTransaction(
+    testcpplite::TestResult &result) {
+    testCommandResponder([&](CommandResponder &commandResponder,
+                             ModelStub &model, ViewStub &view) {
+        setVerifiedTransactions(model,
+            twoTransactions(
+                -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
+        printVerified(commandResponder);
+        assertBothTransactionsPrinted(result, view, -1000, "chipotle",
+            "10/6/19", -5000, "hyvee", "10/4/19");
+    });
 }
 
-void commandResponderPrintsUnverifiedTransaction(testcpplite::TestResult &result) {
-    testCommandResponder(
-        [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &view) {
-            setUnverifiedTransactions(model,
-                twoTransactions(
-                    -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
-            printUnverified(commandResponder);
-            assertBothTransactionsPrinted(result, view, -1000, "chipotle",
-                "10/6/19", -5000, "hyvee", "10/4/19");
-        });
+void commandResponderPrintsUnverifiedTransaction(
+    testcpplite::TestResult &result) {
+    testCommandResponder([&](CommandResponder &commandResponder,
+                             ModelStub &model, ViewStub &view) {
+        setUnverifiedTransactions(model,
+            twoTransactions(
+                -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
+        printUnverified(commandResponder);
+        assertBothTransactionsPrinted(result, view, -1000, "chipotle",
+            "10/6/19", -5000, "hyvee", "10/4/19");
+    });
 }
 
 void commandResponderPrintsNetIncome(testcpplite::TestResult &result) {
-    testCommandResponder(
-        [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &view) {
-            setNetIncome(model, 5000);
-            netIncome(commandResponder);
-            assertNetIncomePrinted(result, view, 5000);
-        });
+    testCommandResponder([&](CommandResponder &commandResponder,
+                             ModelStub &model, ViewStub &view) {
+        setNetIncome(model, 5000);
+        netIncome(commandResponder);
+        assertNetIncomePrinted(result, view, 5000);
+    });
 }
 
 void commandResponderVerifiesAmount(testcpplite::TestResult &result) {
@@ -327,15 +335,17 @@ void commandResponderVerifiesAmount(testcpplite::TestResult &result) {
         });
 }
 
-void commandResponderDoesNotAbortOnUnrecognizedCommand(testcpplite::TestResult &) {
-    testCommandResponder([&](CommandResponder &commandResponder, ModelStub &, ViewStub &) {
-        execute(commandResponder, "jellyfish");
-    });
+void commandResponderDoesNotAbortOnUnrecognizedCommand(
+    testcpplite::TestResult &) {
+    testCommandResponder(
+        [&](CommandResponder &commandResponder, ModelStub &, ViewStub &) {
+            execute(commandResponder, "jellyfish");
+        });
 }
 
-void commandResponderDoesNotAbortOnPartiallyCorrectCommand(testcpplite::TestResult &) {
-    testCommandResponder([&](CommandResponder &commandResponder, ModelStub &, ViewStub &) {
-        add(commandResponder, "oops");
-    });
+void commandResponderDoesNotAbortOnPartiallyCorrectCommand(
+    testcpplite::TestResult &) {
+    testCommandResponder([&](CommandResponder &commandResponder, ModelStub &,
+                             ViewStub &) { add(commandResponder, "oops"); });
 }
 }

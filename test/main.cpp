@@ -1,5 +1,6 @@
 #include "TransactionRecordTests.hpp"
 #include "CommandResponderTests.hpp"
+#include "PresenterTests.hpp"
 #include "ItemizedFormatterTests.hpp"
 #include "FormattedWriterTests.hpp"
 #include <testcpplite/testcpplite.hpp>
@@ -8,8 +9,13 @@
 namespace finances {
 static int main() {
     return testcpplite::test(
-        {{transactionRecordHasNoneOnConstruction,
-             "transactionRecordHasNoneOnConstruction"},
+        {{presenterSubscribesToModelEvents, "presenterSubscribesToModelEvents"},
+            {presenterPrintsTransactionVerified,
+                "presenterPrintsTransactionVerified"},
+            {presenterPrintsTransactionAdded,
+                "presenterPrintsTransactionAdded"},
+            {transactionRecordHasNoneOnConstruction,
+                "transactionRecordHasNoneOnConstruction"},
             {transactionRecordNotifiesListenerOnAdd,
                 "transactionRecordNotifiesListenerOnAdd"},
             {transactionRecordHasOneAdded, "transactionRecordHasOneAdded"},
@@ -63,24 +69,28 @@ static int main() {
                 "transactionRecordDoesNotVerifyMatchingAmountWhenRemovingOne"},
             {commandResponderSubscribesToModelEvents,
                 "commandResponderSubscribesToModelEvents"},
-            {commandResponderAddsTransaction, "commandResponderAddsTransaction"},
+            {commandResponderAddsTransaction,
+                "commandResponderAddsTransaction"},
             {commandResponderAddsTransactionWithDecimal,
                 "commandResponderAddsTransactionWithDecimal"},
             {commandResponderAddsTransactionWithOneDecimalDigit,
                 "commandResponderAddsTransactionWithOneDecimalDigit"},
             {commandResponderAddsTransactionWithNoDecimalDigits,
                 "commandResponderAddsTransactionWithNoDecimalDigits"},
-            {commandResponderRemovesTransaction, "commandResponderRemovesTransaction"},
+            {commandResponderRemovesTransaction,
+                "commandResponderRemovesTransaction"},
             {commandResponderPrintsTransactionVerified,
                 "commandResponderPrintsTransactionVerified"},
             {commandResponderPrintsTransactionAdded,
                 "commandResponderPrintsTransactionAdded"},
-            {commandResponderPrintsAllTransaction, "commandResponderPrintsAllTransaction"},
+            {commandResponderPrintsAllTransaction,
+                "commandResponderPrintsAllTransaction"},
             {commandResponderPrintsAllVerifiedTransaction,
                 "commandResponderPrintsAllVerifiedTransaction"},
             {commandResponderPrintsUnverifiedTransaction,
                 "commandResponderPrintsUnverifiedTransaction"},
-            {commandResponderPrintsNetIncome, "commandResponderPrintsNetIncome"},
+            {commandResponderPrintsNetIncome,
+                "commandResponderPrintsNetIncome"},
             {commandResponderVerifiesAmount, "commandResponderVerifiesAmount"},
             {commandResponderDoesNotAbortOnUnrecognizedCommand,
                 "commandResponderDoesNotAbortOnUnrecognizedCommand"},
