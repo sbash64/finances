@@ -79,11 +79,9 @@ void Presenter::execute(const std::string &s) {
             state = State::normal;
         } else if (state == State::amountEntered) {
             labelAdding = first;
-            labelEntered = true;
             state = State::labelEntered;
         } else {
             amountAdding = hundredths(first);
-            amountEntered = true;
             state = State::amountEntered;
         }
     } catch (const std::invalid_argument &) {

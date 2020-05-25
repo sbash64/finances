@@ -73,11 +73,9 @@ class Presenter : Model::EventListener {
   private:
     Model &model;
     View &view;
-    State state{};
-    bool amountEntered{};
-    int amountAdding{};
-    bool labelEntered{};
     std::string labelAdding{};
+    int amountAdding{};
+    State state{};
 };
 }
 
