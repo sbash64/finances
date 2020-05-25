@@ -50,12 +50,6 @@ class ModelStub : public Model {
         subscribed_ = true;
     }
 
-    auto subscribed() const -> bool { return subscribed_; }
-
-    auto verified(const Transaction &t) { listener->verified(t); }
-
-    auto added(const Transaction &t) { listener->added(t); }
-
   private:
     Transactions transactions_;
     Transactions verifiedTransactions_;
@@ -93,14 +87,6 @@ void setVerifiedTransactions(ModelStub &model, Transactions t) {
 
 void setUnverifiedTransactions(ModelStub &model, Transactions t) {
     model.setUnverifiedTransactions(std::move(t));
-}
-
-void verified(ModelStub &model, int a, std::string b, std::string c) {
-    model.verified(transaction(a, std::move(b), std::move(c)));
-}
-
-void added(ModelStub &model, int a, std::string b, std::string c) {
-    model.added(transaction(a, std::move(b), std::move(c)));
 }
 
 void setNetIncome(ModelStub &model, int x) { model.setNetIncome(x); }
@@ -155,13 +141,6 @@ void assertTransactionRemoved(testcpplite::TestResult &result, ModelStub &model,
         model.transactionRemoved());
 }
 
-void assertTransactionPrinted(testcpplite::TestResult &result, ViewStub &view,
-    int amount, std::string label, std::string date) {
-    assertEqual(result,
-        oneTransaction(amount, std::move(label), std::move(date)),
-        view.shownTransactions());
-}
-
 void assertBothTransactionsPrinted(testcpplite::TestResult &result,
     ViewStub &view, int amount1, std::string label1, std::string date1,
     int amount2, std::string label2, std::string date2) {
@@ -188,12 +167,6 @@ void testCommandResponder(
     CommandResponder commandResponder{model, view};
     f(commandResponder, model, view);
 }
-}
-
-void commandResponderSubscribesToModelEvents(testcpplite::TestResult &result) {
-    testCommandResponder([&](CommandResponder &, ModelStub &model, ViewStub &) {
-        assertTrue(result, model.subscribed());
-    });
 }
 
 void commandResponderAddsTransactionInSteps(testcpplite::TestResult &result) {
@@ -261,23 +234,6 @@ void commandResponderRemovesTransaction(testcpplite::TestResult &result) {
             remove(commandResponder, "-12.34 hyvee 10/5/19");
             assertTransactionRemoved(result, model, -1234, "hyvee", "10/5/19");
         });
-}
-
-void commandResponderPrintsTransactionVerified(
-    testcpplite::TestResult &result) {
-    testCommandResponder([&](CommandResponder &, ModelStub &model,
-                             ViewStub &view) {
-        verified(model, -1000, "chipotle", "10/6/19");
-        assertTransactionPrinted(result, view, -1000, "chipotle", "10/6/19");
-    });
-}
-
-void commandResponderPrintsTransactionAdded(testcpplite::TestResult &result) {
-    testCommandResponder([&](CommandResponder &, ModelStub &model,
-                             ViewStub &view) {
-        added(model, -1000, "chipotle", "10/6/19");
-        assertTransactionPrinted(result, view, -1000, "chipotle", "10/6/19");
-    });
 }
 
 void commandResponderPrintsAllTransaction(testcpplite::TestResult &result) {
