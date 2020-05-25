@@ -114,31 +114,29 @@ void executeCommand(
     execute(presenter, name(c) + std::string(s.empty() ? 0 : 1, ' ') + s);
 }
 
-void executeAdd(Presenter &presenter, const std::string &s) {
+void add(Presenter &presenter, const std::string &s) {
     executeCommand(presenter, Command::add, s);
 }
 
-void executeRemove(Presenter &presenter, const std::string &s) {
+void remove(Presenter &presenter, const std::string &s) {
     executeCommand(presenter, Command::remove, s);
 }
 
-void executePrint(Presenter &presenter) {
-    executeCommand(presenter, Command::print);
-}
+void print(Presenter &presenter) { executeCommand(presenter, Command::print); }
 
-void executePrintVerified(Presenter &presenter) {
+void printVerified(Presenter &presenter) {
     executeCommand(presenter, Command::printVerified);
 }
 
-void executePrintUnverified(Presenter &presenter) {
+void printUnverified(Presenter &presenter) {
     executeCommand(presenter, Command::printUnverified);
 }
 
-void executeNetIncome(Presenter &presenter) {
+void netIncome(Presenter &presenter) {
     executeCommand(presenter, Command::netIncome);
 }
 
-void executeVerify(Presenter &presenter, const std::string &s) {
+void verify(Presenter &presenter, const std::string &s) {
     executeCommand(presenter, Command::verify, s);
 }
 
@@ -197,14 +195,14 @@ void presenterSubscribesToModelEvents(testcpplite::TestResult &result) {
 
 void presenterAddsTransaction(testcpplite::TestResult &result) {
     testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
-        executeAdd(presenter, "-50 hyvee 10/5/19");
+        add(presenter, "-50 hyvee 10/5/19");
         assertTransactionAdded(result, model, -5000, "hyvee", "10/5/19");
     });
 }
 
 void presenterAddsTransactionWithDecimal(testcpplite::TestResult &result) {
     testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
-        executeAdd(presenter, "-9.47 chipotle 10/6/19");
+        add(presenter, "-9.47 chipotle 10/6/19");
         assertTransactionAdded(result, model, -947, "chipotle", "10/6/19");
     });
 }
@@ -212,7 +210,7 @@ void presenterAddsTransactionWithDecimal(testcpplite::TestResult &result) {
 void presenterAddsTransactionWithOneDecimalDigit(
     testcpplite::TestResult &result) {
     testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
-        executeAdd(presenter, "-9.4 chipotle 10/6/19");
+        add(presenter, "-9.4 chipotle 10/6/19");
         assertTransactionAdded(result, model, -940, "chipotle", "10/6/19");
     });
 }
@@ -220,14 +218,14 @@ void presenterAddsTransactionWithOneDecimalDigit(
 void presenterAddsTransactionWithNoDecimalDigits(
     testcpplite::TestResult &result) {
     testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
-        executeAdd(presenter, "-9. chipotle 10/6/19");
+        add(presenter, "-9. chipotle 10/6/19");
         assertTransactionAdded(result, model, -900, "chipotle", "10/6/19");
     });
 }
 
 void presenterRemovesTransaction(testcpplite::TestResult &result) {
     testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
-        executeRemove(presenter, "-12.34 hyvee 10/5/19");
+        remove(presenter, "-12.34 hyvee 10/5/19");
         assertTransactionRemoved(result, model, -1234, "hyvee", "10/5/19");
     });
 }
@@ -251,7 +249,7 @@ void presenterPrintsAllTransaction(testcpplite::TestResult &result) {
         setAllTransactions(model,
             twoTransactions(
                 -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
-        executePrint(presenter);
+        print(presenter);
         assertBothTransactionsPrinted(result, view, -1000, "chipotle",
             "10/6/19", -5000, "hyvee", "10/4/19");
     });
@@ -262,7 +260,7 @@ void presenterPrintsAllVerifiedTransaction(testcpplite::TestResult &result) {
         setVerifiedTransactions(model,
             twoTransactions(
                 -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
-        executePrintVerified(presenter);
+        printVerified(presenter);
         assertBothTransactionsPrinted(result, view, -1000, "chipotle",
             "10/6/19", -5000, "hyvee", "10/4/19");
     });
@@ -273,7 +271,7 @@ void presenterPrintsUnverifiedTransaction(testcpplite::TestResult &result) {
         setUnverifiedTransactions(model,
             twoTransactions(
                 -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
-        executePrintUnverified(presenter);
+        printUnverified(presenter);
         assertBothTransactionsPrinted(result, view, -1000, "chipotle",
             "10/6/19", -5000, "hyvee", "10/4/19");
     });
@@ -282,14 +280,14 @@ void presenterPrintsUnverifiedTransaction(testcpplite::TestResult &result) {
 void presenterPrintsNetIncome(testcpplite::TestResult &result) {
     testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &view) {
         setNetIncome(model, 5000);
-        executeNetIncome(presenter);
+        netIncome(presenter);
         assertNetIncomePrinted(result, view, 5000);
     });
 }
 
 void presenterVerifiesAmount(testcpplite::TestResult &result) {
     testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
-        executeVerify(presenter, "-12.34");
+        verify(presenter, "-12.34");
         assertAmountVerified(result, model, -1234);
     });
 }
@@ -302,7 +300,7 @@ void presenterDoesNotAbortOnUnrecognizedCommand(testcpplite::TestResult &) {
 
 void presenterDoesNotAbortOnPartiallyCorrectCommand(testcpplite::TestResult &) {
     testPresenter([&](Presenter &presenter, ModelStub &, ViewStub &) {
-        executeAdd(presenter, "oops");
+        add(presenter, "oops");
     });
 }
 }

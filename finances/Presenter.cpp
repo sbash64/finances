@@ -21,7 +21,7 @@ static auto hundredths(const std::string &s) -> int {
     const auto decimal{s.find('.')};
     if (decimal == std::string::npos)
         return hundredthsInteger(s);
-    const auto sign{s.front() == '-' ? "-" : ""};
+    const auto *const sign{s.front() == '-' ? "-" : ""};
     const auto beforeDecimalMark{s.substr(0, decimal)};
     const auto firstDecimalPlace{decimal + 1};
     const auto afterDecimalMark{s.substr(firstDecimalPlace)};
