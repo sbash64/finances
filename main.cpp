@@ -1,4 +1,5 @@
 #include <finances/Presenter.hpp>
+#include <finances/CommandResponder.hpp>
 #include <finances/FormattedWriter.hpp>
 #include <finances/ItemizedFormatter.hpp>
 #include <finances/TransactionRecord.hpp>
@@ -38,10 +39,11 @@ auto c_str(const Readline &line) -> const char * { return line.c_str(); }
     ItemizedFormatter formatter;
     FormattedWriter formattedWriter{formatter, writer};
     TransactionRecord record;
-    CommandResponder presenter{record, formattedWriter};
+    CommandResponder responder{record, formattedWriter};
+    Presenter presenter{record, formattedWriter};
     for (;;) {
         Readline line("finances$ ");
-        presenter.execute(c_str(line));
+        responder.execute(c_str(line));
         if (c_str(line) != nullptr && *c_str(line) != 0)
             add_history(c_str(line));
     }

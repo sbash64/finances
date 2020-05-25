@@ -4,7 +4,6 @@
 #include "Transaction.hpp"
 #include "Model.hpp"
 #include "View.hpp"
-#include <string>
 
 namespace finances {
 enum class Command {
