@@ -3,16 +3,10 @@
 
 #include "Transaction.hpp"
 #include "Model.hpp"
+#include "View.hpp"
 #include <string>
 
 namespace finances {
-class View {
-  public:
-    virtual ~View() = default;
-    virtual void show(const Transactions &) = 0;
-    virtual void showNetIncome(int) = 0;
-};
-
 enum class Command {
     print,
     printVerified,
