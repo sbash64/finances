@@ -3,9 +3,7 @@
 
 namespace finances {
 CommandResponder::CommandResponder(Model &record, View &printer)
-    : model{record}, view{printer} {
-    model.subscribe(this);
-}
+    : model{record}, view{printer} {}
 
 static auto integer(const std::string &s) -> int { return std::stoi(s); }
 
@@ -87,8 +85,4 @@ void CommandResponder::execute(const std::string &s) {
     } catch (const std::invalid_argument &) {
     }
 }
-
-void CommandResponder::verified(const Transaction &t) { show(view, {t}); }
-
-void CommandResponder::added(const Transaction &t) { show(view, {t}); }
 }

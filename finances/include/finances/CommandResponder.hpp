@@ -37,12 +37,10 @@ constexpr auto name(Command c) -> const char * {
     return "";
 }
 
-class CommandResponder : Model::EventListener {
+class CommandResponder {
   public:
     CommandResponder(Model &, View &);
     void execute(const std::string &);
-    void verified(const Transaction &) override;
-    void added(const Transaction &) override;
 
     enum class State { normal, amountEntered, labelEntered };
 
