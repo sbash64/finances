@@ -20,6 +20,7 @@ void presenterVerifiesAmount(testcpplite::TestResult &);
 void presenterDoesNotAbortOnUnrecognizedCommand(testcpplite::TestResult &);
 void presenterDoesNotAbortOnPartiallyCorrectCommand(testcpplite::TestResult &);
 void presenterAddsTransactionInSteps(testcpplite::TestResult &);
+void presenterAddsTwoTransactionsInSteps(testcpplite::TestResult &);
 }
 
 #endif

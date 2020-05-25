@@ -74,14 +74,17 @@ void Presenter::execute(const std::string &s) {
             model.add(transaction(stream));
         else if (matches(first, Command::remove))
             model.remove(transaction(stream));
-        else if (labelEntered)
+        else if (state == State::labelEntered) {
             model.add({amountAdding, labelAdding, first});
-        else if (amountEntered) {
+            state = State::normal;
+        } else if (state == State::amountEntered) {
             labelAdding = first;
             labelEntered = true;
+            state = State::labelEntered;
         } else {
             amountAdding = hundredths(first);
             amountEntered = true;
+            state = State::amountEntered;
         }
     } catch (const std::invalid_argument &) {
     }

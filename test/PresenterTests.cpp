@@ -202,6 +202,18 @@ void presenterAddsTransactionInSteps(testcpplite::TestResult &result) {
     });
 }
 
+void presenterAddsTwoTransactionsInSteps(testcpplite::TestResult &result) {
+    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
+        execute(presenter, "-50");
+        execute(presenter, "hyvee");
+        execute(presenter, "10/5/19");
+        execute(presenter, "-9.47");
+        execute(presenter, "chipotle");
+        execute(presenter, "10/6/19");
+        assertTransactionAdded(result, model, -947, "chipotle", "10/6/19");
+    });
+}
+
 void presenterAddsTransaction(testcpplite::TestResult &result) {
     testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
         add(presenter, "-50 hyvee 10/5/19");

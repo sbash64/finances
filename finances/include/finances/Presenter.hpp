@@ -68,9 +68,12 @@ class Presenter : Model::EventListener {
     void verified(const Transaction &) override;
     void added(const Transaction &) override;
 
+    enum class State { normal, amountEntered, labelEntered };
+
   private:
     Model &model;
     View &view;
+    State state{};
     bool amountEntered{};
     int amountAdding{};
     bool labelEntered{};

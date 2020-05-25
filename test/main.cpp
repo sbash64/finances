@@ -88,6 +88,8 @@ static int main() {
                 "presenterDoesNotAbortOnPartiallyCorrectCommand"},
             {presenterAddsTransactionInSteps,
                 "presenterAddsTransactionInSteps"},
+            {presenterAddsTwoTransactionsInSteps,
+                "presenterAddsTwoTransactionsInSteps"},
             {itemizedFormatterFormatsOneTransaction,
                 "itemizedFormatterFormatsOneTransaction"},
             {itemizedFormatterFormatsTwoTransactions,
