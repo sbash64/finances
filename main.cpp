@@ -38,7 +38,7 @@ auto c_str(const Readline &line) -> const char * { return line.c_str(); }
     ItemizedFormatter formatter;
     FormattedWriter formattedWriter{formatter, writer};
     TransactionRecord record;
-    Presenter presenter{record, formattedWriter};
+    CommandResponder presenter{record, formattedWriter};
     for (;;) {
         Readline line("finances$ ");
         presenter.execute(c_str(line));

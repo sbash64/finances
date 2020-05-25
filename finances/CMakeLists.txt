@@ -1,4 +1,4 @@
-add_library(finances TransactionRecord.cpp Presenter.cpp FormattedWriter.cpp
+add_library(finances TransactionRecord.cpp CommandResponder.cpp FormattedWriter.cpp
                      ItemizedFormatter.cpp)
 target_compile_features(
   finances

@@ -2,7 +2,7 @@
 #define FINANCES_INCLUDE_FINANCES_FORMATTEDWRITER_HPP_
 
 #include "Transaction.hpp"
-#include "Presenter.hpp"
+#include "CommandResponder.hpp"
 #include <string>
 
 namespace finances {
