@@ -193,6 +193,15 @@ void presenterSubscribesToModelEvents(testcpplite::TestResult &result) {
     });
 }
 
+void presenterAddsTransactionInSteps(testcpplite::TestResult &result) {
+    testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
+        execute(presenter, "-50");
+        execute(presenter, "hyvee");
+        execute(presenter, "10/5/19");
+        assertTransactionAdded(result, model, -5000, "hyvee", "10/5/19");
+    });
+}
+
 void presenterAddsTransaction(testcpplite::TestResult &result) {
     testPresenter([&](Presenter &presenter, ModelStub &model, ViewStub &) {
         add(presenter, "-50 hyvee 10/5/19");

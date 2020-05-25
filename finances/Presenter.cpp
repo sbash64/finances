@@ -77,7 +77,31 @@ static void execute(Model &model, View &view, const std::string &s) {
 
 void Presenter::execute(const std::string &s) {
     try {
-        finances::execute(model, view, s);
+        std::stringstream stream{s};
+        const auto command{next(stream)};
+        if (matches(command, Command::print))
+            show(view, model.transactions());
+        else if (matches(command, Command::printVerified))
+            show(view, model.verifiedTransactions());
+        else if (matches(command, Command::printUnverified))
+            show(view, model.unverifiedTransactions());
+        else if (matches(command, Command::netIncome))
+            view.showNetIncome(model.netIncome());
+        else if (matches(command, Command::verify))
+            model.verify(amount(stream));
+        else if (matches(command, Command::add))
+            model.add(transaction(stream));
+        else if (matches(command, Command::remove))
+            model.remove(transaction(stream));
+        else if (labelEntered)
+            model.add({amountAdding, labelAdding, command});
+        else if (amountEntered) {
+            labelAdding = command;
+            labelEntered = true;
+        } else {
+            amountAdding = hundredths(command);
+            amountEntered = true;
+        }
     } catch (const std::invalid_argument &) {
     }
 }

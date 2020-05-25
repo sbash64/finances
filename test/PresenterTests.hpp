@@ -19,6 +19,7 @@ void presenterPrintsNetIncome(testcpplite::TestResult &);
 void presenterVerifiesAmount(testcpplite::TestResult &);
 void presenterDoesNotAbortOnUnrecognizedCommand(testcpplite::TestResult &);
 void presenterDoesNotAbortOnPartiallyCorrectCommand(testcpplite::TestResult &);
+void presenterAddsTransactionInSteps(testcpplite::TestResult &);
 }
 
 #endif
