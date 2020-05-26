@@ -6,7 +6,7 @@
 
 namespace finances {
 namespace {
-class ModelEventListenerStub : public Model::EventListener {
+class ModelEventListenerStub : public TransactionRecord::EventListener {
   public:
     auto verified() const -> bool { return verified_; }
 
@@ -108,9 +108,8 @@ void assertTwoTransactions(testcpplite::TestResult &result,
 void testTransactionRecord(
     const std::function<void(TransactionRecord &, ModelEventListenerStub &)>
         &f) {
-    TransactionRecord record;
     ModelEventListenerStub listener;
-    record.subscribe(&listener);
+    TransactionRecord record{listener};
     f(record, listener);
 }
 

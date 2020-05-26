@@ -1,9 +1,7 @@
 #include "Presenter.hpp"
 
 namespace finances {
-Presenter::Presenter(Model &record, View &printer) : view{printer} {
-    record.subscribe(this);
-}
+Presenter::Presenter(View &view) : view{view} {}
 
 static void show(View &view, const Transaction &t) { view.show({t}); }
 

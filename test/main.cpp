@@ -9,9 +9,8 @@
 namespace finances {
 static int main() {
     return testcpplite::test(
-        {{presenterSubscribesToModelEvents, "presenterSubscribesToModelEvents"},
-            {presenterPrintsTransactionVerified,
-                "presenterPrintsTransactionVerified"},
+        {{presenterPrintsTransactionVerified,
+             "presenterPrintsTransactionVerified"},
             {presenterPrintsTransactionAdded,
                 "presenterPrintsTransactionAdded"},
             {transactionRecordHasNoneOnConstruction,

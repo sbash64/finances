@@ -4,7 +4,6 @@
 #include <testcpplite/testcpplite.hpp>
 
 namespace finances {
-void presenterSubscribesToModelEvents(testcpplite::TestResult &);
 void presenterPrintsTransactionVerified(testcpplite::TestResult &);
 void presenterPrintsTransactionAdded(testcpplite::TestResult &);
 }

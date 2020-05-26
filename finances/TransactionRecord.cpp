@@ -43,12 +43,13 @@ static auto unverifiedTransaction(const Transaction &t)
     return v;
 }
 
+TransactionRecord::TransactionRecord(EventListener &listener)
+    : listener{listener} {}
+
 void TransactionRecord::add(const Transaction &t) {
     verifiableTransactions.push_back(unverifiedTransaction(t));
-    listener->added(t);
+    listener.added(t);
 }
-
-void TransactionRecord::subscribe(EventListener *e) { listener = e; }
 
 void TransactionRecord::remove(const Transaction &transaction) {
     const auto maybe{std::find(begin(verifiableTransactions),
@@ -101,7 +102,7 @@ void TransactionRecord::verify(int amount) {
         [=](auto t) { return amountMatches(t, amount) && unverified(t); })};
     if (found(maybe, verifiableTransactions)) {
         maybe->verified = true;
-        listener->verified(*maybe);
+        listener.verified(*maybe);
     }
 }
 }

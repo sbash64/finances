@@ -45,21 +45,14 @@ class ModelStub : public Model {
         return unverifiedTransactions_;
     }
 
-    void subscribe(EventListener *e) override {
-        listener = e;
-        subscribed_ = true;
-    }
-
   private:
     Transactions transactions_;
     Transactions verifiedTransactions_;
     Transactions unverifiedTransactions_;
     Transaction transactionAdded_;
     Transaction transactionRemoved_;
-    EventListener *listener{};
     int netIncome_{};
     int amountVerified_{};
-    bool subscribed_{};
 };
 
 class ViewStub : public View {
