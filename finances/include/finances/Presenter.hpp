@@ -5,7 +5,7 @@
 #include "View.hpp"
 
 namespace finances {
-class Presenter : TransactionRecord::EventListener {
+class Presenter : public TransactionRecord::EventListener {
   public:
     Presenter(View &);
     void verified(const Transaction &) override;
