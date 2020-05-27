@@ -73,7 +73,7 @@ void CommandResponder::execute(const std::string &s) {
         else if (matches(first, Command::remove))
             model.remove(transaction(stream));
         else if (state == State::labelEntered) {
-            model.add({amountAdding, labelAdding, first});
+            model.add({{amountAdding}, labelAdding, first});
             state = State::normal;
         } else if (state == State::amountEntered) {
             labelAdding = first;

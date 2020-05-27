@@ -33,7 +33,7 @@ class ModelStub : public Model {
 
     auto netIncome() -> NetIncome override { return netIncome_; }
 
-    void verify(const Amount &x) override { amountVerified_ = x; }
+    void verify(Amount x) override { amountVerified_ = x; }
 
     void remove(const Transaction &t) override { transactionRemoved_ = t; }
 

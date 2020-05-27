@@ -104,7 +104,7 @@ auto TransactionRecord::netIncome() -> NetIncome {
     return netIncome;
 }
 
-void TransactionRecord::verify(const Amount &amount) {
+void TransactionRecord::verify(Amount amount) {
     const auto maybe{findIf(verifiableTransactions, [=](auto t) {
         return amountMatches(t, amount.cents) && unverified(t);
     })};

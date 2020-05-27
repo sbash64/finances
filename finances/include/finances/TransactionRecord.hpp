@@ -25,7 +25,7 @@ class TransactionRecord : public Model {
     void remove(const Transaction &) override;
     auto netIncome() -> NetIncome override;
     auto transactions() -> Transactions override;
-    void verify(const Amount &) override;
+    void verify(Amount) override;
     auto verifiedTransactions() -> Transactions override;
     auto unverifiedTransactions() -> Transactions override;
 

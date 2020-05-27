@@ -19,11 +19,15 @@ struct Transaction {
 
 using Transactions = std::vector<Transaction>;
 
-constexpr auto amount(const Transaction &t) { return t.amount; }
+constexpr auto amount(const Transaction &t) -> Amount { return t.amount; }
 
-constexpr auto label(const Transaction &t) -> auto & { return t.label; }
+constexpr auto label(const Transaction &t) -> const std::string & {
+    return t.label;
+}
 
-constexpr auto date(const Transaction &t) -> auto & { return t.date; }
+constexpr auto date(const Transaction &t) -> const std::string & {
+    return t.date;
+}
 }
 
 #endif
