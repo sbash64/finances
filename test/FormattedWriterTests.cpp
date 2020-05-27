@@ -11,7 +11,7 @@ class FormatterStub : public Formatter {
 
     auto netIncomeToFormat() const { return netIncomeToFormat_; }
 
-    auto formatNetIncome(int x) -> std::string override {
+    auto format(const NetIncome &x) -> std::string override {
         netIncomeToFormat_ = x;
         return formattedNetIncome_;
     }
@@ -33,7 +33,7 @@ class FormatterStub : public Formatter {
     Transactions transactionsToFormat_;
     std::string formattedTransactions_;
     std::string formattedNetIncome_;
-    int netIncomeToFormat_{};
+    NetIncome netIncomeToFormat_{};
 };
 
 class WriterStub : public Writer {
@@ -56,7 +56,9 @@ void assertWrittenForShowing(
 }
 
 void showNetIncome(FormattedWriter &printer, int x = {}) {
-    printer.showNetIncome(x);
+    NetIncome netIncome{};
+    netIncome.cents = x;
+    printer.show(netIncome);
 }
 
 void testFormattedWriter(
@@ -92,7 +94,7 @@ void formattedWriterFormatsNetIncome(testcpplite::TestResult &result) {
     testFormattedWriter(
         [&](FormattedWriter &printer, FormatterStub &formatter, WriterStub &) {
             showNetIncome(printer, 10);
-            assertEqual(result, 10, formatter.netIncomeToFormat());
+            assertEqual(result, 10, formatter.netIncomeToFormat().cents);
         });
 }
 

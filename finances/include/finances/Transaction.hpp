@@ -5,8 +5,14 @@
 #include <vector>
 
 namespace finances {
+struct Amount {
+    int cents;
+};
+
+struct NetIncome : Amount {};
+
 struct Transaction {
-    int amount;
+    Amount amount;
     std::string label;
     std::string date;
 };
@@ -18,12 +24,6 @@ constexpr auto amount(const Transaction &t) { return t.amount; }
 constexpr auto label(const Transaction &t) -> auto & { return t.label; }
 
 constexpr auto date(const Transaction &t) -> auto & { return t.date; }
-
-constexpr auto operator==(const Transaction &lhs, const Transaction &rhs)
-    -> bool {
-    return amount(lhs) == amount(rhs) && label(lhs) == label(rhs) &&
-        date(lhs) == date(rhs);
-}
 }
 
 #endif

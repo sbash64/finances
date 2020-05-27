@@ -15,7 +15,7 @@ class ModelStub : public Model {
 
     auto transactionRemoved() const { return transactionRemoved_; }
 
-    void setNetIncome(int x) { netIncome_ = x; }
+    void setNetIncome(int x) { netIncome_.cents = x; }
 
     void add(const Transaction &t) override { transactionAdded_ = t; }
 
@@ -31,9 +31,9 @@ class ModelStub : public Model {
 
     auto transactions() -> Transactions override { return transactions_; }
 
-    auto netIncome() -> int override { return netIncome_; }
+    auto netIncome() -> NetIncome override { return netIncome_; }
 
-    void verify(int x) override { amountVerified_ = x; }
+    void verify(const Amount &x) override { amountVerified_ = x; }
 
     void remove(const Transaction &t) override { transactionRemoved_ = t; }
 
@@ -51,8 +51,8 @@ class ModelStub : public Model {
     Transactions unverifiedTransactions_;
     Transaction transactionAdded_;
     Transaction transactionRemoved_;
-    int netIncome_{};
-    int amountVerified_{};
+    NetIncome netIncome_{};
+    Amount amountVerified_{};
 };
 
 class ViewStub : public View {
@@ -63,11 +63,11 @@ class ViewStub : public View {
 
     void show(const Transactions &t) override { shownTransactions_ = t; }
 
-    void showNetIncome(int x) override { shownNetIncome_ = x; }
+    void show(const NetIncome &x) override { shownNetIncome_ = x; }
 
   private:
-    Transactions shownTransactions_;
-    int shownNetIncome_;
+    Transactions shownTransactions_{};
+    NetIncome shownNetIncome_{};
 };
 
 void setAllTransactions(ModelStub &model, Transactions t) {
@@ -145,12 +145,12 @@ void assertBothTransactionsPrinted(testcpplite::TestResult &result,
 
 void assertNetIncomePrinted(
     testcpplite::TestResult &result, ViewStub &view, int x) {
-    assertEqual(result, x, view.shownNetIncome());
+    assertEqual(result, x, view.shownNetIncome().cents);
 }
 
 void assertAmountVerified(
     testcpplite::TestResult &result, ModelStub &model, int x) {
-    assertEqual(result, x, model.amountVerified());
+    assertEqual(result, x, model.amountVerified().cents);
 }
 
 void testCommandResponder(

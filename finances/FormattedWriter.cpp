@@ -8,15 +8,13 @@ static void write(Writer &writer, const std::string &what) {
     writer.write('\n' + what + "\n\n");
 }
 
-void FormattedWriter::showNetIncome(int x) {
-    write(writer, formatter.formatNetIncome(x));
+void FormattedWriter::show(const NetIncome &x) {
+    write(writer, formatter.format(x));
 }
 
 void FormattedWriter::show(const Transactions &t) {
     write(writer, formatter.format(t));
 }
 
-void FormattedWriter::show(const std::string &s) {
-    write(writer, s);
-}
+void FormattedWriter::show(const std::string &s) { write(writer, s); }
 }

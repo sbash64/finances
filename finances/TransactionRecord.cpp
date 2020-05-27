@@ -18,7 +18,7 @@ static auto unverified(const VerifiableTransaction &t) -> bool {
 }
 
 static auto amountMatches(const Transaction &t, int x) -> bool {
-    return amount(t) == x;
+    return amount(t).cents == x;
 }
 
 static void addTo(Transactions &t, const VerifiableTransaction &vt) {
@@ -49,6 +49,11 @@ TransactionRecord::TransactionRecord(EventListener &listener)
 void TransactionRecord::add(const Transaction &t) {
     verifiableTransactions.push_back(unverifiedTransaction(t));
     listener.added(t);
+}
+
+static auto operator==(const Transaction &a, const Transaction &b) -> bool {
+    return a.amount.cents == b.amount.cents && a.date == b.date &&
+        a.label == b.label;
 }
 
 void TransactionRecord::remove(const Transaction &transaction) {
@@ -91,15 +96,18 @@ auto TransactionRecord::transactions() -> Transactions {
     return transactions;
 }
 
-auto TransactionRecord::netIncome() -> int {
-    return std::accumulate(begin(verifiableTransactions),
+auto TransactionRecord::netIncome() -> NetIncome {
+    NetIncome netIncome{};
+    netIncome.cents = std::accumulate(begin(verifiableTransactions),
         end(verifiableTransactions), 0,
-        [](auto net, auto t) { return net + amount(t); });
+        [](auto net, auto t) { return net + amount(t).cents; });
+    return netIncome;
 }
 
-void TransactionRecord::verify(int amount) {
-    const auto maybe{findIf(verifiableTransactions,
-        [=](auto t) { return amountMatches(t, amount) && unverified(t); })};
+void TransactionRecord::verify(const Amount &amount) {
+    const auto maybe{findIf(verifiableTransactions, [=](auto t) {
+        return amountMatches(t, amount.cents) && unverified(t);
+    })};
     if (found(maybe, verifiableTransactions)) {
         maybe->verified = true;
         listener.verified(*maybe);

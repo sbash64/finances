@@ -36,7 +36,9 @@ void add(TransactionRecord &record, int amount, std::string label,
     record.add(transaction(amount, std::move(label), std::move(date)));
 }
 
-void verify(TransactionRecord &record, int amount) { record.verify(amount); }
+void verify(TransactionRecord &record, int amount) {
+    record.verify(Amount{amount});
+}
 
 void remove(TransactionRecord &record, int amount, std::string label,
     std::string date) {
@@ -115,7 +117,7 @@ void testTransactionRecord(
 
 void assertNetIncome(
     testcpplite::TestResult &result, TransactionRecord &record, int amount) {
-    assertEqual(result, amount, record.netIncome());
+    assertEqual(result, amount, record.netIncome().cents);
 }
 }
 

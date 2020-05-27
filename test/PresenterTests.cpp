@@ -13,11 +13,11 @@ class ViewStub : public View {
 
     void show(const Transactions &t) override { shownTransactions_ = t; }
 
-    void showNetIncome(int x) override { shownNetIncome_ = x; }
+    void show(const NetIncome &x) override { shownNetIncome_ = x; }
 
   private:
-    Transactions shownTransactions_;
-    int shownNetIncome_;
+    Transactions shownTransactions_{};
+    NetIncome shownNetIncome_{};
 };
 
 void verified(Presenter &presenter, int a, std::string b, std::string c) {

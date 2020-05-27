@@ -37,8 +37,9 @@ void itemizedFormatterFormatsTwoTransactions(testcpplite::TestResult &result) {
 
 void itemizedFormatterFormatsNetIncome(testcpplite::TestResult &result) {
     testItemizedFormatter([&](ItemizedFormatter &formatter) {
-        assertEqual(
-            result, "Net Income: -9.79", formatter.formatNetIncome(-979));
+        NetIncome netIncome{};
+        netIncome.cents = -979;
+        assertEqual(result, "Net Income: -9.79", formatter.format(netIncome));
     });
 }
 }

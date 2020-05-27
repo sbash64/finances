@@ -9,7 +9,7 @@
 namespace finances {
 inline auto transaction(int amount, std::string label, std::string date)
     -> Transaction {
-    return {amount, std::move(label), std::move(date)};
+    return {{amount}, std::move(label), std::move(date)};
 }
 
 inline auto oneTransaction(int amount, std::string label, std::string date)
@@ -31,15 +31,15 @@ inline auto threeTransactions(int amount1, std::string label1,
         transaction(amount3, std::move(label3), std::move(date3))};
 }
 
-inline void assertEqual(testcpplite::TestResult &result, const Transaction &expected,
-    const Transaction &actual) {
-    assertEqual(result, expected.amount, actual.amount);
+inline void assertEqual(testcpplite::TestResult &result,
+    const Transaction &expected, const Transaction &actual) {
+    assertEqual(result, expected.amount.cents, actual.amount.cents);
     assertEqual(result, expected.date, actual.date);
     assertEqual(result, expected.label, actual.label);
 }
 
-inline void assertEqual(testcpplite::TestResult &result, const Transactions &expected,
-    const Transactions &actual) {
+inline void assertEqual(testcpplite::TestResult &result,
+    const Transactions &expected, const Transactions &actual) {
     assertEqual(result, expected.size(), actual.size());
     for (size_t i{0}; i < expected.size(); ++i)
         assertEqual(result, expected.at(i), actual.at(i));

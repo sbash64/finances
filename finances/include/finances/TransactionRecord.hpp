@@ -23,9 +23,9 @@ class TransactionRecord : public Model {
     explicit TransactionRecord(EventListener &);
     void add(const Transaction &) override;
     void remove(const Transaction &) override;
-    auto netIncome() -> int override;
+    auto netIncome() -> NetIncome override;
     auto transactions() -> Transactions override;
-    void verify(int) override;
+    void verify(const Amount &) override;
     auto verifiedTransactions() -> Transactions override;
     auto unverifiedTransactions() -> Transactions override;
 

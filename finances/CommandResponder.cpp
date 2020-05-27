@@ -41,8 +41,8 @@ static auto matches(const std::string &a, Command c) -> bool {
     return matches(a, name(c));
 }
 
-static auto amount(std::stringstream &stream) -> int {
-    return hundredths(next(stream));
+static auto amount(std::stringstream &stream) -> Amount {
+    return Amount{hundredths(next(stream))};
 }
 
 static auto transaction(std::stringstream &stream) -> Transaction {
@@ -65,7 +65,7 @@ void CommandResponder::execute(const std::string &s) {
         else if (matches(first, Command::printUnverified))
             show(view, model.unverifiedTransactions());
         else if (matches(first, Command::netIncome))
-            view.showNetIncome(model.netIncome());
+            view.show(model.netIncome());
         else if (matches(first, Command::verify))
             model.verify(amount(stream));
         else if (matches(first, Command::add))
