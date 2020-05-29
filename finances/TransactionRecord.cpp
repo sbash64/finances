@@ -5,9 +5,9 @@
 #include <utility>
 
 namespace finances {
-static auto begin(const VerifiableTransactions &v) { return v.begin(); }
+constexpr auto begin(const VerifiableTransactions &v) { return v.begin(); }
 
-static auto end(const VerifiableTransactions &v) { return v.end(); }
+constexpr auto end(const VerifiableTransactions &v) { return v.end(); }
 
 static auto verified(const VerifiableTransaction &t) -> bool {
     return t.verified;
@@ -21,8 +21,8 @@ static auto amountMatches(const Transaction &t, int x) -> bool {
     return amount(t).cents == x;
 }
 
-static void addTo(Transactions &t, const VerifiableTransaction &vt) {
-    t.push_back(vt);
+static void addTo(Transactions &transactions, const Transaction &t) {
+    transactions.push_back(t);
 }
 
 static auto found(VerifiableTransactions::iterator it,
@@ -31,8 +31,8 @@ static auto found(VerifiableTransactions::iterator it,
 }
 
 static auto findIf(VerifiableTransactions &transactions,
-    std::function<bool(const VerifiableTransaction &)> f) {
-    return std::find_if(begin(transactions), end(transactions), std::move(f));
+    const std::function<bool(const VerifiableTransaction &)> &f) {
+    return std::find_if(begin(transactions), end(transactions), f);
 }
 
 static auto unverifiedTransaction(const Transaction &t)
@@ -66,15 +66,16 @@ void TransactionRecord::remove(const Transaction &transaction) {
     }
 }
 
-static void for_each(const VerifiableTransactions &transactions,
-    std::function<void(const VerifiableTransaction &)> f) {
-    std::for_each(begin(transactions), end(transactions), std::move(f));
+static void forEach(const VerifiableTransactions &transactions,
+    const std::function<void(const VerifiableTransaction &)> &f) {
+    std::for_each(begin(transactions), end(transactions), f);
 }
 
 static auto collectIf(const VerifiableTransactions &transactions,
-    std::function<bool(const VerifiableTransaction &)> f) -> Transactions {
+    const std::function<bool(const VerifiableTransaction &)> &f)
+    -> Transactions {
     Transactions collected;
-    for_each(transactions, [&](auto transaction) {
+    forEach(transactions, [&](auto transaction) {
         if (f(transaction))
             addTo(collected, transaction);
     });
@@ -91,7 +92,7 @@ auto TransactionRecord::unverifiedTransactions() -> Transactions {
 
 auto TransactionRecord::transactions() -> Transactions {
     Transactions transactions;
-    for_each(verifiableTransactions,
+    forEach(verifiableTransactions,
         [&](auto transaction) { addTo(transactions, transaction); });
     return transactions;
 }
