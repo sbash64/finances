@@ -93,6 +93,8 @@ static int main() {
                 "commandResponderAddsTransactionInSteps"},
             {commandResponderAddsTwoTransactionsInSteps,
                 "commandResponderAddsTwoTransactionsInSteps"},
+            {commandResponderDoesNotAddTransactionInSteps,
+                "commandResponderDoesNotAddTransactionInSteps"},
             {itemizedFormatterFormatsOneTransaction,
                 "itemizedFormatterFormatsOneTransaction"},
             {itemizedFormatterFormatsTwoTransactions,

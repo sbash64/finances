@@ -13,11 +13,16 @@ class ModelStub : public Model {
 
     auto transactionAdded() const { return transactionAdded_; }
 
+    auto transactionWasAdded() const -> bool { return transactionWasAdded_; }
+
     auto transactionRemoved() const { return transactionRemoved_; }
 
     void setNetIncome(int x) { netIncome_.cents = x; }
 
-    void add(const Transaction &t) override { transactionAdded_ = t; }
+    void add(const Transaction &t) override {
+        transactionWasAdded_ = true;
+        transactionAdded_ = t;
+    }
 
     void setTransactions(Transactions t) { transactions_ = std::move(t); }
 
@@ -53,6 +58,7 @@ class ModelStub : public Model {
     Transaction transactionRemoved_;
     NetIncome netIncome_{};
     Amount amountVerified_{};
+    bool transactionWasAdded_{};
 };
 
 class ViewStub : public View {
@@ -183,6 +189,17 @@ void commandResponderAddsTwoTransactionsInSteps(
             execute(commandResponder, "chipotle");
             execute(commandResponder, "10/6/19");
             assertTransactionAdded(result, model, -947, "chipotle", "10/6/19");
+        });
+}
+
+void commandResponderDoesNotAddTransactionInSteps(
+    testcpplite::TestResult &result) {
+    testCommandResponder(
+        [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &) {
+            execute(commandResponder, "oops");
+            execute(commandResponder, "hyvee");
+            execute(commandResponder, "10/5/19");
+            assertFalse(result, model.transactionWasAdded());
         });
 }
 

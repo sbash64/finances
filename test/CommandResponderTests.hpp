@@ -22,6 +22,7 @@ void commandResponderDoesNotAbortOnPartiallyCorrectCommand(
     testcpplite::TestResult &);
 void commandResponderAddsTransactionInSteps(testcpplite::TestResult &);
 void commandResponderAddsTwoTransactionsInSteps(testcpplite::TestResult &);
+void commandResponderDoesNotAddTransactionInSteps(testcpplite::TestResult &);
 }
 
 #endif
