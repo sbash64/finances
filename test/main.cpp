@@ -13,6 +13,7 @@ static int main() {
              "presenterPrintsTransactionVerified"},
             {presenterPrintsTransactionAdded,
                 "presenterPrintsTransactionAdded"},
+            {presenterPrintsAllTransactions, "presenterPrintsAllTransactions"},
             {transactionRecordHasNoneOnConstruction,
                 "transactionRecordHasNoneOnConstruction"},
             {transactionRecordNotifiesListenerOnAdd,

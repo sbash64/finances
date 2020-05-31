@@ -10,6 +10,7 @@ class Presenter : public TransactionRecord::EventListener {
     Presenter(View &);
     void verified(const Transaction &) override;
     void added(const Transaction &) override;
+    void print(const Transactions &);
 
   private:
     View &view;

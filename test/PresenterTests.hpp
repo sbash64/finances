@@ -6,6 +6,7 @@
 namespace finances {
 void presenterPrintsTransactionVerified(testcpplite::TestResult &);
 void presenterPrintsTransactionAdded(testcpplite::TestResult &);
+void presenterPrintsAllTransactions(testcpplite::TestResult &);
 }
 
 #endif
