@@ -11,6 +11,7 @@ class Presenter : public TransactionRecord::EventListener {
     void verified(const Transaction &) override;
     void added(const Transaction &) override;
     void print(const Transactions &);
+    void print(NetIncome);
 
   private:
     View &view;

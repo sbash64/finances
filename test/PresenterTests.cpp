@@ -15,6 +15,8 @@ class ViewStub : public View {
 
     void show(const NetIncome &x) override { shownNetIncome_ = x; }
 
+    auto shownNetIncome() -> NetIncome { return shownNetIncome_; }
+
   private:
     Transactions shownTransactions_{};
     NetIncome shownNetIncome_{};
@@ -49,6 +51,15 @@ void assertBothTransactionsPrinted(testcpplite::TestResult &result,
             std::move(label2), std::move(date2)));
 }
 
+void assertNetIncomePrinted(
+    testcpplite::TestResult &result, ViewStub &view, int x) {
+    assertEqual(result, x, view.shownNetIncome().cents);
+}
+
+void printNetIncome(Presenter &presenter, int x) {
+    presenter.print(NetIncome{x});
+}
+
 void testPresenter(const std::function<void(Presenter &, ViewStub &)> &f) {
     ViewStub view;
     Presenter presenter{view};
@@ -77,6 +88,13 @@ void presenterPrintsAllTransactions(testcpplite::TestResult &result) {
                 -1000, "chipotle", "10/6/19", -5000, "hyvee", "10/4/19"));
         assertBothTransactionsPrinted(result, view, -1000, "chipotle",
             "10/6/19", -5000, "hyvee", "10/4/19");
+    });
+}
+
+void presenterPrintsNetIncome(testcpplite::TestResult &result) {
+    testPresenter([&](Presenter &presenter, ViewStub &view) {
+        printNetIncome(presenter, 5000);
+        assertNetIncomePrinted(result, view, 5000);
     });
 }
 }

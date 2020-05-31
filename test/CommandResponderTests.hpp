@@ -11,9 +11,9 @@ void commandResponderAddsTransactionWithOneDecimalDigit(
 void commandResponderAddsTransactionWithNoDecimalDigits(
     testcpplite::TestResult &);
 void commandResponderRemovesTransaction(testcpplite::TestResult &);
-void commandResponderPrintsAllTransaction(testcpplite::TestResult &);
+void commandResponderPrintsAllTransactions(testcpplite::TestResult &);
 void commandResponderPrintsAllVerifiedTransaction(testcpplite::TestResult &);
-void commandResponderPrintsUnverifiedTransaction(testcpplite::TestResult &);
+void commandResponderPrintsUnverifiedTransactions(testcpplite::TestResult &);
 void commandResponderPrintsNetIncome(testcpplite::TestResult &);
 void commandResponderVerifiesAmount(testcpplite::TestResult &);
 void commandResponderDoesNotAbortOnUnrecognizedCommand(

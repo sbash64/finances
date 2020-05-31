@@ -9,7 +9,9 @@ struct Amount {
     int cents;
 };
 
-struct NetIncome : Amount {};
+struct NetIncome : Amount {
+    explicit NetIncome(int cents = {}) : Amount{cents} {}
+};
 
 struct Transaction {
     Amount amount;

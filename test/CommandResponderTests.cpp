@@ -246,7 +246,7 @@ void commandResponderRemovesTransaction(testcpplite::TestResult &result) {
         });
 }
 
-void commandResponderPrintsAllTransaction(testcpplite::TestResult &result) {
+void commandResponderPrintsAllTransactions(testcpplite::TestResult &result) {
     testCommandResponder([&](CommandResponder &commandResponder,
                              ModelStub &model, ViewStub &view) {
         setAllTransactions(model,
@@ -271,7 +271,7 @@ void commandResponderPrintsAllVerifiedTransaction(
     });
 }
 
-void commandResponderPrintsUnverifiedTransaction(
+void commandResponderPrintsUnverifiedTransactions(
     testcpplite::TestResult &result) {
     testCommandResponder([&](CommandResponder &commandResponder,
                              ModelStub &model, ViewStub &view) {
