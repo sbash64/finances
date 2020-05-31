@@ -77,7 +77,7 @@ void setUnverifiedTransactions(ModelStub &model, Transactions t) {
 void setNetIncome(ModelStub &model, int x) { model.setNetIncome(x); }
 
 void execute(CommandResponder &commandResponder, const std::string &s) {
-    commandResponder.execute(s);
+    commandResponder.enter(s);
 }
 
 void executeCommand(

@@ -54,7 +54,7 @@ static auto transaction(std::stringstream &stream) -> Transaction {
 
 static void show(View &view, const Transactions &t) { view.show(t); }
 
-void CommandResponder::execute(const std::string &s) {
+void CommandResponder::enter(const std::string &s) {
     try {
         std::stringstream stream{s};
         const auto first{next(stream)};

@@ -26,13 +26,13 @@ class Readline {
     Readline(Readline &&) noexcept = delete;
     auto operator=(Readline &&) noexcept -> Readline & = delete;
 
-    auto c_str() const -> const char * { return line; }
+    auto cString() const -> const char * { return line; }
 
   private:
     char *line;
 };
 
-auto c_str(const Readline &line) -> const char * { return line.c_str(); }
+auto cString(const Readline &line) -> const char * { return line.cString(); }
 
 [[noreturn]] void main() {
     ConsoleWriter writer;
@@ -42,10 +42,10 @@ auto c_str(const Readline &line) -> const char * { return line.c_str(); }
     TransactionRecord record{presenter};
     CommandResponder responder{record, formattedWriter};
     for (;;) {
-        Readline line("finances$ ");
-        responder.execute(c_str(line));
-        if (c_str(line) != nullptr && *c_str(line) != 0)
-            add_history(c_str(line));
+        Readline line{"finances$ "};
+        responder.enter(cString(line));
+        if (cString(line) != nullptr && *cString(line) != 0)
+            add_history(cString(line));
     }
 }
 }

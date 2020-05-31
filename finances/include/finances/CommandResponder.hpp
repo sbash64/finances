@@ -39,7 +39,7 @@ constexpr auto name(Command c) -> const char * {
 class CommandResponder {
   public:
     CommandResponder(Model &, View &);
-    void execute(const std::string &);
+    void enter(const std::string &);
 
     enum class State { normal, amountEntered, labelEntered };
 
