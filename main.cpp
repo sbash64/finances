@@ -3,17 +3,13 @@
 #include <finances/FormattedWriter.hpp>
 #include <finances/ItemizedFormatter.hpp>
 #include <finances/TransactionRecord.hpp>
+#include <finances/Prompt.hpp>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <iostream>
 
 namespace finances {
 namespace {
-class ConsoleWriter : public Writer {
-  public:
-    void write(const std::string &s) override { std::cout << s; }
-};
-
 class Readline {
   public:
     explicit Readline(const std::string &prompt)
@@ -34,6 +30,21 @@ class Readline {
 
 auto cString(const Readline &line) -> const char * { return line.cString(); }
 
+class ReadlineInput : public Input {
+  public:
+    auto next() -> std::string override {
+        Readline line{"finances$ "};
+        if (cString(line) != nullptr && *cString(line) != 0)
+            add_history(cString(line));
+        return cString(line);
+    }
+};
+
+class ConsoleWriter : public Writer {
+  public:
+    void write(const std::string &s) override { std::cout << s; }
+};
+
 [[noreturn]] void main() {
     ConsoleWriter writer;
     ItemizedFormatter formatter;
@@ -41,12 +52,10 @@ auto cString(const Readline &line) -> const char * { return line.cString(); }
     Presenter presenter{formattedWriter};
     TransactionRecord record{presenter};
     CommandResponder responder{record, formattedWriter};
-    for (;;) {
-        Readline line{"finances$ "};
-        responder.enter(cString(line));
-        if (cString(line) != nullptr && *cString(line) != 0)
-            add_history(cString(line));
-    }
+    ReadlineInput input;
+    Prompt prompt{input, responder};
+    for (;;)
+        prompt.once();
 }
 }
 }
