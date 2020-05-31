@@ -3,6 +3,7 @@
 #include "PresenterTests.hpp"
 #include "ItemizedFormatterTests.hpp"
 #include "FormattedWriterTests.hpp"
+#include "PromptTests.hpp"
 #include <testcpplite/testcpplite.hpp>
 #include <iostream>
 
@@ -110,7 +111,8 @@ static int main() {
             {formattedWriterFormatsNetIncome,
                 "formattedWriterFormatsNetIncome"},
             {formattedWriterWritesNetIncome, "formattedWriterWritesNetIncome"},
-            {formattedWriterShowsMessage, "formattedWriterShowsMessage"}},
+            {formattedWriterShowsMessage, "formattedWriterShowsMessage"},
+            {promptPassesInputToResponder, "promptPassesInputToResponder"}},
         std::cout);
 }
 }
