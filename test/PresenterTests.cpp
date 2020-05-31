@@ -30,20 +30,23 @@ void added(Presenter &presenter, int a, std::string b, std::string c) {
 
 void print(Presenter &presenter, const Transactions &t) { presenter.print(t); }
 
+void assertTransactionsPrinted(
+    testcpplite::TestResult &result, ViewStub &view, const Transactions &t) {
+    assertEqual(result, t, view.shownTransactions());
+}
+
 void assertTransactionPrinted(testcpplite::TestResult &result, ViewStub &view,
     int amount, std::string label, std::string date) {
-    assertEqual(result,
-        oneTransaction(amount, std::move(label), std::move(date)),
-        view.shownTransactions());
+    assertTransactionsPrinted(result, view,
+        oneTransaction(amount, std::move(label), std::move(date)));
 }
 
 void assertBothTransactionsPrinted(testcpplite::TestResult &result,
     ViewStub &view, int amount1, std::string label1, std::string date1,
     int amount2, std::string label2, std::string date2) {
-    assertEqual(result,
+    assertTransactionsPrinted(result, view,
         twoTransactions(amount1, std::move(label1), std::move(date1), amount2,
-            std::move(label2), std::move(date2)),
-        view.shownTransactions());
+            std::move(label2), std::move(date2)));
 }
 
 void testPresenter(const std::function<void(Presenter &, ViewStub &)> &f) {
