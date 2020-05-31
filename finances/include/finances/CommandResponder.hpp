@@ -37,10 +37,10 @@ constexpr auto name(Command c) -> const char * {
     return "";
 }
 
-class CommandResponder {
+class CommandResponder : public Responder {
   public:
     CommandResponder(Model &, View &);
-    void enter(const std::string &);
+    void enter(const std::string &) override;
 
     enum class State { normal, amountEntered, labelEntered };
 
