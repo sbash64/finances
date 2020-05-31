@@ -1,5 +1,6 @@
-add_library(finances TransactionRecord.cpp CommandResponder.cpp
-                     FormattedWriter.cpp ItemizedFormatter.cpp Presenter.cpp)
+add_library(
+  finances TransactionRecord.cpp CommandResponder.cpp FormattedWriter.cpp
+           ItemizedFormatter.cpp Presenter.cpp Prompt.cpp)
 target_compile_features(
   finances
   PUBLIC cxx_override cxx_trailing_return_types

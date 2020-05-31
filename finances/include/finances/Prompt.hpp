@@ -18,10 +18,9 @@ class Responder {
 
 class Prompt {
   public:
-    Prompt(Input &input, Responder &responder)
-        : input{input}, responder{responder} {}
+    Prompt(Input &, Responder &);
 
-    void once() { responder.enter(input.next()); }
+    void once();
 
   private:
     Input &input;
