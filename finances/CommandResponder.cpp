@@ -2,8 +2,8 @@
 #include <sstream>
 
 namespace finances {
-CommandResponder::CommandResponder(Model &record, View &printer)
-    : model{record}, view{printer} {}
+CommandResponder::CommandResponder(Model &model, View &view)
+    : model{model}, view{view} {}
 
 static auto integer(const std::string &s) -> int { return std::stoi(s); }
 

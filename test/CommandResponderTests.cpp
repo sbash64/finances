@@ -1,4 +1,5 @@
 #include "CommandResponderTests.hpp"
+#include "ViewStub.hpp"
 #include "testing-utility.hpp"
 #include <finances/CommandResponder.hpp>
 #include <testcpplite/testcpplite.hpp>
@@ -59,21 +60,6 @@ class ModelStub : public Model {
     NetIncome netIncome_{};
     Amount amountVerified_{};
     bool transactionWasAdded_{};
-};
-
-class ViewStub : public View {
-  public:
-    auto shownTransactions() const { return shownTransactions_; }
-
-    auto shownNetIncome() const { return shownNetIncome_; }
-
-    void show(const Transactions &t) override { shownTransactions_ = t; }
-
-    void show(const NetIncome &x) override { shownNetIncome_ = x; }
-
-  private:
-    Transactions shownTransactions_{};
-    NetIncome shownNetIncome_{};
 };
 
 void setAllTransactions(ModelStub &model, Transactions t) {

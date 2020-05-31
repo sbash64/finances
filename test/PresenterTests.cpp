@@ -1,4 +1,5 @@
 #include "PresenterTests.hpp"
+#include "ViewStub.hpp"
 #include "testing-utility.hpp"
 #include <finances/Presenter.hpp>
 #include <testcpplite/testcpplite.hpp>
@@ -7,21 +8,6 @@
 
 namespace finances {
 namespace {
-class ViewStub : public View {
-  public:
-    auto shownTransactions() const { return shownTransactions_; }
-
-    void show(const Transactions &t) override { shownTransactions_ = t; }
-
-    void show(const NetIncome &x) override { shownNetIncome_ = x; }
-
-    auto shownNetIncome() -> NetIncome { return shownNetIncome_; }
-
-  private:
-    Transactions shownTransactions_{};
-    NetIncome shownNetIncome_{};
-};
-
 void verified(Presenter &presenter, int a, std::string b, std::string c) {
     presenter.verified(transaction(a, std::move(b), std::move(c)));
 }
