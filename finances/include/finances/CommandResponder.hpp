@@ -2,6 +2,7 @@
 #define FINANCES_INCLUDE_FINANCES_COMMANDRESPONDER_HPP_
 
 #include "Transaction.hpp"
+#include "Responder.hpp"
 #include "Model.hpp"
 #include "View.hpp"
 
