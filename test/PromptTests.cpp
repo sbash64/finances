@@ -32,13 +32,10 @@ class ResponderStub : public Responder {
 
     void setSecondary() { level_ = Prompt::Level::secondary; }
 
-    auto secondary() -> bool { return secondary_; }
-
   private:
     std::string entered_;
     std::string prompt_;
     Prompt::Level level_{};
-    bool secondary_{};
 };
 
 void testPrompt(

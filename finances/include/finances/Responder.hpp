@@ -16,7 +16,6 @@ class Responder {
     virtual ~Responder() = default;
     virtual void enter(const std::string &) = 0;
     virtual auto prompt() -> Prompt = 0;
-    virtual auto secondary() -> bool = 0;
 };
 }
 

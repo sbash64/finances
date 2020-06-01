@@ -42,7 +42,6 @@ class CommandResponder : public Responder {
     CommandResponder(Model &, View &);
     void enter(const std::string &) override;
     auto prompt() -> Prompt override { return Prompt{}; }
-    auto secondary() -> bool override { return {}; }
 
     enum class State { normal, amountEntered, labelEntered };
 
