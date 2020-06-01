@@ -28,15 +28,16 @@ class ResponderStub : public Responder {
 
     void setPrompt(std::string s) { prompt_ = std::move(s); }
 
-    auto prompt() -> std::string override { return prompt_; }
+    auto prompt() -> Prompt override { return Prompt{prompt_, level_}; }
 
-    void setSecondary() { secondary_ = true; }
+    void setSecondary() { level_ = Prompt::Level::secondary; }
 
     auto secondary() -> bool { return secondary_; }
 
   private:
     std::string entered_;
     std::string prompt_;
+    Prompt::Level level_{};
     bool secondary_{};
 };
 
