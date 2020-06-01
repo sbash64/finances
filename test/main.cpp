@@ -114,7 +114,9 @@ static int main() {
             {formattedWriterShowsMessage, "formattedWriterShowsMessage"},
             {promptPassesInputToResponder, "promptPassesInputToResponder"},
             {promptCombinesPrimaryPromptForInput,
-                "promptCombinesPrimaryPromptForInput"}},
+                "promptCombinesPrimaryPromptForInput"},
+            {promptCombinesSecondaryPromptForInput,
+                "promptCombinesSecondaryPromptForInput"}},
         std::cout);
 }
 }

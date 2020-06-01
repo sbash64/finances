@@ -30,9 +30,14 @@ class ResponderStub : public Responder {
 
     auto prompt() -> std::string override { return prompt_; }
 
+    void setSecondary() { secondary_ = true; }
+
+    auto secondary() -> bool { return secondary_; }
+
   private:
     std::string entered_;
     std::string prompt_;
+    bool secondary_{};
 };
 
 void testPrompt(
@@ -59,6 +64,17 @@ void promptCombinesPrimaryPromptForInput(testcpplite::TestResult &result) {
             responder.setPrompt("a");
             prompt.once();
             assertEqual(result, "a$ ", input.prompt());
+        },
+        "$ ", "> ");
+}
+
+void promptCombinesSecondaryPromptForInput(testcpplite::TestResult &result) {
+    testPrompt(
+        [&](Prompt &prompt, InputStub &input, ResponderStub &responder) {
+            responder.setPrompt("a");
+            responder.setSecondary();
+            prompt.once();
+            assertEqual(result, "a> ", input.prompt());
         },
         "$ ", "> ");
 }

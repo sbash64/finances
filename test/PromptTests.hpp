@@ -6,6 +6,7 @@
 namespace finances {
 void promptPassesInputToResponder(testcpplite::TestResult &);
 void promptCombinesPrimaryPromptForInput(testcpplite::TestResult &);
+void promptCombinesSecondaryPromptForInput(testcpplite::TestResult &);
 }
 
 #endif

@@ -7,6 +7,7 @@ Prompt::Prompt(Input &input, Responder &responder, std::string primary,
       secondary{std::move(secondary)} {}
 
 void Prompt::once() {
-    responder.enter(input.next(responder.prompt() + primary));
+    responder.enter(input.next(
+        responder.prompt() + (responder.secondary() ? secondary : primary)));
 }
 }
