@@ -1,5 +1,6 @@
 #include "PromptTests.hpp"
 #include <finances/Prompt.hpp>
+#include <functional>
 
 namespace finances {
 namespace {
@@ -7,9 +8,7 @@ class InputStub : public Input {
   public:
     void setNext(std::string s) { next_ = std::move(s); }
 
-    auto next() -> std::string { return next_; }
-
-    auto next(const std::string &s) -> std::string {
+    auto next(const std::string &s) -> std::string override {
         prompt_ = s;
         return next_;
     }
@@ -29,29 +28,38 @@ class ResponderStub : public Responder {
 
     void setPrompt(std::string s) { prompt_ = std::move(s); }
 
-    auto prompt() -> std::string { return prompt_; }
+    auto prompt() -> std::string override { return prompt_; }
 
   private:
     std::string entered_;
     std::string prompt_;
 };
+
+void testPrompt(
+    const std::function<void(Prompt &, InputStub &, ResponderStub &)> &f,
+    std::string primary = {}, std::string secondary = {}) {
+    InputStub input;
+    ResponderStub responder;
+    Prompt prompt{input, responder, std::move(primary), std::move(secondary)};
+    f(prompt, input, responder);
+}
 }
 
 void promptPassesInputToResponder(testcpplite::TestResult &result) {
-    InputStub input;
-    ResponderStub responder;
-    Prompt prompt{input, responder};
-    input.setNext("a");
-    prompt.once();
-    assertEqual(result, "a", responder.entered());
+    testPrompt([&](Prompt &prompt, InputStub &input, ResponderStub &responder) {
+        input.setNext("a");
+        prompt.once();
+        assertEqual(result, "a", responder.entered());
+    });
 }
 
 void promptCombinesPrimaryPromptForInput(testcpplite::TestResult &result) {
-    InputStub input;
-    ResponderStub responder;
-    Prompt prompt{input, responder, "$ ", "> "};
-    responder.setPrompt("a");
-    prompt.once();
-    assertEqual(result, "a$ ", input.prompt());
+    testPrompt(
+        [&](Prompt &prompt, InputStub &input, ResponderStub &responder) {
+            responder.setPrompt("a");
+            prompt.once();
+            assertEqual(result, "a$ ", input.prompt());
+        },
+        "$ ", "> ");
 }
 }
