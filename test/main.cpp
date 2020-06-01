@@ -112,7 +112,9 @@ static int main() {
                 "formattedWriterFormatsNetIncome"},
             {formattedWriterWritesNetIncome, "formattedWriterWritesNetIncome"},
             {formattedWriterShowsMessage, "formattedWriterShowsMessage"},
-            {promptPassesInputToResponder, "promptPassesInputToResponder"}},
+            {promptPassesInputToResponder, "promptPassesInputToResponder"},
+            {promptCombinesPrimaryPromptForInput,
+                "promptCombinesPrimaryPromptForInput"}},
         std::cout);
 }
 }

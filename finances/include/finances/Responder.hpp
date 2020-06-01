@@ -8,6 +8,7 @@ class Responder {
   public:
     virtual ~Responder() = default;
     virtual void enter(const std::string &) = 0;
+    virtual auto prompt() -> std::string = 0;
 };
 }
 

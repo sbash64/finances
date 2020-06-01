@@ -8,18 +8,21 @@ namespace finances {
 class Input {
   public:
     virtual ~Input() = default;
-    virtual auto next() -> std::string = 0;
+    virtual auto next(const std::string &prompt) -> std::string = 0;
 };
 
 class Prompt {
   public:
-    Prompt(Input &, Responder &);
+    Prompt(
+        Input &, Responder &, std::string primary = "$ ", std::string = "> ");
 
     void once();
 
   private:
     Input &input;
     Responder &responder;
+    std::string primary;
+    std::string secondary;
 };
 }
 
