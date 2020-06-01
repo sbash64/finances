@@ -41,7 +41,9 @@ class CommandResponder : public Responder {
   public:
     CommandResponder(Model &, View &);
     void enter(const std::string &) override;
-    auto prompt() -> Prompt override { return Prompt{}; }
+    auto prompt() -> Prompt override {
+        return Prompt{"finances", Prompt::Level::primary};
+    }
 
     enum class State { normal, amountEntered, labelEntered };
 

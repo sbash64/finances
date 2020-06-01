@@ -1,6 +1,7 @@
 #include "PromptTests.hpp"
 #include <finances/Prompt.hpp>
 #include <functional>
+#include <utility>
 
 namespace finances {
 namespace {
@@ -26,17 +27,22 @@ class ResponderStub : public Responder {
 
     void enter(const std::string &s) override { entered_ = s; }
 
-    void setPrompt(std::string s) { prompt_ = std::move(s); }
+    void setPrompt(std::string s, Prompt::Level level = {}) {
+        static_cast<std::string &>(prompt_) = std::move(s);
+        prompt_.level = level;
+    }
 
-    auto prompt() -> Prompt override { return Prompt{prompt_, level_}; }
-
-    void setSecondary() { level_ = Prompt::Level::secondary; }
+    auto prompt() -> Prompt override { return prompt_; }
 
   private:
     std::string entered_;
-    std::string prompt_;
-    Prompt::Level level_{};
+    Prompt prompt_;
 };
+
+void assertPromptEquals(testcpplite::TestResult &result, InputStub &input,
+    const std::string &what) {
+    assertEqual(result, what, input.prompt());
+}
 
 void testPrompt(
     const std::function<void(Prompt &, InputStub &, ResponderStub &)> &f,
@@ -61,18 +67,17 @@ void promptCombinesPrimaryPromptForInput(testcpplite::TestResult &result) {
         [&](Prompt &prompt, InputStub &input, ResponderStub &responder) {
             responder.setPrompt("a");
             prompt.once();
-            assertEqual(result, "a$ ", input.prompt());
+            assertPromptEquals(result, input, "a$ ");
         },
-        "$ ", "> ");
+        "$ ");
 }
 
 void promptCombinesSecondaryPromptForInput(testcpplite::TestResult &result) {
     testPrompt(
         [&](Prompt &prompt, InputStub &input, ResponderStub &responder) {
-            responder.setPrompt("a");
-            responder.setSecondary();
+            responder.setPrompt("a", Responder::Prompt::Level::secondary);
             prompt.once();
-            assertEqual(result, "a> ", input.prompt());
+            assertPromptEquals(result, input, "a> ");
         },
         "$ ", "> ");
 }
