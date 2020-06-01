@@ -6,6 +6,7 @@
 #include <finances/Prompt.hpp>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <gsl/gsl>
 #include <iostream>
 
 namespace finances {
@@ -25,7 +26,7 @@ class Readline {
     auto cString() const -> const char * { return line; }
 
   private:
-    char *line;
+    gsl::owner<char *> line;
 };
 
 auto cString(const Readline &line) -> const char * { return line.cString(); }
