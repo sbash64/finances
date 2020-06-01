@@ -33,8 +33,8 @@ auto cString(const Readline &line) -> const char * { return line.cString(); }
 
 class ReadlineInput : public Input {
   public:
-    auto next() -> std::string override {
-        Readline line{"finances$ "};
+    auto next(const std::string &prompt) -> std::string override {
+        Readline line{prompt};
         if (cString(line) != nullptr && *cString(line) != 0)
             add_history(cString(line));
         return cString(line);

@@ -44,9 +44,9 @@ constexpr auto prompt(CommandState c) -> const char * {
     case (CommandState::normal):
         return "finances";
     case (CommandState::amountEntered):
-        return "amount";
-    case (CommandState::labelEntered):
         return "label";
+    case (CommandState::labelEntered):
+        return "date";
     }
     return "";
 }
