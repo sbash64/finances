@@ -72,17 +72,21 @@ void CommandResponder::enter(const std::string &s) {
             model.add(transaction(stream));
         else if (matches(first, Command::remove))
             model.remove(transaction(stream));
-        else if (state == State::labelEntered) {
+        else if (state == CommandState::labelEntered) {
             model.add({{amountAdding}, labelAdding, first});
-            state = State::normal;
-        } else if (state == State::amountEntered) {
+            state = CommandState::normal;
+        } else if (state == CommandState::amountEntered) {
             labelAdding = first;
-            state = State::labelEntered;
+            state = CommandState::labelEntered;
         } else {
             amountAdding = hundredths(first);
-            state = State::amountEntered;
+            state = CommandState::amountEntered;
         }
     } catch (const std::invalid_argument &) {
     }
+}
+
+auto CommandResponder::prompt() -> Prompt {
+    return Prompt{finances::prompt(state), level(state)};
 }
 }

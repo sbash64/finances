@@ -37,22 +37,43 @@ constexpr auto name(Command c) -> const char * {
     return "";
 }
 
+enum class CommandState { normal, amountEntered, labelEntered };
+
+constexpr auto prompt(CommandState c) -> const char * {
+    switch (c) {
+    case (CommandState::normal):
+        return "finances";
+    case (CommandState::amountEntered):
+        return "amount";
+    case (CommandState::labelEntered):
+        return "label";
+    }
+    return "";
+}
+
+constexpr auto level(CommandState c) -> Responder::Prompt::Level {
+    switch (c) {
+    case (CommandState::normal):
+        return Responder::Prompt::Level::primary;
+    case (CommandState::amountEntered):
+    case (CommandState::labelEntered):
+        return Responder::Prompt::Level::secondary;
+    }
+    return {};
+}
+
 class CommandResponder : public Responder {
   public:
     CommandResponder(Model &, View &);
     void enter(const std::string &) override;
-    auto prompt() -> Prompt override {
-        return Prompt{"finances", Prompt::Level::primary};
-    }
-
-    enum class State { normal, amountEntered, labelEntered };
+    auto prompt() -> Prompt override;
 
   private:
     Model &model;
     View &view;
     std::string labelAdding{};
     int amountAdding{};
-    State state{};
+    CommandState state{};
 };
 }
 
