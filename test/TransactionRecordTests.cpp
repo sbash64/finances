@@ -6,7 +6,7 @@
 
 namespace finances {
 namespace {
-class ModelEventListenerStub : public Model::EventListener {
+class ModelEventListenerStub : public TransactionRecord::EventListener {
   public:
     auto verified() const -> bool { return verified_; }
 
@@ -36,7 +36,9 @@ void add(TransactionRecord &record, int amount, std::string label,
     record.add(transaction(amount, std::move(label), std::move(date)));
 }
 
-void verify(TransactionRecord &record, int amount) { record.verify(amount); }
+void verify(TransactionRecord &record, int amount) {
+    record.verify(Amount{amount});
+}
 
 void remove(TransactionRecord &record, int amount, std::string label,
     std::string date) {
@@ -108,15 +110,14 @@ void assertTwoTransactions(testcpplite::TestResult &result,
 void testTransactionRecord(
     const std::function<void(TransactionRecord &, ModelEventListenerStub &)>
         &f) {
-    TransactionRecord record;
     ModelEventListenerStub listener;
-    record.subscribe(&listener);
+    TransactionRecord record{listener};
     f(record, listener);
 }
 
 void assertNetIncome(
     testcpplite::TestResult &result, TransactionRecord &record, int amount) {
-    assertEqual(result, amount, record.netIncome());
+    assertEqual(result, amount, record.netIncome().cents);
 }
 }
 

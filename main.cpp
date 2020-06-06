@@ -1,18 +1,16 @@
 #include <finances/Presenter.hpp>
+#include <finances/CommandResponder.hpp>
 #include <finances/FormattedWriter.hpp>
 #include <finances/ItemizedFormatter.hpp>
 #include <finances/TransactionRecord.hpp>
+#include <finances/Prompt.hpp>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <gsl/gsl>
 #include <iostream>
 
 namespace finances {
 namespace {
-class ConsoleWriter : public Writer {
-  public:
-    void write(const std::string &s) override { std::cout << s; }
-};
-
 class Readline {
   public:
     explicit Readline(const std::string &prompt)
@@ -25,26 +23,40 @@ class Readline {
     Readline(Readline &&) noexcept = delete;
     auto operator=(Readline &&) noexcept -> Readline & = delete;
 
-    auto c_str() const -> const char * { return line; }
+    auto cString() const -> const char * { return line; }
 
   private:
-    char *line;
+    gsl::owner<char *> line;
 };
 
-auto c_str(const Readline &line) -> const char * { return line.c_str(); }
+auto cString(const Readline &line) -> const char * { return line.cString(); }
+
+class ReadlineInput : public Input {
+  public:
+    auto next(const std::string &prompt) -> std::string override {
+        Readline line{prompt};
+        if (cString(line) != nullptr && *cString(line) != 0)
+            add_history(cString(line));
+        return cString(line);
+    }
+};
+
+class ConsoleWriter : public Writer {
+  public:
+    void write(const std::string &s) override { std::cout << s; }
+};
 
 [[noreturn]] void main() {
     ConsoleWriter writer;
     ItemizedFormatter formatter;
     FormattedWriter formattedWriter{formatter, writer};
-    TransactionRecord record;
-    Presenter presenter{record, formattedWriter};
-    for (;;) {
-        Readline line("finances$ ");
-        presenter.execute(c_str(line));
-        if (c_str(line) != nullptr && *c_str(line) != 0)
-            add_history(c_str(line));
-    }
+    Presenter presenter{formattedWriter};
+    TransactionRecord record{presenter};
+    CommandResponder responder{record, formattedWriter};
+    ReadlineInput input;
+    Prompt prompt{input, responder};
+    for (;;)
+        prompt.once();
 }
 }
 }

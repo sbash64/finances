@@ -2,7 +2,7 @@
 #define FINANCES_INCLUDE_FINANCES_TRANSACTIONRECORD_HPP_
 
 #include "Transaction.hpp"
-#include "Presenter.hpp"
+#include "CommandResponder.hpp"
 #include <vector>
 
 namespace finances {
@@ -14,18 +14,24 @@ using VerifiableTransactions = std::vector<VerifiableTransaction>;
 
 class TransactionRecord : public Model {
   public:
-    void subscribe(EventListener *) override;
+    class EventListener {
+      public:
+        virtual ~EventListener() = default;
+        virtual void verified(const Transaction &) = 0;
+        virtual void added(const Transaction &) = 0;
+    };
+    explicit TransactionRecord(EventListener &);
     void add(const Transaction &) override;
     void remove(const Transaction &) override;
-    auto netIncome() -> int override;
+    auto netIncome() -> NetIncome override;
     auto transactions() -> Transactions override;
-    void verify(int) override;
+    void verify(Amount) override;
     auto verifiedTransactions() -> Transactions override;
     auto unverifiedTransactions() -> Transactions override;
 
   private:
     VerifiableTransactions verifiableTransactions;
-    EventListener *listener{};
+    EventListener &listener;
 };
 }
 

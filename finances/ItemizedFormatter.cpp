@@ -29,12 +29,13 @@ static auto afterDecimal(int x) -> std::string {
 
 static auto beforeDecimal(int x) -> std::string { return string(hundreds(x)); }
 
-static auto formatAmount(int x) -> std::string {
-    return concatenate(beforeDecimal(x), concatenate(".", afterDecimal(x)));
+static auto format(Amount x) -> std::string {
+    return concatenate(
+        beforeDecimal(x.cents), concatenate(".", afterDecimal(x.cents)));
 }
 
 static auto formatTransaction(const Transaction &t) -> std::string {
-    return concatenate(formatAmount(amount(t)),
+    return concatenate(format(amount(t)),
         withLeadingSpace(concatenate(t.label, withLeadingSpace(t.date))));
 }
 
@@ -53,7 +54,7 @@ auto ItemizedFormatter::format(const Transactions &transactions)
     return formatted;
 }
 
-auto ItemizedFormatter::formatNetIncome(int x) -> std::string {
-    return concatenate("Net Income: ", formatAmount(x));
+auto ItemizedFormatter::format(const NetIncome &x) -> std::string {
+    return concatenate("Net Income: ", finances::format(x));
 }
 }
