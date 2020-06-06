@@ -94,6 +94,8 @@ static int main() {
                 "commandResponderDoesNotAbortOnPartiallyCorrectCommand"},
             {commandResponderDoesNotAbortOnInvalidNumber,
                 "commandResponderDoesNotAbortOnInvalidNumber"},
+            {commandResponderStoresMonthForDates,
+                "commandResponderStoresMonthForDates"},
             {commandResponderAddsTransactionInSteps,
                 "commandResponderAddsTransactionInSteps"},
             {commandResponderAddsTwoTransactionsInSteps,

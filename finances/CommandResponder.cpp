@@ -55,6 +55,13 @@ static auto transaction(std::stringstream &stream) -> Transaction {
 
 static void show(View &view, const Transactions &t) { view.show(t); }
 
+static auto date(const std::string &first, const std::string &month,
+    const std::string &year) -> std::string {
+    if (first.find('/') != std::string::npos)
+        return first;
+    return month + '/' + first + '/' + year;
+}
+
 void CommandResponder::enter(const std::string &s) {
     try {
         std::stringstream stream{s};
@@ -73,15 +80,25 @@ void CommandResponder::enter(const std::string &s) {
             model.add(transaction(stream));
         else if (matches(first, Command::remove))
             model.remove(transaction(stream));
-        else if (state == CommandState::labelEntered) {
-            model.add({{amountAdding}, labelAdding, first});
+        else if (matches(first, Command::month))
+            state = CommandState::aboutToSetMonth;
+        else if (state == CommandState::aboutToSetMonth) {
+            month = first;
+            state = CommandState::aboutToSetYear;
+        } else if (state == CommandState::aboutToSetYear) {
+            year = first;
             state = CommandState::normal;
-        } else if (state == CommandState::amountEntered) {
+        } else if (state ==
+            CommandState::aboutToEnterDateForAddingTransaction) {
+            model.add({{amountAdding}, labelAdding, date(first, month, year)});
+            state = CommandState::normal;
+        } else if (state ==
+            CommandState::aboutToEnterLabelForAddingTransaction) {
             labelAdding = first;
-            state = CommandState::labelEntered;
+            state = CommandState::aboutToEnterDateForAddingTransaction;
         } else {
             amountAdding = hundredths(first);
-            state = CommandState::amountEntered;
+            state = CommandState::aboutToEnterLabelForAddingTransaction;
         }
     } catch (const std::invalid_argument &) {
     }

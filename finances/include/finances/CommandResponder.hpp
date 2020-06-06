@@ -14,7 +14,8 @@ enum class Command {
     add,
     remove,
     verify,
-    netIncome
+    netIncome,
+    month
 };
 
 constexpr auto name(Command c) -> const char * {
@@ -33,20 +34,32 @@ constexpr auto name(Command c) -> const char * {
         return "verify";
     case (Command::netIncome):
         return "net";
+    case (Command::month):
+        return "month";
     }
     return "";
 }
 
-enum class CommandState { normal, amountEntered, labelEntered };
+enum class CommandState {
+    normal,
+    aboutToEnterLabelForAddingTransaction,
+    aboutToEnterDateForAddingTransaction,
+    aboutToSetMonth,
+    aboutToSetYear
+};
 
 constexpr auto prompt(CommandState c) -> const char * {
     switch (c) {
     case (CommandState::normal):
         return "finances";
-    case (CommandState::amountEntered):
+    case (CommandState::aboutToEnterLabelForAddingTransaction):
         return "label";
-    case (CommandState::labelEntered):
+    case (CommandState::aboutToEnterDateForAddingTransaction):
         return "date";
+    case (CommandState::aboutToSetMonth):
+        return "month";
+    case (CommandState::aboutToSetYear):
+        return "year";
     }
     return "";
 }
@@ -55,8 +68,10 @@ constexpr auto level(CommandState c) -> Responder::Prompt::Level {
     switch (c) {
     case (CommandState::normal):
         return Responder::Prompt::Level::primary;
-    case (CommandState::amountEntered):
-    case (CommandState::labelEntered):
+    case (CommandState::aboutToEnterLabelForAddingTransaction):
+    case (CommandState::aboutToEnterDateForAddingTransaction):
+    case (CommandState::aboutToSetMonth):
+    case (CommandState::aboutToSetYear):
         return Responder::Prompt::Level::secondary;
     }
     return {};
@@ -72,6 +87,8 @@ class CommandResponder : public Responder {
     Model &model;
     View &view;
     std::string labelAdding{};
+    std::string month{};
+    std::string year{};
     int amountAdding{};
     CommandState state{};
 };

@@ -189,6 +189,20 @@ void commandResponderDoesNotAddTransactionInSteps(
         });
 }
 
+void commandResponderStoresMonthForDates(testcpplite::TestResult &result) {
+    testCommandResponder(
+        [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &) {
+            executeCommand(commandResponder, Command::month);
+            execute(commandResponder, "10");
+            execute(commandResponder, "19");
+            execute(commandResponder, "-50");
+            execute(commandResponder, "hyvee");
+            execute(commandResponder, "5");
+            execute(commandResponder, "10/5/19");
+            assertTransactionAdded(result, model, -5000, "hyvee", "10/5/19");
+        });
+}
+
 void commandResponderAddsTransaction(testcpplite::TestResult &result) {
     testCommandResponder(
         [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &) {
