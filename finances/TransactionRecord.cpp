@@ -51,14 +51,21 @@ static auto operator==(const Transaction &a, const Transaction &b) -> bool {
         a.label == b.label;
 }
 
+static void callIfFound(VerifiableTransactions::iterator it,
+    const VerifiableTransactions &v,
+    const std::function<void(VerifiableTransactions::iterator)> &f) {
+    if (found(it, v))
+        f(it);
+}
+
 void TransactionRecord::remove(const Transaction &transaction) {
-    const auto maybe{std::find(begin(verifiableTransactions),
-        end(verifiableTransactions), transaction)};
-    if (found(maybe, verifiableTransactions)) {
-        if (verified(*maybe))
-            verify(amount(*maybe));
-        verifiableTransactions.erase(maybe);
-    }
+    callIfFound(std::find(begin(verifiableTransactions),
+                    end(verifiableTransactions), transaction),
+        verifiableTransactions, [&](auto it) {
+            if (verified(*it))
+                verify(amount(*it));
+            verifiableTransactions.erase(it);
+        });
 }
 
 static void forEach(const VerifiableTransactions &transactions,
@@ -101,12 +108,14 @@ auto TransactionRecord::netIncome() -> NetIncome {
 }
 
 void TransactionRecord::verify(Amount amount) {
-    const auto maybe{findIf(verifiableTransactions, [=](auto t) {
-        return finances::amount(t).cents == amount.cents && unverified(t);
-    })};
-    if (found(maybe, verifiableTransactions)) {
-        maybe->verified = true;
-        listener.verified(*maybe);
-    }
+    callIfFound(findIf(verifiableTransactions,
+                    [=](auto t) {
+                        return finances::amount(t).cents == amount.cents &&
+                            unverified(t);
+                    }),
+        verifiableTransactions, [&](auto it) {
+            it->verified = true;
+            listener.verified(*it);
+        });
 }
 }
