@@ -7,6 +7,7 @@
 
 namespace finances {
 struct VerifiableTransaction : Transaction {
+    VerifiableTransaction(const Transaction &t) : Transaction{t} {}
     bool verified{};
 };
 

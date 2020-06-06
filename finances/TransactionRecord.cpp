@@ -37,8 +37,7 @@ static auto findIf(VerifiableTransactions &transactions,
 
 static auto unverifiedTransaction(const Transaction &t)
     -> VerifiableTransaction {
-    VerifiableTransaction v;
-    static_cast<Transaction &>(v) = t;
+    VerifiableTransaction v{t};
     v.verified = false;
     return v;
 }
