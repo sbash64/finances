@@ -8,24 +8,22 @@ CommandResponder::CommandResponder(Model &model, View &view)
 
 static auto integer(const std::string &s) -> int { return std::stoi(s); }
 
-static auto hundredthsInteger(const std::string &s) -> int {
-    return integer(s) * 100;
-}
+static auto cents(const std::string &s) -> int { return integer(s) * 100; }
 
 static auto twoDecimalPlaces(const std::string &s) -> std::string {
     return s + std::string(2 - std::min(s.size(), 2UL), '0');
 }
 
-static auto hundredths(const std::string &s) -> int {
+static auto amount(const std::string &s) -> Amount {
     const auto decimal{s.find('.')};
     if (decimal == std::string::npos)
-        return hundredthsInteger(s);
+        return Amount{cents(s)};
     const auto *const sign{s.front() == '-' ? "-" : ""};
     const auto beforeDecimalMark{s.substr(0, decimal)};
     const auto firstDecimalPlace{decimal + 1};
     const auto afterDecimalMark{s.substr(firstDecimalPlace)};
-    return hundredthsInteger(beforeDecimalMark) +
-        integer(sign + twoDecimalPlaces(afterDecimalMark));
+    return Amount{cents(beforeDecimalMark) +
+        integer(sign + twoDecimalPlaces(afterDecimalMark))};
 }
 
 static auto next(std::stringstream &s) -> std::string {
@@ -43,7 +41,7 @@ static auto matches(const std::string &a, Command c) -> bool {
 }
 
 static auto amount(std::stringstream &stream) -> Amount {
-    return Amount{hundredths(next(stream))};
+    return amount(next(stream));
 }
 
 static auto transaction(std::stringstream &stream) -> Transaction {
@@ -100,7 +98,7 @@ void CommandResponder::enter(const std::string &s) {
             transactionToAdd.label = command;
             state = CommandState::aboutToEnterDateForAddingTransaction;
         } else {
-            transactionToAdd.amount = Amount{hundredths(command)};
+            transactionToAdd.amount = amount(command);
             state = CommandState::aboutToEnterLabelForAddingTransaction;
         }
     } catch (const std::invalid_argument &) {
