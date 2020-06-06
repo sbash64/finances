@@ -23,6 +23,7 @@ void commandResponderDoesNotAbortOnPartiallyCorrectCommand(
 void commandResponderAddsTransactionInSteps(testcpplite::TestResult &);
 void commandResponderAddsTwoTransactionsInSteps(testcpplite::TestResult &);
 void commandResponderDoesNotAddTransactionInSteps(testcpplite::TestResult &);
+void commandResponderDoesNotAbortOnInvalidNumber(testcpplite::TestResult &);
 }
 
 #endif

@@ -92,6 +92,8 @@ static int main() {
                 "commandResponderDoesNotAbortOnUnrecognizedCommand"},
             {commandResponderDoesNotAbortOnPartiallyCorrectCommand,
                 "commandResponderDoesNotAbortOnPartiallyCorrectCommand"},
+            {commandResponderDoesNotAbortOnInvalidNumber,
+                "commandResponderDoesNotAbortOnInvalidNumber"},
             {commandResponderAddsTransactionInSteps,
                 "commandResponderAddsTransactionInSteps"},
             {commandResponderAddsTwoTransactionsInSteps,

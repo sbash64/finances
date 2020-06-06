@@ -295,6 +295,13 @@ void commandResponderDoesNotAbortOnUnrecognizedCommand(
         });
 }
 
+void commandResponderDoesNotAbortOnInvalidNumber(testcpplite::TestResult &) {
+    testCommandResponder(
+        [&](CommandResponder &commandResponder, ModelStub &, ViewStub &) {
+            execute(commandResponder, "1.2.3");
+        });
+}
+
 void commandResponderDoesNotAbortOnPartiallyCorrectCommand(
     testcpplite::TestResult &) {
     testCommandResponder([&](CommandResponder &commandResponder, ModelStub &,

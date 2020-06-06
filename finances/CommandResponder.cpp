@@ -1,5 +1,6 @@
 #include "CommandResponder.hpp"
 #include <sstream>
+#include <algorithm>
 
 namespace finances {
 CommandResponder::CommandResponder(Model &model, View &view)
@@ -12,7 +13,7 @@ static auto hundredthsInteger(const std::string &s) -> int {
 }
 
 static auto twoDecimalPlaces(const std::string &s) -> std::string {
-    return s + std::string(2 - s.size(), '0');
+    return s + std::string(2 - std::min(s.size(), 2UL), '0');
 }
 
 static auto hundredths(const std::string &s) -> int {
