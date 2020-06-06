@@ -5,9 +5,9 @@
 #include <utility>
 
 namespace finances {
-constexpr auto begin(const VerifiableTransactions &v) { return v.begin(); }
+static auto begin(const VerifiableTransactions &v) { return v.begin(); }
 
-constexpr auto end(const VerifiableTransactions &v) { return v.end(); }
+static auto end(const VerifiableTransactions &v) { return v.end(); }
 
 static auto verified(const VerifiableTransaction &t) -> bool {
     return t.verified;
