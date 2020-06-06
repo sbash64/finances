@@ -62,6 +62,8 @@ static auto date(const std::string &first, const std::string &month,
     return month + '/' + first + '/' + year;
 }
 
+static void add(Model &model, const Transaction &t) { model.add(t); }
+
 void CommandResponder::enter(const std::string &s) {
     try {
         std::stringstream stream{s};
@@ -77,7 +79,7 @@ void CommandResponder::enter(const std::string &s) {
         else if (matches(command, Command::verify))
             model.verify(amount(stream));
         else if (matches(command, Command::add))
-            model.add(transaction(stream));
+            add(model, transaction(stream));
         else if (matches(command, Command::remove))
             model.remove(transaction(stream));
         else if (matches(command, Command::month))
@@ -91,7 +93,7 @@ void CommandResponder::enter(const std::string &s) {
         } else if (state ==
             CommandState::aboutToEnterDateForAddingTransaction) {
             transactionToAdd.date = date(command, month, year);
-            model.add(transactionToAdd);
+            add(model, transactionToAdd);
             state = CommandState::normal;
         } else if (state ==
             CommandState::aboutToEnterLabelForAddingTransaction) {
