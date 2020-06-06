@@ -17,10 +17,6 @@ static auto unverified(const VerifiableTransaction &t) -> bool {
     return !verified(t);
 }
 
-static auto amountMatches(const Transaction &t, int x) -> bool {
-    return amount(t).cents == x;
-}
-
 static void addTo(Transactions &transactions, const Transaction &t) {
     transactions.push_back(t);
 }
@@ -106,7 +102,7 @@ auto TransactionRecord::netIncome() -> NetIncome {
 
 void TransactionRecord::verify(Amount amount) {
     const auto maybe{findIf(verifiableTransactions, [=](auto t) {
-        return amountMatches(t, amount.cents) && unverified(t);
+        return finances::amount(t).cents == amount.cents && unverified(t);
     })};
     if (found(maybe, verifiableTransactions)) {
         maybe->verified = true;
