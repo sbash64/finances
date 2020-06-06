@@ -21,7 +21,7 @@ static void addTo(Transactions &transactions, const Transaction &t) {
     transactions.push_back(t);
 }
 
-static auto found(VerifiableTransactions::iterator it,
+static auto found(VerifiableTransactions::const_iterator it,
     const VerifiableTransactions &t) -> bool {
     return it != end(t);
 }
@@ -100,11 +100,9 @@ auto TransactionRecord::transactions() -> Transactions {
 }
 
 auto TransactionRecord::netIncome() -> NetIncome {
-    NetIncome netIncome{};
-    netIncome.cents = std::accumulate(begin(verifiableTransactions),
+    return NetIncome{std::accumulate(begin(verifiableTransactions),
         end(verifiableTransactions), 0,
-        [](auto net, auto t) { return net + amount(t).cents; });
-    return netIncome;
+        [](auto net, auto t) { return net + amount(t).cents; })};
 }
 
 void TransactionRecord::verify(Amount amount) {
