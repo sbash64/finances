@@ -65,39 +65,40 @@ static auto date(const std::string &first, const std::string &month,
 void CommandResponder::enter(const std::string &s) {
     try {
         std::stringstream stream{s};
-        const auto first{next(stream)};
-        if (matches(first, Command::print))
+        const auto command{next(stream)};
+        if (matches(command, Command::print))
             show(view, model.transactions());
-        else if (matches(first, Command::printVerified))
+        else if (matches(command, Command::printVerified))
             show(view, model.verifiedTransactions());
-        else if (matches(first, Command::printUnverified))
+        else if (matches(command, Command::printUnverified))
             show(view, model.unverifiedTransactions());
-        else if (matches(first, Command::netIncome))
+        else if (matches(command, Command::netIncome))
             view.show(model.netIncome());
-        else if (matches(first, Command::verify))
+        else if (matches(command, Command::verify))
             model.verify(amount(stream));
-        else if (matches(first, Command::add))
+        else if (matches(command, Command::add))
             model.add(transaction(stream));
-        else if (matches(first, Command::remove))
+        else if (matches(command, Command::remove))
             model.remove(transaction(stream));
-        else if (matches(first, Command::month))
+        else if (matches(command, Command::month))
             state = CommandState::aboutToSetMonth;
         else if (state == CommandState::aboutToSetMonth) {
-            month = first;
+            month = command;
             state = CommandState::aboutToSetYear;
         } else if (state == CommandState::aboutToSetYear) {
-            year = first;
+            year = command;
             state = CommandState::normal;
         } else if (state ==
             CommandState::aboutToEnterDateForAddingTransaction) {
-            model.add({{amountAdding}, labelAdding, date(first, month, year)});
+            transactionToAdd.date = date(command, month, year);
+            model.add(transactionToAdd);
             state = CommandState::normal;
         } else if (state ==
             CommandState::aboutToEnterLabelForAddingTransaction) {
-            labelAdding = first;
+            transactionToAdd.label = command;
             state = CommandState::aboutToEnterDateForAddingTransaction;
         } else {
-            amountAdding = hundredths(first);
+            transactionToAdd.amount = Amount{hundredths(command)};
             state = CommandState::aboutToEnterLabelForAddingTransaction;
         }
     } catch (const std::invalid_argument &) {

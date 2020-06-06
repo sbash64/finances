@@ -86,10 +86,9 @@ class CommandResponder : public Responder {
   private:
     Model &model;
     View &view;
-    std::string labelAdding{};
+    Transaction transactionToAdd;
     std::string month{};
     std::string year{};
-    int amountAdding{};
     CommandState state{};
 };
 }
