@@ -1,5 +1,5 @@
 #include "PromptTests.hpp"
-#include <finances/Prompt.hpp>
+#include <sbash64/finances/Prompt.hpp>
 #include <functional>
 #include <utility>
 

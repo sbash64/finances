@@ -1,9 +1,9 @@
 #include "repl.hpp"
-#include <finances/Presenter.hpp>
-#include <finances/CommandResponder.hpp>
-#include <finances/FormattedWriter.hpp>
-#include <finances/ItemizedFormatter.hpp>
-#include <finances/TransactionRecord.hpp>
+#include <sbash64/finances/Presenter.hpp>
+#include <sbash64/finances/CommandResponder.hpp>
+#include <sbash64/finances/FormattedWriter.hpp>
+#include <sbash64/finances/ItemizedFormatter.hpp>
+#include <sbash64/finances/TransactionRecord.hpp>
 #include <gsl/gsl>
 #include <iostream>
 

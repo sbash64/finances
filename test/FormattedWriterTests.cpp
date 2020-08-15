@@ -1,6 +1,6 @@
 #include "FormattedWriterTests.hpp"
 #include "testing-utility.hpp"
-#include <finances/FormattedWriter.hpp>
+#include <sbash64/finances/FormattedWriter.hpp>
 #include <sbash64/testcpplite/testcpplite.hpp>
 
 namespace finances {

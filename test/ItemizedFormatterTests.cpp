@@ -1,6 +1,6 @@
 #include "ItemizedFormatterTests.hpp"
 #include "testing-utility.hpp"
-#include <finances/ItemizedFormatter.hpp>
+#include <sbash64/finances/ItemizedFormatter.hpp>
 #include <sbash64/testcpplite/testcpplite.hpp>
 #include <functional>
 

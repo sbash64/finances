@@ -1,7 +1,7 @@
 #include "CommandResponderTests.hpp"
 #include "ViewStub.hpp"
 #include "testing-utility.hpp"
-#include <finances/CommandResponder.hpp>
+#include <sbash64/finances/CommandResponder.hpp>
 #include <sbash64/testcpplite/testcpplite.hpp>
 #include <utility>
 #include <functional>

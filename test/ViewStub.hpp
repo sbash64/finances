@@ -1,7 +1,7 @@
 #ifndef TEST_VIEWSTUB_HPP_
 #define TEST_VIEWSTUB_HPP_
 
-#include <finances/View.hpp>
+#include <sbash64/finances/View.hpp>
 
 namespace finances {
 class ViewStub : public View {

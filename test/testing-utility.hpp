@@ -1,7 +1,7 @@
 #ifndef TEST_TESTING_UTILITY_HPP_
 #define TEST_TESTING_UTILITY_HPP_
 
-#include <finances/Transaction.hpp>
+#include <sbash64/finances/Transaction.hpp>
 #include <sbash64/testcpplite/testcpplite.hpp>
 #include <string>
 #include <utility>

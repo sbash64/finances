@@ -8,7 +8,7 @@ target_compile_features(
   PRIVATE cxx_uniform_initialization)
 target_include_directories(
   sbash64-finances
-  PRIVATE include/finances
+  PRIVATE include/sbash64/finances
   PUBLIC include)
 target_compile_options(sbash64-finances PRIVATE ${SBASH64_FINANCES_WARNINGS})
 set_target_properties(sbash64-finances PROPERTIES CXX_EXTENSIONS OFF)
