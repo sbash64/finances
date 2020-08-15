@@ -10,12 +10,8 @@ include(FetchContent)
 FetchContent_Declare(
   GSL
   GIT_REPOSITORY https://github.com/microsoft/GSL
-  GIT_TAG v3.0.1)
+  GIT_TAG v3.1.0)
 FetchContent_MakeAvailable(GSL)
-
-macro(add_console_executable MAIN)
-  add_executable(finances-console repl.cpp ${MAIN})
-endmacro()
 
 option(SBASH64_FINANCES_ENABLE_READLINE "Enable readline" OFF)
 if(${SBASH64_FINANCES_ENABLE_READLINE})
