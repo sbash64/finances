@@ -4,7 +4,7 @@
 #include "Transaction.hpp"
 #include "FormattedWriter.hpp"
 
-namespace finances {
+namespace sbash64::finances {
 class ItemizedFormatter : public Formatter {
   public:
     auto format(const Transactions &) -> std::string override;

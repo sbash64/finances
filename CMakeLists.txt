@@ -25,6 +25,7 @@ add_executable(sbash64-finances-console repl.cpp
                                         ${FINANCES_CONSOLE_MAIN_SOURCE_FILE})
 target_compile_options(sbash64-finances-console
                        PRIVATE ${SBASH64_FINANCES_WARNINGS})
+target_compile_features(sbash64-finances-console PRIVATE cxx_std_17)
 set_target_properties(sbash64-finances-console PROPERTIES CXX_EXTENSIONS OFF)
 target_link_libraries(sbash64-finances-console sbash64-finances GSL
                       ${FINANCES_CONSOLE_ADDITIONAL_DEPENDENCIES})

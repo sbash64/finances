@@ -9,7 +9,7 @@ add_executable(
   main.cpp)
 target_compile_features(
   sbash64-finances-tests PRIVATE cxx_override cxx_trailing_return_types
-                                 cxx_uniform_initialization)
+                                 cxx_uniform_initialization cxx_std_17)
 target_compile_options(sbash64-finances-tests
                        PRIVATE ${SBASH64_FINANCES_WARNINGS})
 set_target_properties(sbash64-finances-tests PROPERTIES CXX_EXTENSIONS OFF)

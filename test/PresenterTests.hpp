@@ -3,7 +3,7 @@
 
 #include <sbash64/testcpplite/testcpplite.hpp>
 
-namespace finances {
+namespace sbash64::finances {
 void presenterPrintsTransactionVerified(sbash64::testcpplite::TestResult &);
 void presenterPrintsTransactionAdded(sbash64::testcpplite::TestResult &);
 void presenterPrintsAllTransactions(sbash64::testcpplite::TestResult &);

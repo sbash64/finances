@@ -3,7 +3,7 @@
 #include <sbash64/finances/FormattedWriter.hpp>
 #include <sbash64/testcpplite/testcpplite.hpp>
 
-namespace finances {
+namespace sbash64::finances {
 namespace {
 class FormatterStub : public Formatter {
   public:

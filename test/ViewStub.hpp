@@ -3,7 +3,7 @@
 
 #include <sbash64/finances/View.hpp>
 
-namespace finances {
+namespace sbash64::finances {
 class ViewStub : public View {
   public:
     auto shownTransactions() const { return shownTransactions_; }

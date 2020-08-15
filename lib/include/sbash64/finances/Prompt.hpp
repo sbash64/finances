@@ -4,7 +4,7 @@
 #include "Responder.hpp"
 #include <string>
 
-namespace finances {
+namespace sbash64::finances {
 class Input {
   public:
     virtual ~Input() = default;

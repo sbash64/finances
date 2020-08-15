@@ -24,7 +24,7 @@ class Readline {
 
 auto cString(const Readline &line) -> const char * { return line.cString(); }
 
-class ReadlineInput : public finances::Input {
+class ReadlineInput : public sbash64::finances::Input {
   public:
     auto next(const std::string &prompt) -> std::string override {
         Readline line{prompt};
@@ -37,5 +37,5 @@ class ReadlineInput : public finances::Input {
 
 int main() {
     ReadlineInput readlineInput;
-    finances::repl(readlineInput);
+    sbash64::finances::repl(readlineInput);
 }

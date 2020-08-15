@@ -3,7 +3,7 @@
 
 #include <sbash64/testcpplite/testcpplite.hpp>
 
-namespace finances {
+namespace sbash64::finances {
 void formattedWriterFormatsOneTransaction(sbash64::testcpplite::TestResult &);
 void formattedWriterWritesFormattedTransactions(sbash64::testcpplite::TestResult &);
 void formattedWriterFormatsNetIncome(sbash64::testcpplite::TestResult &);

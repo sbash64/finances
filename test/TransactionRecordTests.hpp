@@ -3,7 +3,7 @@
 
 #include <sbash64/testcpplite/testcpplite.hpp>
 
-namespace finances {
+namespace sbash64::finances {
 void transactionRecordHasNoneOnConstruction(sbash64::testcpplite::TestResult &);
 void transactionRecordNotifiesListenerOnAdd(sbash64::testcpplite::TestResult &);
 void transactionRecordHasOneAdded(sbash64::testcpplite::TestResult &);

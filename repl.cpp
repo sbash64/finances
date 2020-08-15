@@ -7,7 +7,7 @@
 #include <gsl/gsl>
 #include <iostream>
 
-namespace finances {
+namespace sbash64::finances {
 namespace {
 class ConsoleWriter : public Writer {
   public:

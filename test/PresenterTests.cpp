@@ -6,7 +6,7 @@
 #include <utility>
 #include <functional>
 
-namespace finances {
+namespace sbash64::finances {
 namespace {
 void verified(Presenter &presenter, int a, std::string b, std::string c) {
     presenter.verified(transaction(a, std::move(b), std::move(c)));

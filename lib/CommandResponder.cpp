@@ -2,7 +2,7 @@
 #include <sstream>
 #include <algorithm>
 
-namespace finances {
+namespace sbash64::finances {
 CommandResponder::CommandResponder(Model &model, View &view)
     : model{model}, view{view} {}
 

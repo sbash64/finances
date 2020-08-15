@@ -4,7 +4,7 @@ add_library(
   ItemizedFormatter.cpp Presenter.cpp Prompt.cpp)
 target_compile_features(
   sbash64-finances
-  PUBLIC cxx_override cxx_trailing_return_types
+  PUBLIC cxx_override cxx_trailing_return_types cxx_std_17
   PRIVATE cxx_uniform_initialization)
 target_include_directories(
   sbash64-finances

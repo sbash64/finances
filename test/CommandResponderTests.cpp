@@ -6,7 +6,7 @@
 #include <utility>
 #include <functional>
 
-namespace finances {
+namespace sbash64::finances {
 namespace {
 class ModelStub : public Model {
   public:

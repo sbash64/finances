@@ -1,6 +1,6 @@
 #include "FormattedWriter.hpp"
 
-namespace finances {
+namespace sbash64::finances {
 FormattedWriter::FormattedWriter(Formatter &formatter, Writer &writer)
     : formatter{formatter}, writer{writer} {}
 

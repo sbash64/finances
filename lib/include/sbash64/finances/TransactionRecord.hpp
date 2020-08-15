@@ -5,7 +5,7 @@
 #include "CommandResponder.hpp"
 #include <vector>
 
-namespace finances {
+namespace sbash64::finances {
 struct VerifiableTransaction : Transaction {
     VerifiableTransaction(const Transaction &t) : Transaction{t} {}
     bool verified{};

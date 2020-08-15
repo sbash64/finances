@@ -7,7 +7,7 @@
 #include <sbash64/testcpplite/testcpplite.hpp>
 #include <iostream>
 
-namespace finances {
+namespace sbash64::finances {
 static int main() {
     return sbash64::testcpplite::test(
         {{presenterPrintsTransactionVerified,
@@ -125,4 +125,4 @@ static int main() {
 }
 }
 
-int main() { return finances::main(); }
+int main() { return sbash64::finances::main(); }

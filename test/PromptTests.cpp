@@ -3,7 +3,7 @@
 #include <functional>
 #include <utility>
 
-namespace finances {
+namespace sbash64::finances {
 namespace {
 class InputStub : public Input {
   public:

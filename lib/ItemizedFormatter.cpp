@@ -1,7 +1,7 @@
 #include "ItemizedFormatter.hpp"
 #include <string>
 
-namespace finances {
+namespace sbash64::finances {
 static auto string(int x) -> std::string { return std::to_string(x); }
 
 static auto hundreds(int x) -> int { return x / 100; }

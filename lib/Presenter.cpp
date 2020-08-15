@@ -1,6 +1,6 @@
 #include "Presenter.hpp"
 
-namespace finances {
+namespace sbash64::finances {
 Presenter::Presenter(View &view) : view{view} {}
 
 static void show(View &view, const Transaction &t) { view.show({t}); }

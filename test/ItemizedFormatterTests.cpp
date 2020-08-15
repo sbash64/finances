@@ -4,7 +4,7 @@
 #include <sbash64/testcpplite/testcpplite.hpp>
 #include <functional>
 
-namespace finances {
+namespace sbash64::finances {
 namespace {
 auto format(ItemizedFormatter &formatter, const Transactions &t)
     -> std::string {

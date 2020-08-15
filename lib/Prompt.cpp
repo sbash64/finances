@@ -1,6 +1,6 @@
 #include "Prompt.hpp"
 
-namespace finances {
+namespace sbash64::finances {
 Prompt::Prompt(Input &input, Responder &responder, std::string primary,
     std::string secondary)
     : input{input}, responder{responder}, primary{std::move(primary)},

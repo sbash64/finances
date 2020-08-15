@@ -3,7 +3,7 @@
 
 #include <sbash64/finances/Prompt.hpp>
 
-namespace finances {
+namespace sbash64::finances {
 [[noreturn]] void repl(Input &);
 }
 

@@ -3,7 +3,7 @@
 
 #include <sbash64/testcpplite/testcpplite.hpp>
 
-namespace finances {
+namespace sbash64::finances {
 void commandResponderAddsTransaction(sbash64::testcpplite::TestResult &);
 void commandResponderAddsTransactionWithDecimal(sbash64::testcpplite::TestResult &);
 void commandResponderAddsTransactionWithOneDecimalDigit(

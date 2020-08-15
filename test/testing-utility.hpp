@@ -6,7 +6,7 @@
 #include <string>
 #include <utility>
 
-namespace finances {
+namespace sbash64::finances {
 inline auto transaction(int amount, std::string label, std::string date)
     -> Transaction {
     return {{amount}, std::move(label), std::move(date)};
