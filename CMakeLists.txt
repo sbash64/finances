@@ -3,15 +3,31 @@ project(
   Finances
   VERSION 1.0.0
   LANGUAGES CXX)
+
 add_subdirectory(finances)
+
 include(FetchContent)
 FetchContent_Declare(
   GSL
   GIT_REPOSITORY https://github.com/microsoft/GSL
   GIT_TAG v3.0.1)
 FetchContent_MakeAvailable(GSL)
-add_executable(finances-console main.cpp)
-target_link_libraries(finances-console finances readline GSL)
+
+macro(add_console_executable MAIN)
+  add_executable(finances-console repl.cpp ${MAIN})
+endmacro()
+
+option(SBASH64_FINANCES_ENABLE_READLINE "Enable readline" OFF)
+if(${SBASH64_FINANCES_ENABLE_READLINE})
+  set(FINANCES_CONSOLE_MAIN_SOURCE_FILE main-with-readline.cpp)
+  set(FINANCES_CONSOLE_ADDITIONAL_DEPENDENCIES readline)
+elseif()
+  set(FINANCES_CONSOLE_MAIN_SOURCE_FILE main.cpp)
+endif()
+
+add_executable(finances-console repl.cpp ${FINANCES_CONSOLE_MAIN_SOURCE_FILE})
+target_link_libraries(finances-console finances GSL
+                      ${FINANCES_CONSOLE_ADDITIONAL_DEPENDENCIES})
 
 option(SBASH64_FINANCES_ENABLE_TESTS "Enable tests" OFF)
 if(${SBASH64_FINANCES_ENABLE_TESTS})
