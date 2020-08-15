@@ -21,10 +21,12 @@ elseif()
   set(FINANCES_CONSOLE_MAIN_SOURCE_FILE main.cpp)
 endif()
 
-add_executable(finances-console repl.cpp ${FINANCES_CONSOLE_MAIN_SOURCE_FILE})
-target_compile_options(finances-console PRIVATE ${SBASH64_FINANCES_WARNINGS})
-set_target_properties(finances-console PROPERTIES CXX_EXTENSIONS OFF)
-target_link_libraries(finances-console finances GSL
+add_executable(sbash64-finances-console repl.cpp
+                                        ${FINANCES_CONSOLE_MAIN_SOURCE_FILE})
+target_compile_options(sbash64-finances-console
+                       PRIVATE ${SBASH64_FINANCES_WARNINGS})
+set_target_properties(sbash64-finances-console PROPERTIES CXX_EXTENSIONS OFF)
+target_link_libraries(sbash64-finances-console sbash64-finances GSL
                       ${FINANCES_CONSOLE_ADDITIONAL_DEPENDENCIES})
 
 option(SBASH64_FINANCES_ENABLE_TESTS "Enable tests" OFF)
