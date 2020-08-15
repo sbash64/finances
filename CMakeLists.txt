@@ -4,7 +4,7 @@ project(
   VERSION 1.0.0
   LANGUAGES CXX)
 
-add_subdirectory(finances)
+add_subdirectory(lib)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -22,6 +22,8 @@ elseif()
 endif()
 
 add_executable(finances-console repl.cpp ${FINANCES_CONSOLE_MAIN_SOURCE_FILE})
+target_compile_options(finances-console PRIVATE ${SBASH64_FINANCES_WARNINGS})
+set_target_properties(finances-console PROPERTIES CXX_EXTENSIONS OFF)
 target_link_libraries(finances-console finances GSL
                       ${FINANCES_CONSOLE_ADDITIONAL_DEPENDENCIES})
 

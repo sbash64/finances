@@ -9,3 +9,5 @@ target_include_directories(
   finances
   PRIVATE include/finances
   PUBLIC include)
+target_compile_options(finances PRIVATE ${SBASH64_FINANCES_WARNINGS})
+set_target_properties(finances PROPERTIES CXX_EXTENSIONS OFF)
