@@ -2,7 +2,7 @@
 #define TEST_TESTING_UTILITY_HPP_
 
 #include <finances/Transaction.hpp>
-#include <testcpplite/testcpplite.hpp>
+#include <sbash64/testcpplite/testcpplite.hpp>
 #include <string>
 #include <utility>
 
@@ -31,14 +31,14 @@ inline auto threeTransactions(int amount1, std::string label1,
         transaction(amount3, std::move(label3), std::move(date3))};
 }
 
-inline void assertEqual(testcpplite::TestResult &result,
+inline void assertEqual(sbash64::testcpplite::TestResult &result,
     const Transaction &expected, const Transaction &actual) {
     assertEqual(result, expected.amount.cents, actual.amount.cents);
     assertEqual(result, expected.date, actual.date);
     assertEqual(result, expected.label, actual.label);
 }
 
-inline void assertEqual(testcpplite::TestResult &result,
+inline void assertEqual(sbash64::testcpplite::TestResult &result,
     const Transactions &expected, const Transactions &actual) {
     assertEqual(result, expected.size(), actual.size());
     for (size_t i{0}; i < expected.size(); ++i)

@@ -1,7 +1,7 @@
 #include "ItemizedFormatterTests.hpp"
 #include "testing-utility.hpp"
 #include <finances/ItemizedFormatter.hpp>
-#include <testcpplite/testcpplite.hpp>
+#include <sbash64/testcpplite/testcpplite.hpp>
 #include <functional>
 
 namespace finances {
@@ -17,14 +17,14 @@ void testItemizedFormatter(const std::function<void(ItemizedFormatter &)> &f) {
 }
 }
 
-void itemizedFormatterFormatsOneTransaction(testcpplite::TestResult &result) {
+void itemizedFormatterFormatsOneTransaction(sbash64::testcpplite::TestResult &result) {
     testItemizedFormatter([&](ItemizedFormatter &formatter) {
         assertEqual(result, "-50.00 hyvee 10/5/19",
             format(formatter, oneTransaction(-5000, "hyvee", "10/5/19")));
     });
 }
 
-void itemizedFormatterFormatsTwoTransactions(testcpplite::TestResult &result) {
+void itemizedFormatterFormatsTwoTransactions(sbash64::testcpplite::TestResult &result) {
     testItemizedFormatter([&](ItemizedFormatter &formatter) {
         assertEqual(result,
             "-50.00 hyvee 10/5/19\n"
@@ -35,7 +35,7 @@ void itemizedFormatterFormatsTwoTransactions(testcpplite::TestResult &result) {
     });
 }
 
-void itemizedFormatterFormatsNetIncome(testcpplite::TestResult &result) {
+void itemizedFormatterFormatsNetIncome(sbash64::testcpplite::TestResult &result) {
     testItemizedFormatter([&](ItemizedFormatter &formatter) {
         NetIncome netIncome{};
         netIncome.cents = -979;

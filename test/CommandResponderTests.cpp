@@ -2,7 +2,7 @@
 #include "ViewStub.hpp"
 #include "testing-utility.hpp"
 #include <finances/CommandResponder.hpp>
-#include <testcpplite/testcpplite.hpp>
+#include <sbash64/testcpplite/testcpplite.hpp>
 #include <utility>
 #include <functional>
 
@@ -114,19 +114,19 @@ void verify(CommandResponder &commandResponder, const std::string &s) {
     executeCommand(commandResponder, Command::verify, s);
 }
 
-void assertTransactionAdded(testcpplite::TestResult &result, ModelStub &model,
+void assertTransactionAdded(sbash64::testcpplite::TestResult &result, ModelStub &model,
     int amount, std::string label, std::string date) {
     assertEqual(result, transaction(amount, std::move(label), std::move(date)),
         model.transactionAdded());
 }
 
-void assertTransactionRemoved(testcpplite::TestResult &result, ModelStub &model,
+void assertTransactionRemoved(sbash64::testcpplite::TestResult &result, ModelStub &model,
     int amount, std::string label, std::string date) {
     assertEqual(result, transaction(amount, std::move(label), std::move(date)),
         model.transactionRemoved());
 }
 
-void assertBothTransactionsPrinted(testcpplite::TestResult &result,
+void assertBothTransactionsPrinted(sbash64::testcpplite::TestResult &result,
     ViewStub &view, int amount1, std::string label1, std::string date1,
     int amount2, std::string label2, std::string date2) {
     assertEqual(result,
@@ -136,12 +136,12 @@ void assertBothTransactionsPrinted(testcpplite::TestResult &result,
 }
 
 void assertNetIncomePrinted(
-    testcpplite::TestResult &result, ViewStub &view, int x) {
+    sbash64::testcpplite::TestResult &result, ViewStub &view, int x) {
     assertEqual(result, x, view.shownNetIncome().cents);
 }
 
 void assertAmountVerified(
-    testcpplite::TestResult &result, ModelStub &model, int x) {
+    sbash64::testcpplite::TestResult &result, ModelStub &model, int x) {
     assertEqual(result, x, model.amountVerified().cents);
 }
 
@@ -154,7 +154,7 @@ void testCommandResponder(
 }
 }
 
-void commandResponderAddsTransactionInSteps(testcpplite::TestResult &result) {
+void commandResponderAddsTransactionInSteps(sbash64::testcpplite::TestResult &result) {
     testCommandResponder(
         [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &) {
             execute(commandResponder, "-50");
@@ -165,7 +165,7 @@ void commandResponderAddsTransactionInSteps(testcpplite::TestResult &result) {
 }
 
 void commandResponderAddsTwoTransactionsInSteps(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testCommandResponder(
         [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &) {
             execute(commandResponder, "-50");
@@ -179,7 +179,7 @@ void commandResponderAddsTwoTransactionsInSteps(
 }
 
 void commandResponderDoesNotAddTransactionInSteps(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testCommandResponder(
         [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &) {
             execute(commandResponder, "oops");
@@ -189,7 +189,7 @@ void commandResponderDoesNotAddTransactionInSteps(
         });
 }
 
-void commandResponderStoresMonthForDates(testcpplite::TestResult &result) {
+void commandResponderStoresMonthForDates(sbash64::testcpplite::TestResult &result) {
     testCommandResponder(
         [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &) {
             executeCommand(commandResponder, Command::month);
@@ -203,7 +203,7 @@ void commandResponderStoresMonthForDates(testcpplite::TestResult &result) {
         });
 }
 
-void commandResponderAddsTransaction(testcpplite::TestResult &result) {
+void commandResponderAddsTransaction(sbash64::testcpplite::TestResult &result) {
     testCommandResponder(
         [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &) {
             add(commandResponder, "-50 hyvee 10/5/19");
@@ -212,7 +212,7 @@ void commandResponderAddsTransaction(testcpplite::TestResult &result) {
 }
 
 void commandResponderAddsTransactionWithDecimal(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testCommandResponder(
         [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &) {
             add(commandResponder, "-9.47 chipotle 10/6/19");
@@ -221,7 +221,7 @@ void commandResponderAddsTransactionWithDecimal(
 }
 
 void commandResponderAddsTransactionWithOneDecimalDigit(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testCommandResponder(
         [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &) {
             add(commandResponder, "-9.4 chipotle 10/6/19");
@@ -230,7 +230,7 @@ void commandResponderAddsTransactionWithOneDecimalDigit(
 }
 
 void commandResponderAddsTransactionWithNoDecimalDigits(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testCommandResponder(
         [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &) {
             add(commandResponder, "-9. chipotle 10/6/19");
@@ -238,7 +238,7 @@ void commandResponderAddsTransactionWithNoDecimalDigits(
         });
 }
 
-void commandResponderRemovesTransaction(testcpplite::TestResult &result) {
+void commandResponderRemovesTransaction(sbash64::testcpplite::TestResult &result) {
     testCommandResponder(
         [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &) {
             remove(commandResponder, "-12.34 hyvee 10/5/19");
@@ -246,7 +246,7 @@ void commandResponderRemovesTransaction(testcpplite::TestResult &result) {
         });
 }
 
-void commandResponderPrintsAllTransactions(testcpplite::TestResult &result) {
+void commandResponderPrintsAllTransactions(sbash64::testcpplite::TestResult &result) {
     testCommandResponder([&](CommandResponder &commandResponder,
                              ModelStub &model, ViewStub &view) {
         setAllTransactions(model,
@@ -259,7 +259,7 @@ void commandResponderPrintsAllTransactions(testcpplite::TestResult &result) {
 }
 
 void commandResponderPrintsAllVerifiedTransaction(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testCommandResponder([&](CommandResponder &commandResponder,
                              ModelStub &model, ViewStub &view) {
         setVerifiedTransactions(model,
@@ -272,7 +272,7 @@ void commandResponderPrintsAllVerifiedTransaction(
 }
 
 void commandResponderPrintsUnverifiedTransactions(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testCommandResponder([&](CommandResponder &commandResponder,
                              ModelStub &model, ViewStub &view) {
         setUnverifiedTransactions(model,
@@ -284,7 +284,7 @@ void commandResponderPrintsUnverifiedTransactions(
     });
 }
 
-void commandResponderPrintsNetIncome(testcpplite::TestResult &result) {
+void commandResponderPrintsNetIncome(sbash64::testcpplite::TestResult &result) {
     testCommandResponder([&](CommandResponder &commandResponder,
                              ModelStub &model, ViewStub &view) {
         setNetIncome(model, 5000);
@@ -293,7 +293,7 @@ void commandResponderPrintsNetIncome(testcpplite::TestResult &result) {
     });
 }
 
-void commandResponderVerifiesAmount(testcpplite::TestResult &result) {
+void commandResponderVerifiesAmount(sbash64::testcpplite::TestResult &result) {
     testCommandResponder(
         [&](CommandResponder &commandResponder, ModelStub &model, ViewStub &) {
             verify(commandResponder, "-12.34");
@@ -302,14 +302,14 @@ void commandResponderVerifiesAmount(testcpplite::TestResult &result) {
 }
 
 void commandResponderDoesNotAbortOnUnrecognizedCommand(
-    testcpplite::TestResult &) {
+    sbash64::testcpplite::TestResult &) {
     testCommandResponder(
         [&](CommandResponder &commandResponder, ModelStub &, ViewStub &) {
             execute(commandResponder, "jellyfish");
         });
 }
 
-void commandResponderDoesNotAbortOnInvalidNumber(testcpplite::TestResult &) {
+void commandResponderDoesNotAbortOnInvalidNumber(sbash64::testcpplite::TestResult &) {
     testCommandResponder(
         [&](CommandResponder &commandResponder, ModelStub &, ViewStub &) {
             execute(commandResponder, "1.2.3");
@@ -317,7 +317,7 @@ void commandResponderDoesNotAbortOnInvalidNumber(testcpplite::TestResult &) {
 }
 
 void commandResponderDoesNotAbortOnPartiallyCorrectCommand(
-    testcpplite::TestResult &) {
+    sbash64::testcpplite::TestResult &) {
     testCommandResponder([&](CommandResponder &commandResponder, ModelStub &,
                              ViewStub &) { add(commandResponder, "oops"); });
 }
