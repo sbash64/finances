@@ -9,6 +9,12 @@ target_compile_features(
 target_include_directories(
   sbash64-finances
   PRIVATE include/sbash64/finances
-  PUBLIC include)
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+         $<INSTALL_INTERFACE:include>)
 target_compile_options(sbash64-finances PRIVATE ${SBASH64_FINANCES_WARNINGS})
-set_target_properties(sbash64-finances PROPERTIES CXX_EXTENSIONS OFF)
+set_target_properties(
+  sbash64-finances
+  PROPERTIES
+    CXX_EXTENSIONS OFF
+    PUBLIC_HEADER
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/sbash64/finances/Transaction.hpp)
