@@ -35,16 +35,9 @@ target_link_libraries(sbash64-finances-console sbash64-finances GSL
                       ${FINANCES_CONSOLE_ADDITIONAL_DEPENDENCIES})
 
 include(GNUInstallDirs)
-install(
-  TARGETS sbash64-finances-console sbash64-finances
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT SBash64Finances_RunTime
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-          COMPONENT SBash64Finances_RunTime
-          NAMELINK_COMPONENT SBash64Finances_Development
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-          COMPONENT SBash64Finances_Development
-  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/sbash64/finances
-                COMPONENT SBash64Finances_Development)
+install(TARGETS sbash64-finances-console
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+                COMPONENT SBash64Finances_RunTime)
 
 option(SBASH64_FINANCES_ENABLE_TESTS "Enable tests" OFF)
 if(${SBASH64_FINANCES_ENABLE_TESTS})
