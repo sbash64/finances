@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace finances {
+namespace sbash64::finances {
 struct Amount {
     int cents;
 };

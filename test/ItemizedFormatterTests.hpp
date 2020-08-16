@@ -1,12 +1,12 @@
 #ifndef TEST_ITEMIZEDFORMATTERTESTS_HPP_
 #define TEST_ITEMIZEDFORMATTERTESTS_HPP_
 
-#include <testcpplite/testcpplite.hpp>
+#include <sbash64/testcpplite/testcpplite.hpp>
 
-namespace finances {
-void itemizedFormatterFormatsOneTransaction(testcpplite::TestResult &);
-void itemizedFormatterFormatsTwoTransactions(testcpplite::TestResult &);
-void itemizedFormatterFormatsNetIncome(testcpplite::TestResult &);
+namespace sbash64::finances {
+void itemizedFormatterFormatsOneTransaction(sbash64::testcpplite::TestResult &);
+void itemizedFormatterFormatsTwoTransactions(sbash64::testcpplite::TestResult &);
+void itemizedFormatterFormatsNetIncome(sbash64::testcpplite::TestResult &);
 }
 
 #endif

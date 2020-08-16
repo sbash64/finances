@@ -3,7 +3,7 @@
 
 #include "Transaction.hpp"
 
-namespace finances {
+namespace sbash64::finances {
 class Model {
   public:
     virtual ~Model() = default;

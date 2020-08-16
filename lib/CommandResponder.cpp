@@ -2,7 +2,7 @@
 #include <sstream>
 #include <algorithm>
 
-namespace finances {
+namespace sbash64::finances {
 CommandResponder::CommandResponder(Model &model, View &view)
     : model{model}, view{view} {}
 
@@ -11,7 +11,8 @@ static auto integer(const std::string &s) -> int { return std::stoi(s); }
 static auto cents(const std::string &s) -> int { return integer(s) * 100; }
 
 static auto twoDecimalPlaces(const std::string &s) -> std::string {
-    return s + std::string(2 - std::min(s.size(), 2UL), '0');
+    return s +
+        std::string(2 - std::min(s.size(), std::string::size_type{2}), '0');
 }
 
 static auto amount(const std::string &s) -> Amount {

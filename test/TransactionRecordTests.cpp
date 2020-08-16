@@ -1,10 +1,10 @@
 #include "testing-utility.hpp"
 #include "TransactionRecordTests.hpp"
-#include <finances/TransactionRecord.hpp>
-#include <testcpplite/testcpplite.hpp>
+#include <sbash64/finances/TransactionRecord.hpp>
+#include <sbash64/testcpplite/testcpplite.hpp>
 #include <functional>
 
-namespace finances {
+namespace sbash64::finances {
 namespace {
 class ModelEventListenerStub : public TransactionRecord::EventListener {
   public:
@@ -53,53 +53,53 @@ auto verifiedTransactions(TransactionRecord &record) -> Transactions {
     return record.verifiedTransactions();
 }
 
-void assertTransactions(testcpplite::TestResult &result,
+void assertTransactions(sbash64::testcpplite::TestResult &result,
     TransactionRecord &record, const Transactions &expected) {
     assertEqual(result, expected, transactions(record));
 }
 
-void assertVerifiedTransactions(testcpplite::TestResult &result,
+void assertVerifiedTransactions(sbash64::testcpplite::TestResult &result,
     TransactionRecord &record, const Transactions &expected) {
     assertEqual(result, expected, verifiedTransactions(record));
 }
 
-void assertUnverifiedTransactions(testcpplite::TestResult &result,
+void assertUnverifiedTransactions(sbash64::testcpplite::TestResult &result,
     TransactionRecord &record, const Transactions &expected) {
     assertEqual(result, expected, record.unverifiedTransactions());
 }
 
 void assertNoTransactions(
-    testcpplite::TestResult &result, TransactionRecord &record) {
+    sbash64::testcpplite::TestResult &result, TransactionRecord &record) {
     assertTransactions(result, record, none());
 }
 
 void assertNoVerifiedTransactions(
-    testcpplite::TestResult &result, TransactionRecord &record) {
+    sbash64::testcpplite::TestResult &result, TransactionRecord &record) {
     assertVerifiedTransactions(result, record, none());
 }
 
-void assertOneTransaction(testcpplite::TestResult &result,
+void assertOneTransaction(sbash64::testcpplite::TestResult &result,
     TransactionRecord &record, int amount, std::string label,
     std::string date) {
     assertTransactions(result, record,
         oneTransaction(amount, std::move(label), std::move(date)));
 }
 
-void assertOneVerifiedTransaction(testcpplite::TestResult &result,
+void assertOneVerifiedTransaction(sbash64::testcpplite::TestResult &result,
     TransactionRecord &record, int amount, std::string label,
     std::string date) {
     assertVerifiedTransactions(result, record,
         oneTransaction(amount, std::move(label), std::move(date)));
 }
 
-void assertOneUnverifiedTransaction(testcpplite::TestResult &result,
+void assertOneUnverifiedTransaction(sbash64::testcpplite::TestResult &result,
     TransactionRecord &record, int amount, std::string label,
     std::string date) {
     assertUnverifiedTransactions(result, record,
         oneTransaction(amount, std::move(label), std::move(date)));
 }
 
-void assertTwoTransactions(testcpplite::TestResult &result,
+void assertTwoTransactions(sbash64::testcpplite::TestResult &result,
     TransactionRecord &record, int amount1, std::string label1,
     std::string date1, int amount2, std::string label2, std::string date2) {
     assertTransactions(result, record,
@@ -116,19 +116,19 @@ void testTransactionRecord(
 }
 
 void assertNetIncome(
-    testcpplite::TestResult &result, TransactionRecord &record, int amount) {
+    sbash64::testcpplite::TestResult &result, TransactionRecord &record, int amount) {
     assertEqual(result, amount, record.netIncome().cents);
 }
 }
 
-void transactionRecordHasNoneOnConstruction(testcpplite::TestResult &result) {
+void transactionRecordHasNoneOnConstruction(sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             assertNoTransactions(result, record);
         });
 }
 
-void transactionRecordNotifiesListenerOnAdd(testcpplite::TestResult &result) {
+void transactionRecordNotifiesListenerOnAdd(sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &listener) {
             add(record, -5000, "hyvee", "10/5/19");
@@ -137,7 +137,7 @@ void transactionRecordNotifiesListenerOnAdd(testcpplite::TestResult &result) {
         });
 }
 
-void transactionRecordHasOneAdded(testcpplite::TestResult &result) {
+void transactionRecordHasOneAdded(sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -5000, "hyvee", "10/5/19");
@@ -145,7 +145,7 @@ void transactionRecordHasOneAdded(testcpplite::TestResult &result) {
         });
 }
 
-void transactionRecordHasTwoAdded(testcpplite::TestResult &result) {
+void transactionRecordHasTwoAdded(sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -1000, "hyvee", "10/5/19");
@@ -155,7 +155,7 @@ void transactionRecordHasTwoAdded(testcpplite::TestResult &result) {
         });
 }
 
-void transactionRecordHasNoneAfterRemovingOne(testcpplite::TestResult &result) {
+void transactionRecordHasNoneAfterRemovingOne(sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -1000, "hyvee", "10/5/19");
@@ -164,7 +164,7 @@ void transactionRecordHasNoneAfterRemovingOne(testcpplite::TestResult &result) {
         });
 }
 
-void transactionRecordHasThreeAdded(testcpplite::TestResult &result) {
+void transactionRecordHasThreeAdded(sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -2000, "hyvee", "10/5/19");
@@ -177,7 +177,7 @@ void transactionRecordHasThreeAdded(testcpplite::TestResult &result) {
 }
 
 void transactionRecordHasNoneAfterRemovingNone(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             remove(record, -2000, "hyvee", "10/5/19");
@@ -185,7 +185,7 @@ void transactionRecordHasNoneAfterRemovingNone(
         });
 }
 
-void transactionRecordHasOneAfterRemovingOne(testcpplite::TestResult &result) {
+void transactionRecordHasOneAfterRemovingOne(sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -5000, "hyvee", "10/5/19");
@@ -196,7 +196,7 @@ void transactionRecordHasOneAfterRemovingOne(testcpplite::TestResult &result) {
 }
 
 void transactionRecordHasTwoAfterRemovingOneNotFound(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -5000, "hyvee", "10/5/19");
@@ -208,7 +208,7 @@ void transactionRecordHasTwoAfterRemovingOneNotFound(
 }
 
 void transactionRecordHasZeroNetIncomeOnConstruction(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             assertNetIncome(result, record, 0);
@@ -216,7 +216,7 @@ void transactionRecordHasZeroNetIncomeOnConstruction(
 }
 
 void transactionRecordHasOneContributingNetIncome(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -1000, "hyvee", "10/5/19");
@@ -225,7 +225,7 @@ void transactionRecordHasOneContributingNetIncome(
 }
 
 void transactionRecordHasTwoContributingNetIncome(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -6132, "hyvee", "10/5/19");
@@ -235,14 +235,14 @@ void transactionRecordHasTwoContributingNetIncome(
 }
 
 void transactionRecordHasNoneVerifiedOnConstruction(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             assertNoVerifiedTransactions(result, record);
         });
 }
 
-void transactionRecordHasNoneVerifiedAfterAdd(testcpplite::TestResult &result) {
+void transactionRecordHasNoneVerifiedAfterAdd(sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -2000, "hyvee", "10/5/19");
@@ -250,7 +250,7 @@ void transactionRecordHasNoneVerifiedAfterAdd(testcpplite::TestResult &result) {
         });
 }
 
-void transactionRecordHasOneVerifiedAfterAdd(testcpplite::TestResult &result) {
+void transactionRecordHasOneVerifiedAfterAdd(sbash64::testcpplite::TestResult &result) {
     testTransactionRecord([&](TransactionRecord &record,
                               ModelEventListenerStub &) {
         add(record, -2000, "hyvee", "10/5/19");
@@ -260,7 +260,7 @@ void transactionRecordHasOneVerifiedAfterAdd(testcpplite::TestResult &result) {
 }
 
 void transactionRecordHasOneVerifiedAfterTwoAdded(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord([&](TransactionRecord &record,
                               ModelEventListenerStub &) {
         add(record, -2000, "hyvee", "10/5/19");
@@ -271,7 +271,7 @@ void transactionRecordHasOneVerifiedAfterTwoAdded(
 }
 
 void transactionRecordHasTwoVerifiedAfterThreeAdded(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -2000, "hyvee", "10/5/19");
@@ -286,7 +286,7 @@ void transactionRecordHasTwoVerifiedAfterThreeAdded(
 }
 
 void transactionRecordHasNoneVerifiedAfterVerify(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             verify(record, -3000);
@@ -295,17 +295,17 @@ void transactionRecordHasNoneVerifiedAfterVerify(
 }
 
 void transactionRecordDoesNotNotifyAfterOneAddAndVerify(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &listener) {
             add(record, -2000, "hyvee", "10/5/19");
             verify(record, -1000);
-            testcpplite::assertFalse(result, listener.verified());
+            sbash64::testcpplite::assertFalse(result, listener.verified());
         });
 }
 
 void transactionRecordNotiesAfterOneAddAndVerify(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &listener) {
             add(record, -2000, "hyvee", "10/5/19");
@@ -316,7 +316,7 @@ void transactionRecordNotiesAfterOneAddAndVerify(
 }
 
 void transactionRecordHasNoneUnverifiedOnConstruction(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             assertUnverifiedTransactions(result, record, none());
@@ -324,7 +324,7 @@ void transactionRecordHasNoneUnverifiedOnConstruction(
 }
 
 void transactionRecordHasOneUnverifiedAfterAdd(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -1000, "hyvee", "10/1/19");
@@ -334,7 +334,7 @@ void transactionRecordHasOneUnverifiedAfterAdd(
 }
 
 void transactionRecordHasOneUnverifiedAfterTwoAdded(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -2000, "hyvee", "10/5/19");
@@ -346,7 +346,7 @@ void transactionRecordHasOneUnverifiedAfterTwoAdded(
 }
 
 void transactionRecordHasTwoVerifiedOfSameAmount(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -2000, "hyvee", "10/5/19");
@@ -360,19 +360,19 @@ void transactionRecordHasTwoVerifiedOfSameAmount(
 }
 
 void transactionRecordHasOneVerifiedAfterAddingTwoOfSameAmount(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -2000, "hyvee", "10/5/19");
             add(record, -2000, "chipotle", "10/6/19");
             verify(record, -2000);
-            testcpplite::assertEqual(result, Transactions::size_type{1},
+            sbash64::testcpplite::assertEqual(result, Transactions::size_type{1},
                 verifiedTransactions(record).size());
         });
 }
 
 void transactionRecordVerifiesMatchingAmountWhenRemovingFirst(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -2000, "hyvee", "10/5/19");
@@ -385,7 +385,7 @@ void transactionRecordVerifiesMatchingAmountWhenRemovingFirst(
 }
 
 void transactionRecordVerifiesMatchingAmountWhenRemovingSecond(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord([&](TransactionRecord &record,
                               ModelEventListenerStub &) {
         add(record, -2000, "hyvee", "10/5/19");
@@ -397,7 +397,7 @@ void transactionRecordVerifiesMatchingAmountWhenRemovingSecond(
 }
 
 void transactionRecordDoesNotVerifyMatchingAmountWhenRemovingOne(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testTransactionRecord(
         [&](TransactionRecord &record, ModelEventListenerStub &) {
             add(record, -2000, "hyvee", "10/5/19");

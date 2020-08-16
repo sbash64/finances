@@ -1,13 +1,13 @@
 #ifndef TEST_PRESENTERTESTS_HPP_
 #define TEST_PRESENTERTESTS_HPP_
 
-#include <testcpplite/testcpplite.hpp>
+#include <sbash64/testcpplite/testcpplite.hpp>
 
-namespace finances {
-void presenterPrintsTransactionVerified(testcpplite::TestResult &);
-void presenterPrintsTransactionAdded(testcpplite::TestResult &);
-void presenterPrintsAllTransactions(testcpplite::TestResult &);
-void presenterPrintsNetIncome(testcpplite::TestResult &);
+namespace sbash64::finances {
+void presenterPrintsTransactionVerified(sbash64::testcpplite::TestResult &);
+void presenterPrintsTransactionAdded(sbash64::testcpplite::TestResult &);
+void presenterPrintsAllTransactions(sbash64::testcpplite::TestResult &);
+void presenterPrintsNetIncome(sbash64::testcpplite::TestResult &);
 }
 
 #endif

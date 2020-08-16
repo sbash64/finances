@@ -1,14 +1,14 @@
 #ifndef TEST_FORMATTEDWRITERTESTS_HPP_
 #define TEST_FORMATTEDWRITERTESTS_HPP_
 
-#include <testcpplite/testcpplite.hpp>
+#include <sbash64/testcpplite/testcpplite.hpp>
 
-namespace finances {
-void formattedWriterFormatsOneTransaction(testcpplite::TestResult &);
-void formattedWriterWritesFormattedTransactions(testcpplite::TestResult &);
-void formattedWriterFormatsNetIncome(testcpplite::TestResult &);
-void formattedWriterWritesNetIncome(testcpplite::TestResult &);
-void formattedWriterShowsMessage(testcpplite::TestResult &);
+namespace sbash64::finances {
+void formattedWriterFormatsOneTransaction(sbash64::testcpplite::TestResult &);
+void formattedWriterWritesFormattedTransactions(sbash64::testcpplite::TestResult &);
+void formattedWriterFormatsNetIncome(sbash64::testcpplite::TestResult &);
+void formattedWriterWritesNetIncome(sbash64::testcpplite::TestResult &);
+void formattedWriterShowsMessage(sbash64::testcpplite::TestResult &);
 }
 
 #endif

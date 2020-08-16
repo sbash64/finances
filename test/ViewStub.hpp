@@ -1,9 +1,9 @@
 #ifndef TEST_VIEWSTUB_HPP_
 #define TEST_VIEWSTUB_HPP_
 
-#include <finances/View.hpp>
+#include <sbash64/finances/View.hpp>
 
-namespace finances {
+namespace sbash64::finances {
 class ViewStub : public View {
   public:
     auto shownTransactions() const { return shownTransactions_; }

@@ -4,7 +4,7 @@
 #include <string>
 #include <utility>
 
-namespace finances {
+namespace sbash64::finances {
 class Responder {
   public:
     struct Prompt : std::string {

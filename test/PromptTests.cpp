@@ -1,9 +1,9 @@
 #include "PromptTests.hpp"
-#include <finances/Prompt.hpp>
+#include <sbash64/finances/Prompt.hpp>
 #include <functional>
 #include <utility>
 
-namespace finances {
+namespace sbash64::finances {
 namespace {
 class InputStub : public Input {
   public:
@@ -39,7 +39,7 @@ class ResponderStub : public Responder {
     Prompt prompt_;
 };
 
-void assertPromptEquals(testcpplite::TestResult &result, InputStub &input,
+void assertPromptEquals(sbash64::testcpplite::TestResult &result, InputStub &input,
     const std::string &what) {
     assertEqual(result, what, input.prompt());
 }
@@ -54,7 +54,7 @@ void testPrompt(
 }
 }
 
-void promptPassesInputToResponder(testcpplite::TestResult &result) {
+void promptPassesInputToResponder(sbash64::testcpplite::TestResult &result) {
     testPrompt([&](Prompt &prompt, InputStub &input, ResponderStub &responder) {
         input.setNext("a");
         prompt.once();
@@ -62,7 +62,7 @@ void promptPassesInputToResponder(testcpplite::TestResult &result) {
     });
 }
 
-void promptCombinesPrimaryPromptForInput(testcpplite::TestResult &result) {
+void promptCombinesPrimaryPromptForInput(sbash64::testcpplite::TestResult &result) {
     testPrompt(
         [&](Prompt &prompt, InputStub &input, ResponderStub &responder) {
             responder.setPrompt("a");
@@ -72,7 +72,7 @@ void promptCombinesPrimaryPromptForInput(testcpplite::TestResult &result) {
         "$ ");
 }
 
-void promptCombinesSecondaryPromptForInput(testcpplite::TestResult &result) {
+void promptCombinesSecondaryPromptForInput(sbash64::testcpplite::TestResult &result) {
     testPrompt(
         [&](Prompt &prompt, InputStub &input, ResponderStub &responder) {
             responder.setPrompt("a", Responder::Prompt::Level::secondary);

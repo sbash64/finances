@@ -6,7 +6,7 @@
 #include "Model.hpp"
 #include "View.hpp"
 
-namespace finances {
+namespace sbash64::finances {
 enum class Command {
     print,
     printVerified,

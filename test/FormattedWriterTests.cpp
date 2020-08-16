@@ -1,9 +1,9 @@
 #include "FormattedWriterTests.hpp"
 #include "testing-utility.hpp"
-#include <finances/FormattedWriter.hpp>
-#include <testcpplite/testcpplite.hpp>
+#include <sbash64/finances/FormattedWriter.hpp>
+#include <sbash64/testcpplite/testcpplite.hpp>
 
-namespace finances {
+namespace sbash64::finances {
 namespace {
 class FormatterStub : public Formatter {
   public:
@@ -51,7 +51,7 @@ void showTransactions(FormattedWriter &printer, const Transactions &t = {}) {
 }
 
 void assertWrittenForShowing(
-    testcpplite::TestResult &result, WriterStub &writer, const std::string &s) {
+    sbash64::testcpplite::TestResult &result, WriterStub &writer, const std::string &s) {
     assertEqual(result, '\n' + s + "\n\n", writer.written());
 }
 
@@ -71,7 +71,7 @@ void testFormattedWriter(
 }
 }
 
-void formattedWriterFormatsOneTransaction(testcpplite::TestResult &result) {
+void formattedWriterFormatsOneTransaction(sbash64::testcpplite::TestResult &result) {
     testFormattedWriter([&](FormattedWriter &printer, FormatterStub &formatter,
                             WriterStub &) {
         showTransactions(printer, oneTransaction(-1000, "chipotle", "10/6/19"));
@@ -81,7 +81,7 @@ void formattedWriterFormatsOneTransaction(testcpplite::TestResult &result) {
 }
 
 void formattedWriterWritesFormattedTransactions(
-    testcpplite::TestResult &result) {
+    sbash64::testcpplite::TestResult &result) {
     testFormattedWriter([&](FormattedWriter &printer, FormatterStub &formatter,
                             WriterStub &writer) {
         formatter.setFormattedTransactions("hello");
@@ -90,7 +90,7 @@ void formattedWriterWritesFormattedTransactions(
     });
 }
 
-void formattedWriterFormatsNetIncome(testcpplite::TestResult &result) {
+void formattedWriterFormatsNetIncome(sbash64::testcpplite::TestResult &result) {
     testFormattedWriter(
         [&](FormattedWriter &printer, FormatterStub &formatter, WriterStub &) {
             showNetIncome(printer, 10);
@@ -98,7 +98,7 @@ void formattedWriterFormatsNetIncome(testcpplite::TestResult &result) {
         });
 }
 
-void formattedWriterWritesNetIncome(testcpplite::TestResult &result) {
+void formattedWriterWritesNetIncome(sbash64::testcpplite::TestResult &result) {
     testFormattedWriter([&](FormattedWriter &printer, FormatterStub &formatter,
                             WriterStub &writer) {
         formatter.setFormattedNetIncome("hello");
@@ -107,7 +107,7 @@ void formattedWriterWritesNetIncome(testcpplite::TestResult &result) {
     });
 }
 
-void formattedWriterShowsMessage(testcpplite::TestResult &result) {
+void formattedWriterShowsMessage(sbash64::testcpplite::TestResult &result) {
     testFormattedWriter(
         [&](FormattedWriter &printer, FormatterStub &, WriterStub &writer) {
             printer.show("hello");

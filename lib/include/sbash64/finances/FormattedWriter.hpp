@@ -5,7 +5,7 @@
 #include "CommandResponder.hpp"
 #include <string>
 
-namespace finances {
+namespace sbash64::finances {
 class Formatter {
   public:
     virtual ~Formatter() = default;

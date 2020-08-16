@@ -4,7 +4,7 @@
 #include <functional>
 #include <utility>
 
-namespace finances {
+namespace sbash64::finances {
 static auto begin(const VerifiableTransactions &v) { return v.begin(); }
 
 static auto end(const VerifiableTransactions &v) { return v.end(); }

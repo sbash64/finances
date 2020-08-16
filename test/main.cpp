@@ -4,12 +4,12 @@
 #include "ItemizedFormatterTests.hpp"
 #include "FormattedWriterTests.hpp"
 #include "PromptTests.hpp"
-#include <testcpplite/testcpplite.hpp>
+#include <sbash64/testcpplite/testcpplite.hpp>
 #include <iostream>
 
-namespace finances {
+namespace sbash64::finances {
 static int main() {
-    return testcpplite::test(
+    return sbash64::testcpplite::test(
         {{presenterPrintsTransactionVerified,
              "presenterPrintsTransactionVerified"},
             {presenterPrintsTransactionAdded,
@@ -125,4 +125,4 @@ static int main() {
 }
 }
 
-int main() { return finances::main(); }
+int main() { return sbash64::finances::main(); }

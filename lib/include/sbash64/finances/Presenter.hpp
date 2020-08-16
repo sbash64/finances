@@ -4,7 +4,7 @@
 #include "TransactionRecord.hpp"
 #include "View.hpp"
 
-namespace finances {
+namespace sbash64::finances {
 class Presenter : public TransactionRecord::EventListener {
   public:
     Presenter(View &);
